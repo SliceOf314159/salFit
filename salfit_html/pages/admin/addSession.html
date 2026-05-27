@@ -1,0 +1,108 @@
+<!--
+  addSession.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Dodanie zajęć</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'addSession';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Dodanie zajęć</h1>
+        <a class="btn btn-ghost back-btn" href="manageCalendar.html">← Cofnij</a>
+      </div>
+      <div class="content-cols">
+        <div class="card">
+          <h2 class="card-title">Podstawowe informacje</h2>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="field-label">Nazwa zajęć <span class="req">*</span></label>
+              <input class="field" type="text" placeholder="np. Yoga poranny">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Rodzaj zajęć <span class="req">*</span></label>
+              <select class="field"><option value="">Wybierz…</option><option>Yoga</option><option>Pilates</option><option>CrossFit</option><option>HIIT</option><option>Stretching</option></select>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Przypisz trenera <span class="req">*</span></label>
+              <select class="field"><option value="">Wybierz…</option><option>Anna Kowalska</option><option>Piotr Nowak</option><option>Maria Wiśniewska</option><option>Tomasz Bąk</option></select>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Sala <span class="req">*</span></label>
+              <div class="stepper"><button>−</button><input type="text" value="S-001"><button>+</button></div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Poziom trudności</label>
+              <select class="field"><option>★★★★★</option><option>★★★★☆</option><option selected>★★★☆☆</option><option>★★☆☆☆</option><option>★☆☆☆☆</option></select>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Termin <span class="req">*</span></label>
+              <input class="field" type="datetime-local">
+              <label class="checkbox-item" style="margin-top:6px"><input type="checkbox"> Powtarzalność</label>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Limit uczestników</label>
+              <div class="stepper"><button onclick="stepper(this,-1)">−</button><input type="number" value="35" min="1"><button onclick="stepper(this,1)">+</button></div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Czas trwania</label>
+              <div class="stepper"><button>−</button><input type="text" value="1 godzina"><button>+</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="card-title">Opis i wymagania</h2>
+          <div class="form-group full" style="margin-bottom:14px">
+            <label class="field-label">Opis zajęć</label>
+            <textarea class="field" rows="4" placeholder="Opis zajęć…"></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="field-label">Wymagania sprzętowe i techniczne</label>
+            <textarea class="field" rows="3" placeholder="np. Maty, liny…"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-ghost">Zachowaj wersję roboczą</button>
+            <div class="spacer"></div>
+            <a class="btn btn-ghost" href="manageCalendar.html">Anuluj</a>
+            <a class="btn btn-primary" href="manageCalendar.html">Zapisz</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

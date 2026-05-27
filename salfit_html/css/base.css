@@ -1,0 +1,178 @@
+/*
+ * base.css — Reset, CSS variables, typography, and the app shell layout.
+ *
+ * Load order: base.css → components.css → pages/<name>.css
+ *
+ * CSS custom properties (variables) are defined on :root so every stylesheet
+ * in the project can reference them without importing this file again.
+ */
+
+/* ── Hard reset ─────────────────────────────────────────────────────────────
+   Remove browser default margins/padding and make box-sizing consistent.    */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Design tokens ──────────────────────────────────────────────────────────
+   Change a value here and it propagates to every component automatically.   */
+:root {
+  /* Brand colours */
+  --navy:          #1a1f3c;   /* topbar, headings */
+  --indigo:        #3b4fd4;   /* primary actions, active states */
+  --indigo-light:  #5c6ee8;   /* hover on primary */
+  --indigo-dim:    #e8ebfc;   /* table header bg, active sidebar bg */
+  --teal:          #2ab5a0;   /* trainer accent, success buttons */
+
+  /* Semantic colours */
+  --danger:   #d03b3b;
+  --success:  #1e8a5e;
+  --warn:     #b36b00;
+  --amber:    #e08c2c;        /* stars, warnings */
+
+  /* Neutral palette */
+  --text:    #1a1f3c;
+  --muted:   #6b7280;
+  --border:  #d4d8f0;
+  --bg:      #f4f5fb;         /* page background */
+  --white:   #ffffff;
+
+  /* Layout dimensions */
+  --sidebar-w: 220px;
+  --topbar-h:   58px;
+
+  /* Shared tokens */
+  --radius:    8px;
+  --radius-sm: 4px;
+  --shadow:    0 1px 4px rgba(26,31,60,.10), 0 4px 16px rgba(26,31,60,.07);
+  --shadow-sm: 0 1px 3px rgba(26,31,60,.12);
+}
+
+/* ── Base typography ─────────────────────────────────────────────────────── */
+html { font-size: 14px; }
+
+body {
+  font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+a    { color: inherit; text-decoration: none; }
+button { cursor: pointer; font: inherit; }
+input, select, textarea { font: inherit; }
+
+h1 { font-size: 1.5rem;  font-weight: 700; letter-spacing: -.02em; }
+h2 { font-size: 1.15rem; font-weight: 700; }
+h3 {
+  font-size: .9rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--muted);
+}
+
+/* ── App shell ───────────────────────────────────────────────────────────────
+   Three-zone layout: topbar (fixed height) → shell row (sidebar + main).    */
+.app   { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+.shell { display: flex; flex: 1; overflow: hidden; }
+.main  { flex: 1; overflow-y: auto; padding: 28px 32px; }
+
+/* ── Topbar ─────────────────────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-h);
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.topbar-logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -.03em;
+  margin-right: auto;          /* push user + links to the right */
+}
+.topbar-logo span { color: var(--teal); }
+
+.topbar-user {
+  color: rgba(255,255,255,.65);
+  font-size: .82rem;
+}
+
+.topbar-link {
+  color: rgba(255,255,255,.55);
+  font-size: .82rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.topbar-link:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+/* Section label (e.g. "PANEL ADMINA", "CZŁONKOWIE") */
+.sidebar-section {
+  padding: 6px 16px 2px;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Individual navigation link */
+.sidebar-item {
+  display: block;
+  padding: 9px 20px;
+  color: var(--text);
+  font-size: .88rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+}
+.sidebar-item:hover  { background: var(--indigo-dim); color: var(--indigo); }
+.sidebar-item.active {
+  background: var(--indigo-dim);
+  border-left-color: var(--indigo);
+  color: var(--indigo);
+  font-weight: 600;
+}
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.page-header h1 { flex: 1; min-width: 0; }
+
+/* ── Page screen switching ───────────────────────────────────────────────── */
+.page-screen { display: none; flex-direction: column; }
+.page-screen.active { display: flex; }
+
+/* ── Responsive breakpoints ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar        { display: none; }             /* hide sidebar on small screens */
+  .main           { padding: 16px; }
+  .topbar-user    { display: none; }
+}

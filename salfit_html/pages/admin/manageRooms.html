@@ -1,0 +1,82 @@
+<!--
+  manageRooms.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Zarządzanie salami</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'manageRooms';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Zarządzanie salami</h1>
+        <a class="btn btn-primary" href="addRoom.html">+ Dodaj salę</a>
+      </div>
+      <div class="card">
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Szukaj sali…" oninput="filterTable(this,'tbl-rooms')">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="tbl-rooms">
+            <thead><tr>
+              <th>ID</th><th>Nazwa</th><th>Typ</th>
+              <th>Pojemność</th><th>Przerwa min.</th>
+              <th>Status</th><th style="text-align:right">Akcje</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>S-001</td><td>Sala A</td><td>Ogólna</td><td>20</td><td>15 min</td>
+                <td><span class="badge badge-green">Dostępna</span></td>
+                <td class="td-actions"><button class="btn btn-ghost btn-sm">Zmień status</button><a class="btn btn-ghost btn-sm" href="editRoom.html">Edytuj</a></td></tr>
+              <tr><td>S-002</td><td>Sala B</td><td>Siłownia</td><td>15</td><td>15 min</td>
+                <td><span class="badge badge-amber">Zajęta</span></td>
+                <td class="td-actions"><button class="btn btn-ghost btn-sm">Zmień status</button><a class="btn btn-ghost btn-sm" href="editRoom.html">Edytuj</a></td></tr>
+              <tr><td>S-003</td><td>Sala C</td><td>Ogólna</td><td>25</td><td>20 min</td>
+                <td><span class="badge badge-red">W remoncie</span></td>
+                <td class="td-actions"><button class="btn btn-ghost btn-sm">Zmień status</button><a class="btn btn-ghost btn-sm" href="editRoom.html">Edytuj</a></td></tr>
+              <tr><td>S-004</td><td>Sala D</td><td>Spinning</td><td>18</td><td>10 min</td>
+                <td><span class="badge badge-green">Dostępna</span></td>
+                <td class="td-actions"><button class="btn btn-ghost btn-sm">Zmień status</button><a class="btn btn-ghost btn-sm" href="editRoom.html">Edytuj</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

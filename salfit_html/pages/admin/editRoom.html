@@ -1,0 +1,89 @@
+<!--
+  editRoom.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Edycja sali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'editRoom';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Edycja sali</h1>
+        <a class="btn btn-ghost back-btn" href="manageRooms.html">← Cofnij</a>
+      </div>
+      <div class="card" style="max-width:720px">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="field-label">Nazwa sali <span class="req">*</span></label>
+            <input class="field" type="text" value="Sala A">
+          </div>
+          <div class="form-group">
+            <label class="field-label">Kod sali</label>
+            <div class="stepper"><button>−</button><input type="text" value="S-001"><button>+</button></div>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Typ sali</label>
+            <select class="field"><option selected>Ogólna</option><option>Siłownia</option><option>Spinning</option></select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Limit uczestników</label>
+            <div class="stepper"><button onclick="stepper(this,-1)">−</button><input type="number" value="35"><button onclick="stepper(this,1)">+</button></div>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Minimalna przerwa</label>
+            <div class="stepper"><button onclick="stepper(this,-5)">−</button><input type="number" value="15" step="5"><button onclick="stepper(this,5)">+</button></div>
+            <span class="field-hint">minut</span>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Status</label>
+            <select class="field"><option selected>Dostępna</option><option>Zajęta</option><option>W remoncie</option></select>
+          </div>
+          <div class="form-group full">
+            <label class="field-label">Opis stanu technicznego sprzętu</label>
+            <textarea class="field" rows="3">Opis stanu technicznego sprzętu</textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a class="btn btn-ghost" href="manageRooms.html">Anuluj</a>
+          <div class="spacer"></div>
+          <a class="btn btn-primary" href="manageRooms.html">Zapisz zmiany</a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

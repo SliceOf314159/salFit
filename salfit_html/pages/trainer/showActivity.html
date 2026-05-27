@@ -1,0 +1,74 @@
+<!--
+  showActivity.html
+
+  CSS:  base.css, components.css, trainer.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Moja aktywność</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/trainer.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'showActivity';
+  const ROLE    = 'trener';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Anna Kowalska (Trener)</span>
+    <a class="topbar-link" href="../../pages/login.html">Wyloguj</a>
+    <a class="topbar-link" href="../../pages/changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Moja aktywność</h1>
+        <select class="field" style="width:auto;font-size:.82rem">
+          <option>Maj 2026</option><option>Kwiecień 2026</option><option>Marzec 2026</option>
+        </select>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="val">4</div><div class="lbl">Zajęcia w tym tygodniu</div></div>
+        <div class="stat-card"><div class="val">18</div><div class="lbl">Zajęcia w maju</div></div>
+        <div class="stat-card"><div class="val green">156</div><div class="lbl">Łącznie uczestników</div></div>
+        <div class="stat-card"><div class="val green">73%</div><div class="lbl">Średnie obłożenie</div></div>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Ostatnie zajęcia</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Data</th><th>Typ zajęć</th><th>Sala</th><th>Uczestnicy</th><th>Godz.</th></tr></thead>
+            <tbody>
+              <tr><td>Pon 19.05</td><td>Yoga poranny</td><td>Sala A</td><td>12 / 20</td><td>08:00</td></tr>
+              <tr><td>Wt 20.05</td><td>Stretching</td><td>Sala B</td><td>6 / 15</td><td>17:00</td></tr>
+              <tr><td>Śr 21.05</td><td>Yoga poranny</td><td>Sala A</td><td>8 / 20</td><td>08:00</td></tr>
+              <tr><td>Pt 23.05</td><td>Yoga poranny</td><td>Sala A</td><td>15 / 20</td><td>08:00</td></tr>
+              <tr><td>Pon 26.05</td><td>Yoga poranny</td><td>Sala A</td><td>11 / 20</td><td>08:00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav-trainer.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!--
+  showProfile.html
+
+  CSS:  base.css, components.css, trainer.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Mój profil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/trainer.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'showProfile';
+  const ROLE    = 'trener';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Anna Kowalska (Trener)</span>
+    <a class="topbar-link" href="../../pages/login.html">Wyloguj</a>
+    <a class="topbar-link" href="../../pages/changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header"><h1>Mój profil</h1></div>
+      <div class="card" style="max-width:560px">
+        <p class="profile-notice">
+          Dane edytuje administrator. Skontaktuj się z biurem w celu zmiany danych.
+        </p>
+        <table class="profile-table">
+          <tr><td>Imię i nazwisko</td><td>Anna Kowalska</td></tr>
+          <tr><td>Specjalizacja</td><td>Yoga, Stretching</td></tr>
+          <tr><td>E-mail</td><td>anna@salfit.pl</td></tr>
+          <tr><td>Status</td><td><span class="badge badge-green">Aktywny</span></td></tr>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav-trainer.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!--
+  sellPass.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Sprzedaż karnetu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'sellPass';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Sprzedaż karnetu</h1>
+        <a class="btn btn-ghost back-btn" href="managePasses.html">← Cofnij</a>
+      </div>
+      <div class="sell-pass-layout">
+        <div class="card">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="field-label">Wybierz klubowicza <span class="req">*</span></label>
+              <div style="display:flex;gap:8px">
+                <select class="field"><option value="">Wybierz…</option><option>Jan Kowalski</option><option>Maria Nowak</option></select>
+                <a class="btn btn-secondary" href="addMember.html" style="white-space:nowrap">+ Nowy</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Rodzaj karnetu <span class="req">*</span></label>
+              <select class="field"><option value="">Wybierz…</option><option>Miesięczny</option><option>Kwartalny</option><option>Roczny</option></select>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Metoda płatności</label>
+              <select class="field"><option>Karta</option><option>Gotówka</option><option>Przelew</option></select>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Data rozpoczęcia</label>
+              <input class="field" type="date" value="2026-06-01">
+              <label class="checkbox-item" style="margin-top:6px"><input type="checkbox"> Przedłuż od dnia wygaśnięcia</label>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Data zakończenia</label>
+              <input class="field" type="date" value="2026-06-30">
+            </div>
+          </div>
+          <div class="form-actions">
+            <a class="btn btn-ghost" href="managePasses.html">Anuluj</a>
+            <div class="spacer"></div>
+            <a class="btn btn-secondary" href="managePasses.html">Przedłuż</a>
+            <a class="btn btn-primary" href="managePasses.html">Sprzedaj</a>
+          </div>
+        </div>
+        <div class="mini-cal">
+          <div class="mini-cal-head">
+            <button>‹</button><span>Czerwiec 2026</span><button>›</button>
+          </div>
+          <div class="mini-cal-days">
+            <span class="head">Pn</span><span class="head">Wt</span><span class="head">Śr</span>
+            <span class="head">Cz</span><span class="head">Pt</span><span class="head">Sb</span><span class="head">Nd</span>
+            <span></span><span class="day sel">1</span><span class="day">2</span><span class="day">3</span>
+            <span class="day">4</span><span class="day">5</span><span class="day">6</span>
+            <span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day">10</span>
+            <span class="day">11</span><span class="day">12</span><span class="day">13</span>
+            <span class="day">14</span><span class="day">15</span><span class="day">16</span><span class="day">17</span>
+            <span class="day">18</span><span class="day">19</span><span class="day">20</span>
+            <span class="day">21</span><span class="day">22</span><span class="day">23</span><span class="day">24</span>
+            <span class="day">25</span><span class="day">26</span><span class="day">27</span>
+            <span class="day">28</span><span class="day">29</span><span class="day">30</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

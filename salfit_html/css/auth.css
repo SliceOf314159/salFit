@@ -1,0 +1,120 @@
+/*
+ * auth.css — Styles for all unauthenticated pages:
+ *   login (main), change-password, forgot-password.
+ *
+ * All auth pages share .auth-page as the full-screen centred container.
+ * The .auth-card is the white box holding the form.
+ */
+
+/* ── Full-screen centred wrapper ─────────────────────────────────────────── */
+.auth-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ── App logo block above the form(s) ────────────────────────────────────── */
+.auth-logo {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.auth-logo .logo {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: -.04em;
+}
+.auth-logo .logo span { color: var(--teal); }  /* the "Fit" part */
+.auth-logo p {
+  color: var(--muted);
+  margin-top: 6px;
+  font-size: .9rem;
+}
+
+/* ── White form card ─────────────────────────────────────────────────────── */
+.auth-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+}
+.auth-card h2 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: var(--navy);
+}
+/* Subtitle / description line below the card heading */
+.auth-card .auth-desc {
+  font-size: .82rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* Space out form groups inside an auth card */
+.auth-card .form-group { margin-bottom: 14px; }
+
+/* Full-width button inside auth card */
+.auth-card .btn { width: 100%; margin-top: 8px; padding: 11px; }
+
+/* Small helper links (forgot password, back to login) */
+.auth-footer {
+  margin-top: 14px;
+  text-align: center;
+  font-size: .8rem;
+  color: var(--muted);
+}
+.auth-footer a { color: var(--indigo); }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* ── Login page: two cards side by side ──────────────────────────────────── */
+.login-panels {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 820px;
+}
+/* On login, each panel can grow up to 380px */
+.login-panels .auth-card { max-width: 380px; flex: 1; min-width: 280px; }
+
+/* Success message shown after e.g. password reset email sent */
+.auth-success {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: .85rem;
+  color: var(--success);
+  margin-bottom: 16px;
+}
+
+/* Error/validation message inside auth form */
+.auth-error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: .82rem;
+  color: var(--danger);
+  margin-bottom: 14px;
+}
+
+/* Password strength hint row */
+.password-hint {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .login-panels { flex-direction: column; align-items: center; }
+  .auth-card    { padding: 24px; }
+}

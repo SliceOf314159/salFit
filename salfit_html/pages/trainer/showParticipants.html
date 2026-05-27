@@ -1,0 +1,70 @@
+<!--
+  showParticipants.html
+
+  CSS:  base.css, components.css, trainer.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Uczestnicy zajęć</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/trainer.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'showParticipants';
+  const ROLE    = 'trener';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Anna Kowalska (Trener)</span>
+    <a class="topbar-link" href="../../pages/login.html">Wyloguj</a>
+    <a class="topbar-link" href="../../pages/changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Uczestnicy zajęć: Yoga — Sala A, Pon 8:00</h1>
+        <a class="btn btn-ghost back-btn" href="showCalendar.html">← Powrót do grafiku</a>
+      </div>
+      <p class="participants-meta">
+        <strong>12</strong> uczestników zapisanych · <strong>20</strong> miejsc dostępnych
+      </p>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Imię i nazwisko</th><th>Karnet</th><th>Status karnetu</th><th>Obecność</th></tr></thead>
+            <tbody>
+              <tr><td>M-001</td><td>Jan Kowalski</td><td>Miesięczny</td><td><span class="badge badge-green">Aktywny</span></td><td>✓</td></tr>
+              <tr><td>M-002</td><td>Maria Nowak</td><td>Kwartalny</td><td><span class="badge badge-green">Aktywny</span></td><td>✓</td></tr>
+              <tr><td>M-003</td><td>Adam Wiśniewski</td><td>Roczny</td><td><span class="badge badge-green">Aktywny</span></td><td>✓</td></tr>
+              <tr><td>M-004</td><td>Ewa Zając</td><td>Miesięczny</td><td><span class="badge badge-amber">Wygasa za 5 dni</span></td><td>✓</td></tr>
+              <tr><td>M-007</td><td>Piotr Malinowski</td><td>Kwartalny</td><td><span class="badge badge-green">Aktywny</span></td><td>✓</td></tr>
+              <tr><td>M-011</td><td>Karolina Dąbrowska</td><td>Roczny</td><td><span class="badge badge-green">Aktywny</span></td><td>—</td></tr>
+              <tr><td>M-015</td><td>Tomasz Lewandowski</td><td>Miesięczny</td><td><span class="badge badge-green">Aktywny</span></td><td>✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav-trainer.js"></script>
+</body>
+</html>

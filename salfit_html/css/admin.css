@@ -1,0 +1,62 @@
+/*
+ * admin.css — Styles specific to admin panel pages.
+ *
+ * Most admin screens reuse components from components.css without any
+ * extra CSS. This file contains only the few overrides or additions that
+ * are unique to admin views.
+ *
+ * Covered pages: manageCoach, addCoach, editCoach, manageRooms, addRoom,
+ *   editRoom, manageCalendar, addSession, editSession, manageMembers,
+ *   addMember, editMember, managePasses, sellPass, raports.
+ */
+
+/* ── Two-panel form layout ───────────────────────────────────────────────────
+   Used on form pages (add/edit coach, add/edit member) where the main form
+   sits next to a narrow sidebar (avatar upload, notes textarea).            */
+.form-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .form-with-sidebar { grid-template-columns: 1fr; }
+}
+
+/* ── Two-column content layout ───────────────────────────────────────────────
+   Used on addSession / editSession where description fields sit alongside
+   the main fields in a second column.                                       */
+.content-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .content-cols { grid-template-columns: 1fr; }
+}
+
+/* ── Reports: two-column grid for the bar-chart cards ───────────────────── */
+.reports-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 860px) {
+  .reports-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Sell-pass: form + mini-calendar side by side ────────────────────────── */
+.sell-pass-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .sell-pass-layout { grid-template-columns: 1fr; }
+}

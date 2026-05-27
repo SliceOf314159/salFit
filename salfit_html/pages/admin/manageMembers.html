@@ -1,0 +1,81 @@
+<!--
+  manageMembers.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Zarządzanie członkami</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'manageMembers';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Zarządzanie członkami</h1>
+        <a class="btn btn-primary" href="addMember.html">+ Zarejestruj członka</a>
+      </div>
+      <div class="card">
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Szukaj członka…" oninput="filterTable(this,'tbl-members')">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="tbl-members">
+            <thead><tr>
+              <th>ID</th><th>Imię i nazwisko</th><th>E-mail</th>
+              <th>Telefon</th><th>Karnet</th><th style="text-align:right">Akcje</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>M-001</td><td>Jan Kowalski</td><td>jan@mail.pl</td><td>500-100-200</td>
+                <td><span class="badge badge-green">Aktywny</span></td>
+                <td class="td-actions"><a class="btn btn-ghost btn-sm" href="editMember.html">Edytuj</a><a class="btn btn-ghost btn-sm" href="sellPass.html">Karnet</a></td></tr>
+              <tr><td>M-002</td><td>Maria Nowak</td><td>maria@mail.pl</td><td>501-200-300</td>
+                <td><span class="badge badge-green">Aktywny</span></td>
+                <td class="td-actions"><a class="btn btn-ghost btn-sm" href="editMember.html">Edytuj</a><a class="btn btn-ghost btn-sm" href="sellPass.html">Karnet</a></td></tr>
+              <tr><td>M-003</td><td>Adam Wiśniewski</td><td>adam@mail.pl</td><td>502-300-400</td>
+                <td><span class="badge badge-amber">Wygasa wkrótce</span></td>
+                <td class="td-actions"><a class="btn btn-ghost btn-sm" href="editMember.html">Edytuj</a><a class="btn btn-ghost btn-sm" href="sellPass.html">Karnet</a></td></tr>
+              <tr><td>M-004</td><td>Ewa Zając</td><td>ewa@mail.pl</td><td>503-400-500</td>
+                <td><span class="badge badge-red">Wygasły</span></td>
+                <td class="td-actions"><a class="btn btn-ghost btn-sm" href="editMember.html">Edytuj</a><a class="btn btn-ghost btn-sm" href="sellPass.html">Karnet</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

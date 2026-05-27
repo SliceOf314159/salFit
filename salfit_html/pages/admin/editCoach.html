@@ -1,0 +1,107 @@
+<!--
+  editCoach.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Edycja Trenera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'editCoach';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Edycja Trenera</h1>
+        <a class="btn btn-ghost back-btn" href="manageCoach.html">← Cofnij</a>
+      </div>
+
+      <div class="form-with-sidebar">
+        <div class="card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="field-label">Imię <span class="req">*</span></label>
+              <input class="field" type="text" value="Anna">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Nazwisko <span class="req">*</span></label>
+              <input class="field" type="text" value="Kowalska">
+            </div>
+            <div class="form-group">
+              <label class="field-label">E-mail <span class="req">*</span></label>
+              <input class="field" type="email" value="anna@salfit.pl">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Numer telefonu</label>
+              <input class="field" type="tel" value="500 100 200">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Data urodzenia</label>
+              <input class="field" type="date" value="1988-03-15">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Płeć</label>
+              <select class="field"><option selected>Kobieta</option><option>Mężczyzna</option></select>
+            </div>
+            <div class="form-group full">
+              <label class="field-label">Specjalizacje</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item"><input type="checkbox" checked> Trening grupowy</label>
+                <label class="checkbox-item"><input type="checkbox"> Trening personalny</label>
+                <label class="checkbox-item"><input type="checkbox"> Konsultacja online</label>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label class="field-label">Bio</label>
+              <textarea class="field" rows="3">Specjalistka od jogi z 8-letnim doświadczeniem.</textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-danger">Usuń trenera</button>
+            <div class="spacer"></div>
+            <a class="btn btn-ghost" href="manageCoach.html">Anuluj</a>
+            <a class="btn btn-primary" href="manageCoach.html">Zapisz zmiany</a>
+          </div>
+        </div>
+        <div class="card" style="text-align:center">
+          <h2 class="card-title" style="font-size:.85rem">Zdjęcie</h2>
+          <div class="avatar-upload" style="margin:0 auto">
+            <div class="avatar-upload-icon">📷</div>
+            <div>Kliknij aby zmienić</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

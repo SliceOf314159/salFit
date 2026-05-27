@@ -1,0 +1,76 @@
+<!--
+  editMember.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Edycja danych członka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'editMember';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Edycja danych członka</h1>
+        <a class="btn btn-ghost back-btn" href="manageMembers.html">← Cofnij</a>
+      </div>
+      <div class="form-with-sidebar">
+        <div class="card">
+          <div class="form-grid">
+            <div class="form-group"><label class="field-label">Imię <span class="req">*</span></label><input class="field" type="text" value="Jan"></div>
+            <div class="form-group"><label class="field-label">Nazwisko <span class="req">*</span></label><input class="field" type="text" value="Kowalski"></div>
+            <div class="form-group"><label class="field-label">E-mail <span class="req">*</span></label><input class="field" type="email" value="jan@mail.pl"></div>
+            <div class="form-group"><label class="field-label">Numer telefonu</label><input class="field" type="tel" value="500-100-200"></div>
+            <div class="form-group"><label class="field-label">Data urodzenia</label><input class="field" type="date" value="1990-06-15"></div>
+            <div class="form-group"><label class="field-label">Płeć</label><select class="field"><option selected>Mężczyzna</option><option>Kobieta</option><option>Inna</option></select></div>
+            <div class="form-group"><label class="field-label">Miasto</label><input class="field" type="text" value="Kraków"></div>
+            <div class="form-group"><label class="field-label">Kod pocztowy</label><input class="field" type="text" value="30-001"></div>
+            <div class="form-group full"><label class="field-label">Ulica</label><input class="field" type="text" value="ul. Floriańska 5"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-danger">Usuń członka</button>
+            <div class="spacer"></div>
+            <a class="btn btn-ghost" href="manageMembers.html">Anuluj</a>
+            <a class="btn btn-primary" href="manageMembers.html">Zapisz zmiany</a>
+          </div>
+        </div>
+        <div class="card">
+          <h2 style="font-size:.85rem;margin-bottom:12px">Notatki dla administratora</h2>
+          <textarea class="field" rows="5" style="width:100%">Regularny klient od 2024.</textarea>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

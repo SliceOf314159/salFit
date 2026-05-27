@@ -1,0 +1,86 @@
+<!--
+  login.html — Login screen.
+
+  Two side-by-side login cards: one for the Administrator, one for the Trainer.
+  Both cards submit to the app shell (index.html) via the shared nav() function.
+
+  CSS:  base.css, components.css, auth.css
+  JS:   nav.js
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Logowanie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+
+<div class="auth-page">
+
+  <div class="auth-logo">
+    <div class="logo">Sal<span>Fit</span></div>
+    <p>System zarządzania obiektem fitness</p>
+  </div>
+
+  <div class="login-panels">
+
+    <!-- ── Administrator login ─────────────────────────────── -->
+    <div class="auth-card">
+      <h2>Logowanie — Administrator</h2>
+      <p class="auth-desc">Dostęp do pełnego panelu zarządzania.</p>
+
+      <div class="form-group">
+        <label class="field-label">Login</label>
+        <input class="field" type="text" placeholder="Podaj swój login" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="field-label">Hasło</label>
+        <input class="field" type="password" placeholder="Podaj swoje hasło" autocomplete="current-password">
+      </div>
+
+      <!-- Navigates to the admin dashboard (manageCoach is the landing page) -->
+      <button class="btn btn-primary" onclick="location.href='admin/manageCoach.html'">
+        Zaloguj
+      </button>
+
+      <div class="auth-footer">
+        <a href="forgotPassword.html">Zapomniałem hasła</a>
+      </div>
+    </div>
+
+    <!-- ── Trainer login ────────────────────────────────────── -->
+    <div class="auth-card">
+      <h2>Logowanie — Trener</h2>
+      <p class="auth-desc">Dostęp do własnego grafiku i profilu.</p>
+
+      <div class="form-group">
+        <label class="field-label">Login</label>
+        <input class="field" type="text" placeholder="Podaj swój login" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="field-label">Hasło</label>
+        <input class="field" type="password" placeholder="Podaj swoje hasło" autocomplete="current-password">
+      </div>
+
+      <!-- Navigates to the trainer schedule view -->
+      <button class="btn btn-success" onclick="location.href='trainer/showCalendar.html'">
+        Zaloguj
+      </button>
+
+      <div class="auth-footer">
+        <a href="forgotPassword.html">Zapomniałem hasła</a>
+      </div>
+    </div>
+
+  </div><!-- /.login-panels -->
+</div><!-- /.auth-page -->
+
+</body>
+</html>

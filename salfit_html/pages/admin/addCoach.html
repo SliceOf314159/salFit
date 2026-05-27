@@ -1,0 +1,134 @@
+<!--
+  addCoach.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Dodanie Trenera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'addCoach';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Dodanie Trenera</h1>
+        <a class="btn btn-ghost back-btn" href="manageCoach.html">← Cofnij</a>
+      </div>
+
+      <div class="form-with-sidebar">
+
+        <!-- Main form -->
+        <div class="card">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="field-label">Imię <span class="req">*</span></label>
+              <input class="field" type="text" placeholder="Imię">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Nazwisko <span class="req">*</span></label>
+              <input class="field" type="text" placeholder="Nazwisko">
+            </div>
+            <div class="form-group">
+              <label class="field-label">E-mail <span class="req">*</span></label>
+              <input class="field" type="email" placeholder="adres@email.pl">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Numer telefonu <span class="req">*</span></label>
+              <input class="field" type="tel" placeholder="000 000 000">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Data urodzenia</label>
+              <input class="field" type="date">
+            </div>
+            <div class="form-group">
+              <label class="field-label">Płeć</label>
+              <select class="field">
+                <option value="">Wybierz…</option>
+                <option>Kobieta</option>
+                <option>Mężczyzna</option>
+                <option>Inna</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="field-label">Specjalizacje</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item"><input type="checkbox"> Trening grupowy</label>
+                <label class="checkbox-item"><input type="checkbox"> Trening personalny</label>
+                <label class="checkbox-item"><input type="checkbox"> Konsultacja online</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Poziom doświadczenia</label>
+              <select class="field">
+                <option>★★★★★ Ekspert</option>
+                <option selected>★★★☆☆ Średniozaawansowany</option>
+                <option>★★☆☆☆ Podstawowy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Social media</label>
+              <input class="field" type="url" placeholder="https://instagram.com/…">
+            </div>
+            <div class="form-group full">
+              <label class="field-label">Bio</label>
+              <textarea class="field" rows="3" placeholder="Krótki opis trenera…"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="field-label">Hasło <span class="req">*</span></label>
+              <input class="field" type="password" placeholder="Min. 8 znaków">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-ghost">Zachowaj wersję roboczą</button>
+            <div class="spacer"></div>
+            <a class="btn btn-ghost" href="manageCoach.html">Anuluj</a>
+            <a class="btn btn-primary" href="manageCoach.html">Zapisz</a>
+          </div>
+        </div>
+
+        <!-- Avatar sidebar -->
+        <div class="card" style="text-align:center">
+          <h2 class="card-title" style="font-size:.85rem">Zdjęcie</h2>
+          <div class="avatar-upload" style="margin:0 auto">
+            <div class="avatar-upload-icon">📷</div>
+            <div>Kliknij aby dodać</div>
+          </div>
+        </div>
+
+      </div><!-- /.form-with-sidebar -->
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>

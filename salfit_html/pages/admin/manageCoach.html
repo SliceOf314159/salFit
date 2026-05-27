@@ -1,0 +1,124 @@
+<!--
+  manageCoach.html
+
+  CSS:  base.css, components.css, admin.css
+  JS:   nav.js  (renders sidebar, provides filterTable / stepper)
+-->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalFit — Zarządzanie trenerami</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+<script>
+  const PAGE_ID = 'manageCoach';
+  const ROLE    = 'admin';
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-logo">Sal<span>Fit</span></div>
+    <span class="topbar-user">Jan Kowalski (admin)</span>
+    <a class="topbar-link" href="../login.html">Wyloguj</a>
+    <a class="topbar-link" href="../changePassword.html">Zmień hasło</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar — populated by nav.js renderSidebar() -->
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="main">
+      <!-- Page header -->
+      <div class="page-header">
+        <h1>Zarządzanie trenerami</h1>
+        <a class="btn btn-primary" href="addCoach.html">+ Dodaj trenera</a>
+      </div>
+
+      <div class="card">
+        <!-- Search bar -->
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Szukaj trenera…"
+                   oninput="filterTable(this, 'tbl-coaches')">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="tbl-coaches">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Imię i nazwisko</th>
+                <th>Specjalizacja</th>
+                <th>E-mail</th>
+                <th>Status</th>
+                <th style="text-align:right">Akcje</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>T-001</td>
+                <td>Anna Kowalska</td>
+                <td>Yoga, Stretching</td>
+                <td>anna@salfit.pl</td>
+                <td><span class="badge badge-green">Aktywny</span></td>
+                <td class="td-actions">
+                  <a class="btn btn-ghost btn-sm" href="editCoach.html">Edytuj</a>
+                  <button class="btn btn-ghost btn-sm">Dezaktywuj</button>
+                </td>
+              </tr>
+              <tr>
+                <td>T-002</td>
+                <td>Piotr Nowak</td>
+                <td>Trening siłowy</td>
+                <td>piotr@salfit.pl</td>
+                <td><span class="badge badge-green">Aktywny</span></td>
+                <td class="td-actions">
+                  <a class="btn btn-ghost btn-sm" href="editCoach.html">Edytuj</a>
+                  <button class="btn btn-ghost btn-sm">Dezaktywuj</button>
+                </td>
+              </tr>
+              <tr>
+                <td>T-003</td>
+                <td>Maria Wiśniewska</td>
+                <td>Pilates</td>
+                <td>maria@salfit.pl</td>
+                <td><span class="badge badge-gray">Nieaktywny</span></td>
+                <td class="td-actions">
+                  <a class="btn btn-ghost btn-sm" href="editCoach.html">Edytuj</a>
+                  <button class="btn btn-ghost btn-sm">Aktywuj</button>
+                </td>
+              </tr>
+              <tr>
+                <td>T-004</td>
+                <td>Tomasz Bąk</td>
+                <td>CrossFit, HIIT</td>
+                <td>tomek@salfit.pl</td>
+                <td><span class="badge badge-green">Aktywny</span></td>
+                <td class="td-actions">
+                  <a class="btn btn-ghost btn-sm" href="editCoach.html">Edytuj</a>
+                  <button class="btn btn-ghost btn-sm">Dezaktywuj</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/nav.js"></script>
+</body>
+</html>
