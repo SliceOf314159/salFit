@@ -23,31 +23,50 @@ skinparam sequence {
   DividerBackgroundColor #F0FDF4
   DividerBorderColor #16A34A
 }
+skinparam note {
+  BackgroundColor #FEF9C3
+  BorderColor #CA8A04
+}
 
 actor Trener
-boundary "GrafikView\n(FXML)" as View
-control "GrafikController" as Controller
+' Shell controller nawiguje do TrainerGrafikView przez FXMLLoader
+control "TrainerShellController" as Shell
+boundary "TrainerGrafikView\n(FXML)" as View
+control "TrainerGrafikController" as Controller
 entity "GrafikRepository" as GrafikRepo
-entity "SalaRepository" as SalaRepo
 
-Trener        -> View        : otwiera "Mój grafik"
-View          -> Controller  : initialize()
-Controller    -> Controller  : aktualnyTydzien = LocalDate.now()
-Controller    -> Controller  : poniedzialek = aktualnyTydzien\n.with(MONDAY)
+Trener     -> Shell      : kliknie "Moje zajęcia"
+Shell      -> Shell      : loadContent("TrainerGrafikView.fxml", btnMojeZajecia)
+Shell      -> Shell      : updateActiveButton(btnMojeZajecia)
+Shell      -> Controller : initialize() [przez FXMLLoader]
+Controller -> Controller : aktualnyTydzien = LocalDate.now()
+Controller -> Controller : refresh()
+Controller -> Controller : poniedzialek = aktualnyTydzien.with(MONDAY)
+Controller -> Controller : weekLabel.setText(...)
 
-Controller    -> GrafikRepo  : findByTrener(trenerId)
-GrafikRepo    --> Controller : List<Zajecia>
-Controller    -> SalaRepo    : findAll()
-SalaRepo      --> Controller : List<Sala>
-Controller    -> Controller  : renderTydzien(poniedzialek)
-View          --> Trener     : wyświetla siatkę tygodniową\n(godz. × dni tygodnia)
+note right of Controller
+  Docelowo: findByTrener(trenerId)
+  Aktualnie: renderGrid() bez danych
+  z repozytorium (stub)
+end note
 
-Trener        -> View        : kliknie "Następny tydzień"
-View          -> Controller  : onNastepnyTydzien()
-Controller    -> Controller  : aktualnyTydzien = aktualnyTydzien\n.plusWeeks(1)
-Controller    -> GrafikRepo  : findByTrener(trenerId)
-GrafikRepo    --> Controller : List<Zajecia>
-Controller    -> Controller  : renderTydzien(poniedzialek)
-View          --> Trener     : wyświetla zaktualizowany widok
+Controller -> GrafikRepo : findByTrener(trenerId)
+GrafikRepo --> Controller : List<Zajecia>
+Controller -> Controller  : renderGrid(monday)
+View       --> Trener     : wyświetla pustą siatkę tygodniową\n(godz. × dni tygodnia)
+
+Trener     -> View        : kliknie "Następny tydzień"
+View       -> Controller  : onNastepny()
+Controller -> Controller  : aktualnyTydzien = aktualnyTydzien.plusWeeks(1)
+Controller -> Controller  : refresh()
+Controller -> Controller  : renderGrid(monday)
+View       --> Trener     : wyświetla zaktualizowany widok
+
+' Przejście do listy uczestników wybranych zajęć
+Trener     -> View        : kliknie "Uczestnicy zajęć"
+View       -> Controller  : showUczestnicy()
+Controller -> Shell       : TrainerShellController.getInstance().showUczestnicy()
+Shell      -> Shell       : loadContent("TrainerUczestnicyView.fxml", btnMojeZajecia)
+View       --> Trener     : wyświetla listę uczestników
 
 @enduml

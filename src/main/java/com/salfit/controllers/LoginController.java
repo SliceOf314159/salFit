@@ -48,11 +48,9 @@ public class LoginController {
     private void showError(Label lbl, String msg) {
         lbl.setText(msg);
         lbl.setVisible(true);
-        lbl.setManaged(true);
     }
 
     private void hideError(Label lbl) {
         lbl.setVisible(false);
-        lbl.setManaged(false);
     }
 }

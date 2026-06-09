@@ -39,7 +39,16 @@ database "plik eksportu\n(.csv / .txt)" as ExportFile
 
 Administrator -> View       : otwiera moduł raportów
 View          -> Controller : initialize()
+Controller    -> Controller : refresh()
 
+note right of Controller
+  Docelowo: pobiera dane z repozytoriów
+  i oblicza statystyki. Aktualnie
+  refresh() jest stubem — paski postępu
+  i statystyki pokazują wartości zerowe.
+end note
+
+' Docelowo — po podłączeniu repozytoriów
 Controller    -> GrafikRepo   : findByTydzien(aktualnyTydzien)
 GrafikRepo    --> Controller  : List<Zajecia>
 Controller    -> SalaRepo     : findAll()
@@ -48,26 +57,24 @@ Controller    -> TrenerRepo   : findAll()
 TrenerRepo    --> Controller  : List<Trener>
 Controller    -> CzlonekRepo  : findKarnetyWygasajace(30)
 CzlonekRepo   --> Controller  : List<Karnet>
-
 Controller    -> Controller   : obliczOblozenieSal()
 Controller    -> Controller   : obliczAktywnosc()
 Controller    -> Controller   : pobierzWygasajace()
-Controller    -> View         : renderRaport(dane)
 View          --> Administrator : wyświetla raport\n(paski postępu, statystyki)
 
 alt eksport CSV
   Administrator -> View      : kliknie "Eksport CSV"
   View          -> Controller : onEksportCSV()
+  ' Docelowo: zapis pliku przez FileChooser
   Controller    -> ExportFile : zapisz raport.csv
   ExportFile    --> Controller : OK
-  Controller    -> View       : showInfo("Plik zapisany")
   View          --> Administrator : potwierdzenie zapisu
 else eksport TXT
   Administrator -> View      : kliknie "Eksport TXT"
   View          -> Controller : onEksportTXT()
+  ' Docelowo: zapis pliku przez FileChooser
   Controller    -> ExportFile : zapisz raport.txt
   ExportFile    --> Controller : OK
-  Controller    -> View       : showInfo("Plik zapisany")
   View          --> Administrator : potwierdzenie zapisu
 end
 

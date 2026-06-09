@@ -31,6 +31,9 @@ skinparam note {
 actor Administrator
 boundary "GrafikView\n(FXML)" as View
 control "GrafikController" as Controller
+' Dialog otwierany jako osobny Stage z Modality.APPLICATION_MODAL
+boundary "AddEditZajeciaDialog\n(FXML)" as Dialog
+control "AddEditZajeciaDialogController" as DialogCtrl
 entity "GrafikRepository" as GrafikRepo
 entity "TrenerRepository" as TrenerRepo
 entity "SalaRepository" as SalaRepo
@@ -38,43 +41,57 @@ database "grafik.json" as File
 
 Administrator -> View       : kliknie "Dodaj zajęcia"
 View          -> Controller : onDodajZajecia()
-Controller    -> TrenerRepo : findAktywni()
-TrenerRepo    --> Controller : List<Trener>
-Controller    -> SalaRepo   : findByStatus(DOSTEPNA)
-SalaRepo      --> Controller : List<Sala>
-Controller    -> View       : showDialog(trenerzy, sale)
 
-Administrator -> View       : wypełnia formularz\n(nazwa, trener, sala, termin,\nlimit, czas trwania)
-Administrator -> View       : kliknie "Zapisz"
-View          -> Controller : onZapisz(formData)
+' openDialog() tworzy nowe okno modalne i wywołuje showAndWait()
+Controller    -> Controller : openDialog("/views/dialogs/\nAddEditZajeciaDialog.fxml", "Dodanie zajęć")
+Controller    -> Dialog     : new Stage(Modality.APPLICATION_MODAL)\nFXMLLoader.load(...)
+Dialog        -> DialogCtrl : initialize()
 
-Controller    -> Controller : new Zajecia(formData)
-Controller    -> GrafikRepo : findByTrener(trenerId)
-GrafikRepo    --> Controller : List<Zajecia>
-Controller    -> GrafikRepo : findBySala(salaId)
-GrafikRepo    --> Controller : List<Zajecia>
-Controller    -> Controller : sprawdzKonflikt(zajecia)
-
-note right of Controller
-  Sprawdza czy trener
-  i sala są wolne
-  w danym terminie
+note right of DialogCtrl
+  Aktualnie ComboBox trenerzy/sale
+  wypełniane są listami statycznymi.
+  Po podłączeniu repozytoriów:
+  findAktywni() i findByStatus(DOSTEPNA)
 end note
 
-alt konflikt istnieje
-  Controller  -> View       : showAlert("Konflikt terminów:\ntrener lub sala zajęci")
-  View        --> Administrator : wyświetla alert
-  Administrator -> View     : poprawia dane formularza
-else brak konfliktu
-  Controller  -> GrafikRepo : save(zajecia)
-  GrafikRepo  -> GrafikRepo : generateId()
-  GrafikRepo  -> GrafikRepo : cache.add(zajecia)
-  GrafikRepo  -> File       : saveToFile() [JSON]
-  File        --> GrafikRepo : OK
-  GrafikRepo  --> Controller : void
-  Controller  -> View       : closeDialog()
-  Controller  -> Controller : renderTydzien(aktualnyTydzien)
-  View        --> Administrator : wyświetla zaktualizowany grafik
+' Docelowo — po podłączeniu repozytoriów
+DialogCtrl    -> TrenerRepo : findAktywni()
+TrenerRepo    --> DialogCtrl : List<Trener>
+DialogCtrl    -> SalaRepo   : findByStatus(DOSTEPNA)
+SalaRepo      --> DialogCtrl : List<Sala>
+DialogCtrl    -> Dialog     : wypełnia ComboBox fieldTrener / fieldSala
+
+Administrator -> Dialog     : wypełnia formularz\n(nazwa, rodzaj, trener, sala,\ndata, limit, czas, opis)
+Administrator -> Dialog     : kliknie "Zapisz"
+Dialog        -> DialogCtrl : onSave()
+
+alt fieldNazwa jest puste
+  DialogCtrl  --> Dialog    : return (formularz pozostaje otwarty)
+  Dialog      --> Administrator : pole Nazwa pozostaje aktywne
+else nazwa podana
+  ' Weryfikacja konfliktu i zapis — do zaimplementowania po podłączeniu GrafikRepository
+  DialogCtrl  -> GrafikRepo : findByTrener(trenerId)
+  GrafikRepo  --> DialogCtrl : List<Zajecia>
+  DialogCtrl  -> GrafikRepo : findBySala(salaId)
+  GrafikRepo  --> DialogCtrl : List<Zajecia>
+  DialogCtrl  -> DialogCtrl : sprawdzKonflikt(zajecia)
+
+  alt konflikt istnieje
+    DialogCtrl -> Dialog    : showAlert("Konflikt terminów")
+    Dialog     --> Administrator : wyświetla alert
+  else brak konfliktu
+    DialogCtrl -> GrafikRepo : save(new Zajecia(formData))
+    GrafikRepo -> GrafikRepo : generateId()
+    GrafikRepo -> GrafikRepo : cache.add(zajecia)
+    GrafikRepo -> File       : saveToFile() [JSON]
+    File       --> GrafikRepo : OK
+    GrafikRepo --> DialogCtrl : void
+    DialogCtrl -> DialogCtrl : closeDialog() [stage.close()]
+    Dialog     --> Controller : showAndWait() zwraca kontrolę
+    Controller -> Controller : refresh()
+    Controller -> Controller : renderTydzien(aktualnyTydzien)
+    View       --> Administrator : wyświetla zaktualizowany grafik
+  end
 end
 
 @enduml

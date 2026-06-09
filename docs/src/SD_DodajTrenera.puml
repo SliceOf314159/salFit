@@ -31,37 +31,42 @@ skinparam note {
 actor Administrator
 boundary "TrenerView\n(FXML)" as View
 control "TrenerController" as Controller
+' Dialog otwierany jako osobny Stage z Modality.APPLICATION_MODAL
+boundary "AddEditTrenerDialog\n(FXML)" as Dialog
+control "AddEditTrenerDialogController" as DialogCtrl
 entity "TrenerRepository" as Repo
 database "trenerzy.json" as File
 
 Administrator -> View       : kliknie "Dodaj trenera"
 View          -> Controller : onDodajTrener()
-Controller    -> View       : showDialog(formularzDodaniaTrenera)
 
-Administrator -> View       : wypelnia formularz\n(imie, nazwisko, email,\nspecjalizacja)
-Administrator -> View       : kliknie "Zapisz"
-View          -> Controller : onZapisz(formData)
+' openDialog() tworzy nowe okno modalne i wywołuje showAndWait()
+Controller    -> Controller : openDialog("/views/dialogs/\nAddEditTrenerDialog.fxml", "Dodanie trenera")
+Controller    -> Dialog     : new Stage(Modality.APPLICATION_MODAL)\nFXMLLoader.load(...)
+Dialog        -> DialogCtrl : initialize()
+DialogCtrl    -> Dialog     : ustawia ComboBox Płeć i Poziom,\nwyświetla pusty formularz (tryb dodawania)
 
-Controller    -> Controller : waliduj(formData)
+Administrator -> Dialog     : wypełnia formularz\n(imię, nazwisko, email,\ntelefon, specjalizacja, hasło)
+Administrator -> Dialog     : kliknie "Zapisz"
+Dialog        -> DialogCtrl : onSave()
+DialogCtrl    -> DialogCtrl : validate()
 
-alt dane niepoprawne
-  Controller  -> View       : showError("Uzupelnij wymagane pola")
-  View        --> Administrator : wyswietla komunikat bledu
-else dane poprawne
-  Controller  -> Controller : new Trener(formData)
-  Controller  -> Repo       : save(trener)
+alt validate() == false — puste wymagane pola
+  DialogCtrl  --> Dialog    : return (formularz pozostaje otwarty)
+  Dialog      --> Administrator : pola pozostają aktywne
+else validate() == true
+  ' Zapis do repozytorium — do zaimplementowania po podłączeniu TrenerRepository
+  DialogCtrl  -> Repo       : save(new Trener(formData))
   Repo        -> Repo       : generateId()
-  Repo        -> Repo       : loadFromFile()
   Repo        -> Repo       : cache.add(trener)
   Repo        -> File       : saveToFile() [JSON]
   File        --> Repo      : OK
-  Repo        --> Controller : void
-  Controller  -> View       : closeDialog()
-  Controller  -> Repo       : findAll()
-  Repo        --> Controller : List<Trener>
-  Controller  -> Controller  : refresh()
-  Controller  -> View        : updateTable(listaTrenerow)
-  View        --> Administrator : wyswietla zaktualizowana liste
+  Repo        --> DialogCtrl : void
+  DialogCtrl  -> DialogCtrl : closeDialog() [stage.close()]
+  Dialog      --> Controller : showAndWait() zwraca kontrolę
+  Controller  -> Controller : refresh()
+  Controller  -> Controller : loadData() [stub]
+  View        --> Administrator : wyświetla zaktualizowaną listę
 end
 
 @enduml

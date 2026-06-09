@@ -1,5 +1,4 @@
-
-@startuml CD_Model
+@startuml CD_POJO
 title Diagram klas — warstwa modelu (POJO)
 
 skinparam defaultFontName Arial

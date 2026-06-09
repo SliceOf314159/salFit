@@ -1,3 +1,4 @@
+/home/konrad/salFit/src/main/java/com/salfit/model/StatusKarnetu.java
 /home/konrad/salFit/src/main/java/com/salfit/model/Trener.java
 /home/konrad/salFit/src/main/java/com/salfit/repository/CzlonekRepository.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/TrainerShellController.java
@@ -8,9 +9,11 @@
 /home/konrad/salFit/src/main/java/com/salfit/SceneManager.java
 /home/konrad/salFit/src/main/java/com/salfit/model/Czlonek.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/SalaController.java
+/home/konrad/salFit/src/main/java/com/salfit/model/RodzajKarnetu.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/TrainerUczestnicyController.java
 /home/konrad/salFit/src/main/java/com/salfit/Main.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/ChangePasswordController.java
+/home/konrad/salFit/src/main/java/com/salfit/model/Zajecia.java
 /home/konrad/salFit/src/main/java/com/salfit/repository/TrenerRepository.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/RaportController.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/MainController.java
@@ -21,8 +24,11 @@
 /home/konrad/salFit/src/main/java/com/salfit/controllers/AddEditZajeciaDialogController.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/GrafikController.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/TrainerGrafikController.java
+/home/konrad/salFit/src/main/java/com/salfit/repository/GrafikRepository.java
+/home/konrad/salFit/src/main/java/com/salfit/model/StatusSali.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/TrainerAktywnoscController.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/AddEditSalaDialogController.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/AddEditTrenerDialogController.java
+/home/konrad/salFit/src/main/java/com/salfit/repository/Repository.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/LoginController.java
 /home/konrad/salFit/src/main/java/com/salfit/controllers/TrainerProfilController.java

@@ -1,5 +1,5 @@
 @startuml SD_SprzedajKarnet
-title Diagram sekwencji — Sprzedaz karnetu (Epic 4)
+title Diagram sekwencji — Sprzedaż karnetu (Epic 4)
 
 skinparam defaultFontName Arial
 skinparam defaultFontSize 11
@@ -31,41 +31,55 @@ skinparam note {
 actor Administrator
 boundary "CzlonekView\n(FXML)" as View
 control "CzlonekController" as Controller
+' Dialog otwierany jako osobny Stage z Modality.APPLICATION_MODAL
+boundary "SprzedajKarnetDialog\n(FXML)" as Dialog
+control "SprzedajKarnetDialogController" as DialogCtrl
 entity "CzlonekRepository" as Repo
 database "czlonkowie.json\nkarnety.json" as File
 
 Administrator -> View       : kliknie "Sprzedaj karnet"
 View          -> Controller : onSprzedajKarnet()
-Controller    -> Repo       : findAll()
-Repo          --> Controller : List<Czlonek>
-Controller    -> View       : showDialog(czlonkowie)
 
-Administrator -> View       : wybiera czlonka,\nrodzaj karnetu,\ndate rozpoczecia
-Administrator -> View       : kliknie "Sprzedaj"
-View          -> Controller : onZapisz(czlonekId, rodzaj, dataOd)
+' openDialog() tworzy nowe okno modalne i wywołuje showAndWait()
+Controller    -> Controller : openDialog("/views/dialogs/\nSprzedajKarnetDialog.fxml", "Sprzedaż karnetu")
+Controller    -> Dialog     : new Stage(Modality.APPLICATION_MODAL)\nFXMLLoader.load(...)
+Dialog        -> DialogCtrl : initialize()
 
-Controller    -> Controller : obliczDataDo(rodzaj, dataOd)
+' Docelowo — po podłączeniu CzlonekRepository
+DialogCtrl    -> Repo       : findAll()
+Repo          --> DialogCtrl : List<Czlonek>
+DialogCtrl    -> Dialog     : wypełnia ComboBox fieldCzlonek\ndataOd = LocalDate.now()\nwyświetla mini-kalendarz renderCalendar()
 
-note right of Controller
-  MIESIĘCZNY  -> +30 dni
-  KWARTALNY   -> +90 dni
-  ROCZNY      -> +365 dni
+Administrator -> Dialog     : wybiera rodzaj karnetu
+Dialog        -> DialogCtrl : onRodzajChanged()
+
+note right of DialogCtrl
+  Inline switch expression:
+  "Miesięczny" → dataOd +30 dni
+  "Kwartalny"  → dataOd +90 dni
+  "Roczny"     → dataOd +365 dni
 end note
 
-Controller    -> Controller : new Karnet(czlonekId, rodzaj, dataOd, dataDo)
-Controller    -> Repo       : saveKarnet(karnet)
+DialogCtrl    -> Dialog     : aktualizuje fieldDataDo
+
+Administrator -> Dialog     : klika dzień w mini-kalendarzu
+Dialog        -> DialogCtrl : onDataOdChanged() → onRodzajChanged()
+DialogCtrl    -> Dialog     : aktualizuje fieldDataDo
+
+Administrator -> Dialog     : kliknie "Sprzedaj"
+Dialog        -> DialogCtrl : onSprzedaj()
+
+' Zapis — do zaimplementowania po podłączeniu CzlonekRepository
+DialogCtrl    -> Repo       : saveKarnet(new Karnet(czlonekId, rodzaj, dataOd, dataDo))
 Repo          -> Repo       : generateId()
 Repo          -> Repo       : cacheKarnety.add(karnet)
 Repo          -> File       : saveToFile() [karnety.json]
 File          --> Repo      : OK
-Repo          --> Controller : void
-Controller    -> View       : closeDialog()
-Controller    -> Repo       : findAll()
-Repo          --> Controller : List<Czlonek>
-Controller    -> Repo       : findAktywnyKarnet(czlonekId)
-Repo          --> Controller : Optional<Karnet>
-Controller    -> Controller  : refresh()
-Controller    -> View        : updateTable(czlonkowie, karnetStatus)
-View          --> Administrator : wyswietla zaktualizowana liste\nze statusem karnetu
+Repo          --> DialogCtrl : void
+DialogCtrl    -> DialogCtrl : closeDialog() [stage.close()]
+Dialog        --> Controller : showAndWait() zwraca kontrolę
+Controller    -> Controller : refresh()
+Controller    -> Controller : loadData() [stub]
+View          --> Administrator : wyświetla zaktualizowaną listę\nze statusem karnetu
 
 @enduml

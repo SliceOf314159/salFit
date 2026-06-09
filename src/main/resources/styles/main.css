@@ -78,7 +78,7 @@
 .sidebar-item {
     -fx-text-fill: -sf-navy;
     -fx-font-size: 12px;
-    -fx-font-weight: 500;
+    -fx-font-weight: bold;
     -fx-padding: 9 20 9 20;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -87,6 +87,9 @@
     -fx-cursor: hand;
     -fx-pref-width: Infinity;
     -fx-max-width: Infinity;
+    -fx-min-height: 38;
+    -fx-pref-height: 38;
+    -fx-max-height: 38;
 }
 .sidebar-item:hover {
     -fx-background-color: -sf-indigo-dim;
@@ -98,6 +101,7 @@
     -fx-text-fill: -sf-indigo;
     -fx-font-weight: bold;
     -fx-border-width: 0 0 0 3;
+    -fx-alignment: CENTER_LEFT;
 }
 /* Trainer sidebar accent */
 .sidebar-item-active.trainer {

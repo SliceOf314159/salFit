@@ -29,7 +29,7 @@
                        styleClass="auth-desc" wrapText="true"/>
 
                 <Label fx:id="adminError" styleClass="auth-error" wrapText="true"
-                       managed="false" visible="false"/>
+                       minHeight="22" visible="false"/>
 
                 <VBox spacing="5" style="-fx-padding: 0 0 14 0;">
                     <Label text="LOGIN" styleClass="field-label"/>
@@ -59,7 +59,7 @@
                        styleClass="auth-desc" wrapText="true"/>
 
                 <Label fx:id="trainerError" styleClass="auth-error" wrapText="true"
-                       managed="false" visible="false"/>
+                       minHeight="22" visible="false"/>
 
                 <VBox spacing="5" style="-fx-padding: 0 0 14 0;">
                     <Label text="LOGIN" styleClass="field-label"/>

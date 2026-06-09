@@ -15,8 +15,6 @@ public class CzlonekController {
 
     @FXML private VBox membersTab;
     @FXML private VBox passesTab;
-    @FXML private Button tabMemberBtn;
-    @FXML private Button tabPassBtn;
 
     @FXML private TextField searchMembers;
     @FXML private TableView<Object> czlonekTable;
@@ -118,20 +116,12 @@ public class CzlonekController {
     public void showMembersTab() {
         membersTab.setVisible(true);  membersTab.setManaged(true);
         passesTab.setVisible(false);  passesTab.setManaged(false);
-        tabMemberBtn.getStyleClass().removeAll("btn-ghost");
-        tabMemberBtn.getStyleClass().add("btn-secondary");
-        tabPassBtn.getStyleClass().removeAll("btn-secondary");
-        tabPassBtn.getStyleClass().add("btn-ghost");
     }
 
     @FXML
     public void showPassesTab() {
         membersTab.setVisible(false); membersTab.setManaged(false);
         passesTab.setVisible(true);   passesTab.setManaged(true);
-        tabPassBtn.getStyleClass().removeAll("btn-ghost");
-        tabPassBtn.getStyleClass().add("btn-secondary");
-        tabMemberBtn.getStyleClass().removeAll("btn-secondary");
-        tabMemberBtn.getStyleClass().add("btn-ghost");
     }
 
     @FXML

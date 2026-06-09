@@ -34,7 +34,17 @@ public class MainController {
     @FXML public void showSalaView()    { loadContent("/views/SalaView.fxml",     btnSale);      }
     @FXML public void showGrafikView()  { loadContent("/views/GrafikView.fxml",   btnGrafik);    }
     @FXML public void showCzlonekView() { loadContent("/views/CzlonekView.fxml",  btnCzlonkowie);}
-    @FXML public void showKarnetView()  { loadContent("/views/CzlonekView.fxml",  btnKarnety);   }
+    @FXML public void showKarnetView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CzlonekView.fxml"));
+            Node view = loader.load();
+            loader.<CzlonekController>getController().showPassesTab();
+            contentArea.getChildren().setAll(view);
+            updateActiveButton(btnKarnety);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML public void showRaportView()  { loadContent("/views/RaportView.fxml",   btnRaporty);   }
 
     @FXML
