@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.salfit.controllers.GrafikController"
+      styleClass="main-content" spacing="0">
+    <stylesheets><URL value="@/styles/main.css"/></stylesheets>
+
+    <HBox styleClass="page-header" alignment="CENTER_LEFT">
+        <Label text="Grafik zajęć" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Dodaj zajęcia" styleClass="btn,btn-primary"
+                onAction="#onDodajZajecia"/>
+    </HBox>
+
+    <VBox styleClass="card" spacing="0">
+        <!-- Calendar navigation row -->
+        <HBox styleClass="cal-nav" alignment="CENTER_LEFT" spacing="10"
+              style="-fx-padding: 0 0 16 0;">
+            <Button text="← Poprzedni" styleClass="btn,btn-ghost,btn-sm"
+                    onAction="#onPoprzedniTydzien"/>
+            <Label fx:id="weekLabel" text="Tydzień 19–23 maja 2026"
+                   style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: -sf-navy;"
+                   HBox.hgrow="ALWAYS"/>
+            <Button text="Następny →" styleClass="btn,btn-ghost,btn-sm"
+                    onAction="#onNastepnyTydzien"/>
+        </HBox>
+
+        <!-- Weekly grid -->
+        <ScrollPane fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
+                    style="-fx-background-color: transparent;">
+            <GridPane fx:id="grafikGrid" hgap="0" vgap="0"
+                      style="-fx-background-color: -sf-white;">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="55" prefWidth="60" maxWidth="70"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
+                </columnConstraints>
+            </GridPane>
+        </ScrollPane>
+    </VBox>
+</VBox>

@@ -1,0 +1,703 @@
+/* ── Design tokens (looked-up colors) ─────────────────────────── */
+.root {
+    -sf-navy:         #1a1f3c;
+    -sf-indigo:       #3b4fd4;
+    -sf-indigo-light: #5c6ee8;
+    -sf-indigo-dim:   #e8ebfc;
+    -sf-teal:         #2ab5a0;
+    -sf-danger:       #d03b3b;
+    -sf-success:      #1e8a5e;
+    -sf-warn:         #b36b00;
+    -sf-amber:        #e08c2c;
+    -sf-muted:        #6b7280;
+    -sf-border:       #d4d8f0;
+    -sf-bg:           #f4f5fb;
+    -sf-white:        #ffffff;
+
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-background-color: -sf-bg;
+}
+
+/* ── Topbar ────────────────────────────────────────────────────── */
+.topbar {
+    -fx-background-color: -sf-navy;
+    -fx-padding: 0 24 0 24;
+    -fx-min-height: 58px;
+    -fx-pref-height: 58px;
+    -fx-max-height: 58px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 16;
+}
+.topbar-logo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.topbar-logo-accent {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-teal;
+}
+.topbar-spacer { -fx-hgrow: ALWAYS; }
+.topbar-user {
+    -fx-text-fill: rgba(255,255,255,0.65);
+    -fx-font-size: 11px;
+}
+.topbar-link {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 11px;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+.topbar-link:hover {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-text-fill: white;
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 0 1 0 0;
+    -fx-pref-width: 220;
+    -fx-min-width: 220;
+    -fx-max-width: 220;
+    -fx-padding: 16 0 16 0;
+    -fx-spacing: 0;
+}
+.sidebar-section {
+    -fx-text-fill: -sf-muted;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16 2 16;
+}
+.sidebar-item {
+    -fx-text-fill: -sf-navy;
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-padding: 9 20 9 20;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 3;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-pref-width: Infinity;
+    -fx-max-width: Infinity;
+}
+.sidebar-item:hover {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-text-fill: -sf-indigo;
+}
+.sidebar-item-active {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-border-color: -sf-indigo;
+    -fx-text-fill: -sf-indigo;
+    -fx-font-weight: bold;
+    -fx-border-width: 0 0 0 3;
+}
+/* Trainer sidebar accent */
+.sidebar-item-active.trainer {
+    -fx-background-color: #e6f7f5;
+    -fx-border-color: -sf-teal;
+    -fx-text-fill: -sf-teal;
+}
+
+/* ── Main content area ─────────────────────────────────────────── */
+.main-scroll {
+    -fx-background-color: -sf-bg;
+}
+.main-scroll > .viewport { -fx-background-color: -sf-bg; }
+.main-content {
+    -fx-background-color: -sf-bg;
+    -fx-padding: 28 32 28 32;
+    -fx-spacing: 0;
+}
+
+/* ── Page header ───────────────────────────────────────────────── */
+.page-header {
+    -fx-spacing: 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 20 0;
+}
+.page-title {
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-navy;
+}
+
+/* ── Card ──────────────────────────────────────────────────────── */
+.card {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, rgba(26,31,60,0.10), 4, 0, 0, 1);
+}
+.card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-navy;
+    -fx-padding: 0 0 16 0;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────── */
+.btn {
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.btn-primary {
+    -fx-background-color: -sf-indigo;
+    -fx-text-fill: white;
+    -fx-border-color: -sf-indigo;
+    -fx-border-width: 1;
+}
+.btn-primary:hover {
+    -fx-background-color: -sf-indigo-light;
+    -fx-border-color: -sf-indigo-light;
+}
+.btn-secondary {
+    -fx-background-color: -sf-white;
+    -fx-text-fill: -sf-indigo;
+    -fx-border-color: -sf-indigo;
+    -fx-border-width: 1;
+}
+.btn-secondary:hover { -fx-background-color: -sf-indigo-dim; }
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: -sf-muted;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+}
+.btn-ghost:hover {
+    -fx-border-color: -sf-indigo;
+    -fx-text-fill: -sf-indigo;
+    -fx-background-color: -sf-indigo-dim;
+}
+.btn-danger {
+    -fx-background-color: #fff0f0;
+    -fx-text-fill: -sf-danger;
+    -fx-border-color: #f5c0c0;
+    -fx-border-width: 1;
+}
+.btn-danger:hover { -fx-background-color: #ffe0e0; }
+.btn-success {
+    -fx-background-color: -sf-teal;
+    -fx-text-fill: white;
+    -fx-border-color: -sf-teal;
+    -fx-border-width: 1;
+}
+.btn-success:hover { -fx-background-color: #239e8b; }
+.btn-sm {
+    -fx-padding: 5 12 5 12;
+    -fx-font-size: 11px;
+}
+.back-btn {
+    -fx-padding: 7 16 7 16;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-border-color: -sf-border;
+    -fx-background-color: -sf-white;
+    -fx-text-fill: -sf-muted;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+}
+.back-btn:hover {
+    -fx-border-color: -sf-indigo;
+    -fx-text-fill: -sf-indigo;
+}
+
+/* ── Form fields ───────────────────────────────────────────────── */
+.field-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-muted;
+}
+.req { -fx-text-fill: -sf-danger; }
+.field {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 9 12 9 12;
+    -fx-font-size: 12px;
+    -fx-pref-height: 36px;
+}
+.field:focused {
+    -fx-border-color: -sf-indigo;
+    -fx-effect: dropshadow(gaussian, rgba(59,79,212,0.12), 6, 0, 0, 0);
+}
+.field-hint {
+    -fx-font-size: 10px;
+    -fx-text-fill: -sf-muted;
+    -fx-padding: 2 0 0 0;
+}
+.form-actions {
+    -fx-padding: 20 0 0 0;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1 0 0 0;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* ── Stepper ───────────────────────────────────────────────────── */
+.stepper {
+    -fx-alignment: CENTER;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-spacing: 0;
+}
+.stepper-btn {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-text-fill: -sf-indigo;
+    -fx-border-width: 0;
+    -fx-padding: 8 14 8 14;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+}
+.stepper-btn:hover {
+    -fx-background-color: -sf-indigo;
+    -fx-text-fill: white;
+}
+.stepper-value {
+    -fx-background-color: -sf-white;
+    -fx-border-width: 0;
+    -fx-alignment: CENTER;
+    -fx-font-size: 12px;
+    -fx-pref-width: 60px;
+    -fx-pref-height: 36px;
+}
+
+/* ── Table ─────────────────────────────────────────────────────── */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: -sf-border;
+}
+.table-view .column-header-background {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 0 0 2 0;
+}
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 40px;
+}
+.table-view .column-header .label {
+    -fx-text-fill: -sf-indigo;
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 14 10 14;
+}
+.table-row-cell {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 42px;
+}
+.table-row-cell:hover {
+    -fx-background-color: #f8f9ff;
+}
+.table-row-cell:selected {
+    -fx-background-color: -sf-indigo-dim;
+}
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -sf-navy;
+}
+.table-row-cell .table-cell {
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-navy;
+    -fx-border-color: transparent;
+}
+.table-view .filler {
+    -fx-background-color: -sf-indigo-dim;
+}
+
+/* ── Badges ────────────────────────────────────────────────────── */
+.badge {
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 20;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+.badge-green { -fx-background-color: #dcfce7; -fx-text-fill: #15803d; }
+.badge-red   { -fx-background-color: #fee2e2; -fx-text-fill: #b91c1c; }
+.badge-amber { -fx-background-color: #fef3c7; -fx-text-fill: #92400e; }
+.badge-blue  { -fx-background-color: -sf-indigo-dim; -fx-text-fill: -sf-indigo; }
+.badge-gray  { -fx-background-color: #f3f4f6; -fx-text-fill: #6b7280; }
+
+/* ── Toolbar / search ──────────────────────────────────────────── */
+.toolbar {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 16 0;
+}
+.search-box {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-pref-height: 36px;
+    -fx-spacing: 8;
+    -fx-padding: 0 12 0 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 320px;
+    -fx-max-width: 480px;
+}
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-size: 12px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* ── Stat cards ────────────────────────────────────────────────── */
+.stat-card {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 18 20 18 20;
+    -fx-effect: dropshadow(gaussian, rgba(26,31,60,0.12), 3, 0, 0, 1);
+}
+.stat-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-indigo;
+}
+.stat-value-green { -fx-text-fill: -sf-success; }
+.stat-value-warn  { -fx-text-fill: -sf-warn; }
+.stat-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -sf-muted;
+    -fx-font-weight: 500;
+}
+
+/* ── Progress bars (reports) ───────────────────────────────────── */
+.progress-bar {
+    -fx-pref-height: 8px;
+    -fx-max-height: 8px;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+.progress-bar > .track {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-background-radius: 4;
+}
+.progress-bar > .bar {
+    -fx-background-color: -sf-indigo;
+    -fx-background-radius: 4;
+}
+.progress-bar-teal > .bar { -fx-background-color: -sf-teal; }
+.progress-bar-danger > .bar { -fx-background-color: -sf-danger; }
+.progress-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-text-fill: -sf-navy;
+    -fx-min-width: 80px;
+}
+.progress-pct {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-muted;
+    -fx-min-width: 50px;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* ── Calendar grid ─────────────────────────────────────────────── */
+.cal-header-cell {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-text-fill: -sf-indigo;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 10 8 10;
+    -fx-alignment: CENTER;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+}
+.cal-time-cell {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-muted;
+    -fx-alignment: CENTER;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-padding: 6 8 6 8;
+    -fx-background-color: -sf-white;
+    -fx-min-width: 55px;
+}
+.cal-cell {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-min-height: 56px;
+    -fx-padding: 4;
+}
+.cal-event {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-text-fill: -sf-indigo;
+    -fx-background-radius: 4;
+    -fx-padding: 3 6 3 6;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-cursor: default;
+}
+.cal-event-yellow { -fx-background-color: #fef9c3; -fx-text-fill: #92400e; }
+.cal-event-green  { -fx-background-color: #dcfce7; -fx-text-fill: #15803d; }
+.cal-event-pink   { -fx-background-color: #fce7f3; -fx-text-fill: #9d174d; }
+.cal-event-sub    { -fx-font-weight: 400; -fx-font-size: 9px; }
+
+/* ── Auth pages ────────────────────────────────────────────────── */
+.auth-page {
+    -fx-background-color: -sf-bg;
+    -fx-alignment: CENTER;
+}
+.auth-logo {
+    -fx-alignment: CENTER;
+    -fx-spacing: 4;
+    -fx-padding: 0 0 36 0;
+}
+.auth-logo-text {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-navy;
+}
+.auth-logo-accent {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-teal;
+}
+.auth-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: -sf-muted;
+}
+.auth-card {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 32;
+    -fx-pref-width: 380px;
+    -fx-max-width: 400px;
+    -fx-effect: dropshadow(gaussian, rgba(26,31,60,0.10), 4, 0, 0, 1);
+}
+.auth-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-navy;
+    -fx-padding: 0 0 6 0;
+}
+.auth-desc {
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-muted;
+    -fx-wrap-text: true;
+    -fx-padding: 0 0 20 0;
+}
+.auth-footer {
+    -fx-alignment: CENTER;
+    -fx-padding: 14 0 0 0;
+}
+.auth-link {
+    -fx-text-fill: -sf-indigo;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-underline: false;
+}
+.auth-link:hover { -fx-underline: true; }
+.auth-success {
+    -fx-background-color: #dcfce7;
+    -fx-border-color: #86efac;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 12 16 12 16;
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-success;
+    -fx-wrap-text: true;
+}
+.auth-error {
+    -fx-background-color: #fee2e2;
+    -fx-border-color: #fca5a5;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-danger;
+    -fx-wrap-text: true;
+}
+
+/* ── Password strength bar ─────────────────────────────────────── */
+.strength-bar-track {
+    -fx-background-color: -sf-border;
+    -fx-background-radius: 2;
+    -fx-pref-height: 4px;
+    -fx-max-height: 4px;
+    -fx-pref-width: Infinity;
+}
+.strength-hint {
+    -fx-font-size: 10px;
+    -fx-text-fill: -sf-muted;
+    -fx-padding: 4 0 0 0;
+}
+
+/* ── Profile view ──────────────────────────────────────────────── */
+.profile-notice {
+    -fx-background-color: #f8f9ff;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-muted;
+    -fx-wrap-text: true;
+}
+.profile-row {
+    -fx-border-color: -sf-border;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 0 10 0;
+    -fx-alignment: CENTER_LEFT;
+}
+.profile-key {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-muted;
+    -fx-min-width: 160px;
+    -fx-pref-width: 160px;
+}
+.profile-value {
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-navy;
+}
+
+/* ── Participants meta ─────────────────────────────────────────── */
+.participants-meta {
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-muted;
+    -fx-padding: 0 0 12 0;
+}
+.participants-count {
+    -fx-font-size: 12px;
+    -fx-text-fill: -sf-indigo;
+    -fx-font-weight: bold;
+}
+
+/* ── Mini calendar (sell pass) ─────────────────────────────────── */
+.mini-cal {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 16;
+}
+.mini-cal-month {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-navy;
+}
+.mini-cal-nav {
+    -fx-background-color: transparent;
+    -fx-text-fill: -sf-muted;
+    -fx-border-width: 0;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 2 6 2 6;
+}
+.mini-cal-nav:hover { -fx-text-fill: -sf-indigo; }
+.mini-cal-weekday {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -sf-muted;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 24px;
+}
+.mini-cal-day {
+    -fx-font-size: 11px;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 32px;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: -sf-navy;
+}
+.mini-cal-day:hover { -fx-background-color: -sf-indigo-dim; }
+.mini-cal-day-selected {
+    -fx-background-color: -sf-indigo;
+    -fx-text-fill: white;
+}
+
+/* ── Avatar upload placeholder ─────────────────────────────────── */
+.avatar-upload {
+    -fx-background-color: -sf-indigo-dim;
+    -fx-border-color: -sf-border;
+    -fx-border-width: 2;
+    -fx-border-radius: 55;
+    -fx-background-radius: 55;
+    -fx-border-style: dashed;
+    -fx-cursor: hand;
+    -fx-pref-width: 110px;
+    -fx-pref-height: 110px;
+    -fx-alignment: CENTER;
+    -fx-spacing: 6;
+}
+.avatar-upload:hover {
+    -fx-border-color: -sf-indigo;
+}
+.avatar-upload-icon {
+    -fx-font-size: 22px;
+    -fx-text-fill: -sf-muted;
+}
+.avatar-upload-text {
+    -fx-font-size: 10px;
+    -fx-text-fill: -sf-muted;
+    -fx-wrap-text: true;
+    -fx-text-alignment: CENTER;
+}
+
+/* ── Checkbox group ────────────────────────────────────────────── */
+.checkbox-item {
+    -fx-spacing: 6;
+    -fx-cursor: hand;
+}
+.checkbox-item .box {
+    -fx-background-color: -sf-white;
+    -fx-border-color: -sf-border;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+.checkbox-item:selected .box {
+    -fx-background-color: -sf-indigo;
+    -fx-border-color: -sf-indigo;
+}
+
+/* ── Dialog ────────────────────────────────────────────────────── */
+.dialog-root {
+    -fx-background-color: -sf-bg;
+    -fx-padding: 0;
+}

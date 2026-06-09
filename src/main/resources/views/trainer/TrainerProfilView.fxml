@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.salfit.controllers.TrainerProfilController"
+      styleClass="main-content" spacing="0">
+    <stylesheets><URL value="@/styles/main.css"/></stylesheets>
+
+    <HBox styleClass="page-header" alignment="CENTER_LEFT">
+        <Label text="Mój profil" styleClass="page-title"/>
+    </HBox>
+
+    <VBox styleClass="card" maxWidth="560" spacing="16">
+
+        <!-- Read-only notice -->
+        <Label text="Dane edytuje administrator. Skontaktuj się z biurem w celu zmiany danych."
+               styleClass="profile-notice" wrapText="true"/>
+
+        <!-- Profile key-value rows -->
+        <HBox styleClass="profile-row" alignment="CENTER_LEFT">
+            <Label text="Imię i nazwisko" styleClass="profile-key"/>
+            <Label fx:id="valNazwa" text="Anna Kowalska" styleClass="profile-value"/>
+        </HBox>
+        <HBox styleClass="profile-row" alignment="CENTER_LEFT">
+            <Label text="Specjalizacja" styleClass="profile-key"/>
+            <Label fx:id="valSpec" text="Yoga, Stretching" styleClass="profile-value"/>
+        </HBox>
+        <HBox styleClass="profile-row" alignment="CENTER_LEFT">
+            <Label text="E-mail" styleClass="profile-key"/>
+            <Label fx:id="valEmail" text="anna@salfit.pl" styleClass="profile-value"/>
+        </HBox>
+        <HBox styleClass="profile-row" alignment="CENTER_LEFT">
+            <Label text="Telefon" styleClass="profile-key"/>
+            <Label fx:id="valTelefon" text="500 100 200" styleClass="profile-value"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 10 0;">
+            <Label text="Status" styleClass="profile-key"/>
+            <Label text="Aktywny" styleClass="badge,badge-green"/>
+        </HBox>
+    </VBox>
+</VBox>

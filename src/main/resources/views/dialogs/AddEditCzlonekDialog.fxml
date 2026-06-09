@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.salfit.controllers.AddEditCzlonekDialogController"
+      styleClass="dialog-root" prefWidth="820" spacing="0">
+    <stylesheets><URL value="@/styles/main.css"/></stylesheets>
+
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                style="-fx-background-color: -sf-bg;" VBox.vgrow="ALWAYS">
+        <HBox style="-fx-padding: 24;" spacing="24" alignment="TOP_LEFT">
+
+            <!-- Main form card -->
+            <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
+
+                <HBox spacing="16">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <HBox spacing="2"><Label text="IMIę" styleClass="field-label"/>
+                            <Label text="*" styleClass="req"/></HBox>
+                        <TextField fx:id="fieldImie" styleClass="field" promptText="Imię"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <HBox spacing="2"><Label text="NAZWISKO" styleClass="field-label"/>
+                            <Label text="*" styleClass="req"/></HBox>
+                        <TextField fx:id="fieldNazwisko" styleClass="field" promptText="Nazwisko"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <HBox spacing="2"><Label text="E-MAIL" styleClass="field-label"/>
+                            <Label text="*" styleClass="req"/></HBox>
+                        <TextField fx:id="fieldEmail" styleClass="field"
+                                   promptText="adres@email.pl"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="NUMER TELEFONU" styleClass="field-label"/>
+                        <TextField fx:id="fieldTelefon" styleClass="field"
+                                   promptText="000-000-000"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="DATA URODZENIA" styleClass="field-label"/>
+                        <DatePicker fx:id="fieldDataUr" styleClass="field"
+                                    maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="PŁEĆ" styleClass="field-label"/>
+                        <ComboBox fx:id="fieldPlec" styleClass="field"
+                                  maxWidth="Infinity" promptText="Wybierz…"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="MIASTO" styleClass="field-label"/>
+                        <TextField fx:id="fieldMiasto" styleClass="field"
+                                   promptText="Kraków"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="KOD POCZTOWY" styleClass="field-label"/>
+                        <TextField fx:id="fieldKod" styleClass="field"
+                                   promptText="30-001"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="5">
+                    <Label text="ULICA" styleClass="field-label"/>
+                    <TextField fx:id="fieldUlica" styleClass="field"
+                               promptText="ul. Przykładowa 1"/>
+                </VBox>
+
+                <HBox styleClass="form-actions" alignment="CENTER_LEFT">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Anuluj" styleClass="btn,btn-ghost"
+                            onAction="#onCancel"/>
+                    <Button fx:id="btnSave" text="Zapisz"
+                            styleClass="btn,btn-primary"
+                            onAction="#onSave"/>
+                </HBox>
+            </VBox>
+
+            <!-- Notes + avatar sidebar -->
+            <VBox prefWidth="220" spacing="16">
+                <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
+                    <Label text="NOTATKI DLA ADMINISTRATORA"
+                           styleClass="field-label"/>
+                    <TextArea fx:id="fieldNotatki" styleClass="field"
+                              promptText="Wewnętrzne notatki…"
+                              prefRowCount="5" maxWidth="Infinity"/>
+
+                    <Label text="ZDJĘCIE" styleClass="field-label"
+                           style="-fx-padding: 8 0 0 0;"/>
+                    <VBox styleClass="avatar-upload" alignment="CENTER"
+                          spacing="6" onMouseClicked="#onChoosePhoto"
+                          style="-fx-pref-width: 90px; -fx-pref-height: 90px;">
+                        <Label text="📷" style="-fx-font-size: 18px; -fx-text-fill: -sf-muted;"/>
+                        <Label text="Dodaj" styleClass="avatar-upload-text"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+
+        </HBox>
+    </ScrollPane>
+</VBox>

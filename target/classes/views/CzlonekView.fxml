@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.salfit.controllers.CzlonekController"
+      styleClass="main-content" spacing="0">
+    <stylesheets><URL value="@/styles/main.css"/></stylesheets>
+
+    <!-- Tab bar: Members | Passes -->
+    <HBox spacing="0" style="-fx-padding: 0 0 20 0;" alignment="CENTER_LEFT">
+        <Label text="Zarządzanie członkami" styleClass="page-title"
+               HBox.hgrow="ALWAYS"/>
+        <HBox spacing="8" alignment="CENTER_RIGHT">
+            <Button fx:id="tabMemberBtn" text="Lista członków"
+                    styleClass="btn,btn-secondary" onAction="#showMembersTab"/>
+            <Button fx:id="tabPassBtn" text="Karnety"
+                    styleClass="btn,btn-ghost" onAction="#showPassesTab"/>
+        </HBox>
+    </HBox>
+
+    <!-- ── Members tab ─────────────────────────────────────────── -->
+    <VBox fx:id="membersTab" spacing="0">
+        <HBox styleClass="page-header" alignment="CENTER_LEFT"
+              style="-fx-padding: 0 0 16 0;">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+ Zarejestruj członka" styleClass="btn,btn-primary"
+                    onAction="#onDodajCzlonka"/>
+        </HBox>
+
+        <VBox styleClass="card" spacing="0">
+            <HBox styleClass="toolbar" alignment="CENTER_LEFT">
+                <HBox styleClass="search-box" alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔍" style="-fx-text-fill: -sf-muted;"/>
+                    <TextField fx:id="searchMembers" styleClass="search-field"
+                               promptText="Szukaj członka…"
+                               onKeyReleased="#onSearchMembers" HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </HBox>
+            <TableView fx:id="czlonekTable" VBox.vgrow="ALWAYS"
+                       style="-fx-pref-height: 400px;">
+                <columns>
+                    <TableColumn text="ID"             fx:id="colMId"     prefWidth="70"/>
+                    <TableColumn text="IMIĘ I NAZWISKO" fx:id="colMNazwa"  prefWidth="200"/>
+                    <TableColumn text="E-MAIL"         fx:id="colMEmail"  prefWidth="180"/>
+                    <TableColumn text="TELEFON"        fx:id="colMTel"    prefWidth="120"/>
+                    <TableColumn text="KARNET"         fx:id="colMKarnet" prefWidth="130"/>
+                    <TableColumn text="AKCJE"          fx:id="colMAkcje"  prefWidth="160"/>
+                </columns>
+                <placeholder>
+                    <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </VBox>
+
+    <!-- ── Passes tab ──────────────────────────────────────────── -->
+    <VBox fx:id="passesTab" visible="false" managed="false" spacing="0">
+        <HBox styleClass="page-header" alignment="CENTER_LEFT"
+              style="-fx-padding: 0 0 16 0;">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="+ Sprzedaj karnet" styleClass="btn,btn-primary"
+                    onAction="#onSprzedajKarnet"/>
+        </HBox>
+
+        <VBox styleClass="card" spacing="0">
+            <HBox styleClass="toolbar" alignment="CENTER_LEFT">
+                <HBox styleClass="search-box" alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔍" style="-fx-text-fill: -sf-muted;"/>
+                    <TextField fx:id="searchPasses" styleClass="search-field"
+                               promptText="Szukaj członka…"
+                               onKeyReleased="#onSearchPasses" HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </HBox>
+            <TableView fx:id="karnetTable" VBox.vgrow="ALWAYS"
+                       style="-fx-pref-height: 400px;">
+                <columns>
+                    <TableColumn text="CZŁONEK"        fx:id="colKCzlonek" prefWidth="180"/>
+                    <TableColumn text="RODZAJ KARNETU" fx:id="colKRodzaj"  prefWidth="140"/>
+                    <TableColumn text="OD"             fx:id="colKOd"      prefWidth="100"/>
+                    <TableColumn text="DO"             fx:id="colKDo"      prefWidth="100"/>
+                    <TableColumn text="STATUS"         fx:id="colKStatus"  prefWidth="130"/>
+                    <TableColumn text="AKCJE"          fx:id="colKAkcje"   prefWidth="120"/>
+                </columns>
+                <placeholder>
+                    <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </VBox>
+
+</VBox>
