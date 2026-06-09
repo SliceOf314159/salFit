@@ -25,69 +25,147 @@ skinparam arrow {
   Thickness 1.5
 }
 
-' Main navigation controller
-class MainController {
-  - BorderPane rootPane
-  - TrenerController trenerController
-  - SalaController salaController
-  - GrafikController grafikController
-  - CzlonekController czlonekController
-  - RaportController raportController
+' ─── Navigation / Auth ───────────────────────────────────────────────────────
+package "Nawigacja / Auth" {
+  class SceneManager << (S,#FCA5A5) singleton >> {
+    - Stage stage
+    --
+    + void init(Stage stage)
+    + Stage getStage()
+    + void showLogin()
+    + void showForgotPassword()
+    + void showChangePassword()
+    + void showAdminShell()
+    + void showTrainerShell()
+    - void loadScene(String fxmlPath)
+  }
+
+  class LoginController {
+    --
+    + void loginAdmin()
+    + void loginTrainer()
+    + void goForgotPassword()
+    - void showError(Label lbl, String msg)
+    - void hideError(Label lbl)
+  }
+
+  class ForgotPasswordController {
+    --
+    + void submitReset()
+    + void goLogin()
+  }
+
+  class ChangePasswordController {
+    --
+    + void updateStrength()
+    + void submitChange()
+    + void goLogin()
+    - void showError(String msg)
+    - void hideError()
+  }
+
+  LoginController          ..> SceneManager : uses
+  ForgotPasswordController ..> SceneManager : uses
+  ChangePasswordController ..> SceneManager : uses
+}
+
+' ─── Admin shell ─────────────────────────────────────────────────────────────
+class MainController << (S,#FCA5A5) singleton >> {
+  - StackPane contentArea
+  - Button activeButton
   --
   + void initialize()
   + void showTrenerView()
   + void showSalaView()
   + void showGrafikView()
   + void showCzlonekView()
+  + void showKarnetView()
   + void showRaportView()
+  + void logout()
+  + void goChangePassword()
+  + void loadContent(String fxmlPath, Button activeBtn)
+  - void updateActiveButton(Button active)
 }
 
-' Manages trainers
+SceneManager ..> MainController : instantiates
+
+' ─── Trener (admin) ──────────────────────────────────────────────────────────
 package "Trener" {
   class TrenerController {
-    - TrenerRepository trenerRepo
-    - TableView<Trener> trenerTable
+    - TableView<Object> trenerTable
     - TextField searchField
     --
     + void initialize()
     + void refresh()
+    + void onSearch()
     + void onDodajTrener()
-    + void onEdytujTrener()
-    + void onUsunTrener()
-    + void onZapisz(Object formData)
-    + void onToggleAktywny()
-    - void waliduj(Object formData)
+    - void onEdytujTrener()
+    - void onToggleAktywny()
     - void loadData()
-    - void applyFilter(String query)
+    - void openDialog(String fxmlPath, String title)
+    - void setupColumns()
   }
+
+  class AddEditTrenerDialogController {
+    - boolean editMode
+    --
+    + void initialize()
+    + void setEditMode(boolean edit)
+    - void onSave()
+    - void onUsun()
+    - void onCancel()
+    - void onChoosePhoto()
+    - boolean validate()
+    - void closeDialog()
+  }
+
   class TrenerRepository << (S,#FCA5A5) singleton >>
   TrenerController ..> TrenerRepository : uses
+  TrenerController ..> AddEditTrenerDialogController : opens dialog
 }
 
-' Manages rooms
+' ─── Sala ────────────────────────────────────────────────────────────────────
 package "Sala" {
   class SalaController {
-    - SalaRepository salaRepo
-    - TableView<Sala> salaTable
+    - TableView<Object> salaTable
+    - TextField searchField
     --
     + void initialize()
     + void refresh()
+    + void onSearch()
     + void onDodajSale()
-    + void onEdytujSale()
-    + void onZmienStatus()
+    - void onEdytujSale()
+    - void onZmienStatus()
     - void loadData()
+    - void openDialog(String path, String title)
+    - void setupColumns()
   }
+
+  class AddEditSalaDialogController {
+    --
+    + void initialize()
+    + void setEditMode(boolean edit)
+    - void onSave()
+    - void onUsun()
+    - void onCancel()
+    - void stepUp()
+    - void stepDown()
+    - void stepPrzerwaUp()
+    - void stepPrzerwaDown()
+    - void step(TextField field, int delta)
+    - void closeDialog()
+  }
+
   class SalaRepository << (S,#FCA5A5) singleton >>
   SalaController ..> SalaRepository : uses
+  SalaController ..> AddEditSalaDialogController : opens dialog
 }
 
-' Manages schedule
+' ─── Grafik (admin) ──────────────────────────────────────────────────────────
 package "Grafik" {
   class GrafikController {
-    - GrafikRepository grafikRepo
-    - TrenerRepository trenerRepo
-    - SalaRepository salaRepo
     - GridPane grafikGrid
+    - Label weekLabel
     - LocalDate aktualnyTydzien
     --
     + void initialize()
@@ -95,49 +173,92 @@ package "Grafik" {
     + void onPoprzedniTydzien()
     + void onNastepnyTydzien()
     + void onDodajZajecia()
-    + void onZapisz(Object formData)
-    + void onUsunZajecia()
-    - void renderTydzien(LocalDate poniedzialek)
-    - boolean sprawdzKonflikt(Zajecia z)
+    - void renderTydzien(LocalDate monday)
+    - Label makeHeaderCell(String text)
+    - RowConstraints rowConst(double height)
   }
+
+  class AddEditZajeciaDialogController {
+    --
+    + void initialize()
+    - void onSave()
+    - void onCancel()
+    - void stepLimitUp()
+    - void stepLimitDown()
+    - void stepCzasUp()
+    - void stepCzasDown()
+    - void step(TextField field, int delta)
+    - void closeDialog()
+  }
+
   class GrafikRepository << (S,#FCA5A5) singleton >>
   class "TrenerRepository " as GrafTrenerRepo << (S,#FCA5A5) singleton >>
-  class "SalaRepository " as GrafSalaRepo << (S,#FCA5A5) singleton >>
+  class "SalaRepository "   as GrafSalaRepo  << (S,#FCA5A5) singleton >>
   GrafikController ..> GrafikRepository : uses
   GrafikController ..> GrafTrenerRepo   : uses
   GrafikController ..> GrafSalaRepo     : uses
+  GrafikController ..> AddEditZajeciaDialogController : opens dialog
 }
 
-' Manages members
+' ─── Czlonek ─────────────────────────────────────────────────────────────────
 package "Czlonek" {
   class CzlonekController {
-    - CzlonekRepository czlonekRepo
-    - TableView<Czlonek> czlonekTable
-    - TextField searchField
+    - TableView<Object> czlonekTable
+    - TableView<Object> karnetTable
+    - TextField searchMembers
+    - TextField searchPasses
     --
     + void initialize()
     + void refresh()
+    + void showMembersTab()
+    + void showPassesTab()
+    + void onSearchMembers()
+    + void onSearchPasses()
     + void onDodajCzlonka()
-    + void onEdytujCzlonka()
+    - void onEdytujCzlonka()
     + void onSprzedajKarnet()
-    + void onZapisz(Object formData)
-    + void onPrzedluzKarnet()
-    - void obliczDataDo(RodzajKarnetu rodzaj, LocalDate dataOd)
+    - void onPrzedluzKarnet()
     - void loadData()
-    - void applyFilter(String query)
-    - void highlightWygasajaceKarnety()
+    - void setupMemberColumns()
+    - void setupPassColumns()
+    - void openDialog(String path, String title)
   }
+
+  class AddEditCzlonekDialogController {
+    --
+    + void initialize()
+    + void setEditMode(boolean edit)
+    - void onSave()
+    - void onCancel()
+    - void onChoosePhoto()
+    - void closeDialog()
+  }
+
+  class SprzedajKarnetDialogController {
+    - YearMonth displayedMonth
+    --
+    + void initialize()
+    - void onRodzajChanged()
+    - void onDataOdChanged()
+    - void prevMonth()
+    - void nextMonth()
+    - void renderCalendar()
+    - void onNowyCzlonek()
+    - void onSprzedaj()
+    - void onPrzedluz()
+    - void onCancel()
+    - void closeDialog()
+  }
+
   class CzlonekRepository << (S,#FCA5A5) singleton >>
   CzlonekController ..> CzlonekRepository : uses
+  CzlonekController ..> AddEditCzlonekDialogController : opens dialog
+  CzlonekController ..> SprzedajKarnetDialogController : opens dialog
 }
 
-' Generates reports
+' ─── Raport ──────────────────────────────────────────────────────────────────
 package "Raport" {
   class RaportController {
-    - GrafikRepository grafikRepo
-    - SalaRepository salaRepo
-    - TrenerRepository trenerRepo
-    - CzlonekRepository czlonekRepo
     --
     + void initialize()
     + void refresh()
@@ -146,8 +267,6 @@ package "Raport" {
     - Map<String,Double> obliczOblozenieSal()
     - Map<String,Integer> obliczAktywnosc()
     - List<Karnet> pobierzWygasajace()
-    - void serializujDoCSV(Object dane)
-    - void serializujDoTXT(Object dane)
   }
   class "GrafikRepository "  as RapGrafikRepo  << (S,#FCA5A5) singleton >>
   class "SalaRepository "    as RapSalaRepo    << (S,#FCA5A5) singleton >>
@@ -159,15 +278,77 @@ package "Raport" {
   RaportController ..> RapCzlonekRepo : uses
 }
 
-TrenerController  -[hidden]right- SalaController
-SalaController    -[hidden]right- GrafikController
-GrafikController  -[hidden]right- CzlonekController
-CzlonekController -[hidden]right- RaportController
+' ─── Trainer shell ───────────────────────────────────────────────────────────
+package "Trener (widok trenera)" {
+  class TrainerShellController << (S,#FCA5A5) singleton >> {
+    - StackPane contentArea
+    - Button activeButton
+    --
+    + void initialize()
+    + void showGrafik()
+    + void showProfil()
+    + void showAktywnosc()
+    + void showUczestnicy()
+    + void logout()
+    + void goChangePassword()
+    + void loadContent(String fxmlPath, Button activeBtn)
+    - void updateActiveButton(Button active)
+  }
 
-MainController "1" -down-> "1" TrenerController
-MainController "1" -down-> "1" SalaController
-MainController "1" -down-> "1" GrafikController
-MainController "1" -down-> "1" CzlonekController
-MainController "1" -down-> "1" RaportController
+  class TrainerGrafikController {
+    - GridPane grafikGrid
+    - Label weekLabel
+    - LocalDate aktualnyTydzien
+    --
+    + void initialize()
+    + void onPoprzedni()
+    + void onNastepny()
+    + void showUczestnicy()
+    - void refresh()
+    - void renderGrid(LocalDate monday)
+    - Label makeHeaderCell(String text)
+    - RowConstraints rowConst(double h)
+  }
+
+  class TrainerProfilController {
+    --
+    + void initialize()
+  }
+
+  class TrainerAktywnoscController {
+    - ComboBox<String> monthSelector
+    --
+    + void initialize()
+    - void populateMonthSelector()
+    - void loadData()
+    - void onMonthChanged()
+  }
+
+  class TrainerUczestnicyController {
+    - TableView<Object> uczestnicyTable
+    --
+    + void initialize()
+    - void setupColumns()
+    - void loadData()
+    - void backToGrafik()
+  }
+
+  class "GrafikRepository " as TrGrafikRepo << (S,#FCA5A5) singleton >>
+  TrainerShellController ..> TrainerGrafikController     : loads
+  TrainerShellController ..> TrainerProfilController     : loads
+  TrainerShellController ..> TrainerAktywnoscController  : loads
+  TrainerShellController ..> TrainerUczestnicyController : loads
+  TrainerGrafikController   ..> TrGrafikRepo             : uses
+  TrainerUczestnicyController ..> TrainerShellController : backToGrafik()
+}
+
+SceneManager ..> TrainerShellController : instantiates
+
+' ─── Admin navigation ────────────────────────────────────────────────────────
+MainController ..> TrenerController  : loads
+MainController ..> SalaController    : loads
+MainController ..> GrafikController  : loads
+MainController ..> CzlonekController : loads
+MainController ..> RaportController  : loads
 
 @enduml

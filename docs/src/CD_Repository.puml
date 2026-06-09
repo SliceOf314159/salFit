@@ -112,6 +112,8 @@ class CzlonekRepository {
   - String generateId()
 }
 
+Repository        -[hidden]down-  TrenerRepository
+Repository        -[hidden]down-  CzlonekRepository
 TrenerRepository  -[hidden]right- SalaRepository
 SalaRepository    -[hidden]right- GrafikRepository
 GrafikRepository  -[hidden]right- CzlonekRepository

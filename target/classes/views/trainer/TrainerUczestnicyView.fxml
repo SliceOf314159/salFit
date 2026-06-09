@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.salfit.controllers.TrainerUczestnicyController"
+      styleClass="main-content" spacing="0">
+    <stylesheets><URL value="@/styles/main.css"/></stylesheets>
+
+    <HBox styleClass="page-header" alignment="CENTER_LEFT">
+        <Label fx:id="pageTitle"
+               text="Uczestnicy zajęć: Yoga — Sala A, Pon 8:00"
+               styleClass="page-title" wrapText="true"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Powrót do grafiku" styleClass="btn,btn-ghost,back-btn"
+                onAction="#backToGrafik"/>
+    </HBox>
+
+    <!-- Participant count summary -->
+    <HBox style="-fx-padding: 0 0 12 0;" spacing="4" alignment="CENTER_LEFT">
+        <Label fx:id="countLabel" text="12" styleClass="participants-count"/>
+        <Label text=" uczestników zapisanych · " styleClass="participants-meta"/>
+        <Label fx:id="limitLabel" text="20" styleClass="participants-count"/>
+        <Label text=" miejsc dostępnych" styleClass="participants-meta"/>
+    </HBox>
+
+    <VBox styleClass="card" spacing="0">
+        <TableView fx:id="uczestnicyTable" VBox.vgrow="ALWAYS"
+                   style="-fx-pref-height: 420px;">
+            <columns>
+                <TableColumn text="ID"             fx:id="colId"      prefWidth="80"/>
+                <TableColumn text="IMIĘ I NAZWISKO" fx:id="colNazwa"  prefWidth="200"/>
+                <TableColumn text="KARNET"         fx:id="colKarnet"  prefWidth="120"/>
+                <TableColumn text="STATUS KARNETU" fx:id="colStatus"  prefWidth="160"/>
+                <TableColumn text="OBECNOŚĆ"       fx:id="colObec"    prefWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="Brak uczestników" style="-fx-text-fill: -sf-muted;"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+
+</VBox>

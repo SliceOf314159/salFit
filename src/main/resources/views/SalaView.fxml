@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.salfit.controllers.SalaController"
+      styleClass="main-content" spacing="0">
+    <stylesheets><URL value="@/styles/main.css"/></stylesheets>
+
+    <HBox styleClass="page-header" alignment="CENTER_LEFT">
+        <Label text="Zarządzanie salami" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Dodaj salę" styleClass="btn,btn-primary"
+                onAction="#onDodajSale"/>
+    </HBox>
+
+    <VBox styleClass="card" spacing="0">
+        <HBox styleClass="toolbar" alignment="CENTER_LEFT">
+            <HBox styleClass="search-box" alignment="CENTER_LEFT" spacing="8">
+                <Label text="🔍" style="-fx-text-fill: -sf-muted;"/>
+                <TextField fx:id="searchField" styleClass="search-field"
+                           promptText="Szukaj sali…"
+                           onKeyReleased="#onSearch" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </HBox>
+
+        <TableView fx:id="salaTable" VBox.vgrow="ALWAYS"
+                   style="-fx-pref-height: 400px;">
+            <columns>
+                <TableColumn text="ID"           fx:id="colId"      prefWidth="70"/>
+                <TableColumn text="NAZWA"        fx:id="colNazwa"   prefWidth="140"/>
+                <TableColumn text="TYP"          fx:id="colTyp"     prefWidth="100"/>
+                <TableColumn text="POJEMNOŚĆ"    fx:id="colPoj"     prefWidth="100"/>
+                <TableColumn text="PRZERWA MIN." fx:id="colPrzerwa" prefWidth="110"/>
+                <TableColumn text="STATUS"       fx:id="colStatus"  prefWidth="110"/>
+                <TableColumn text="AKCJE"        fx:id="colAkcje"   prefWidth="180"/>
+            </columns>
+            <placeholder>
+                <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>
