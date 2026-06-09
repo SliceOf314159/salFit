@@ -1,0 +1,173 @@
+@startuml CD_Controllers
+top to bottom direction
+title Diagram klas — warstwa kontrolerów (JavaFX Controllers)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  HeaderBackgroundColor #C7D2FE
+  HeaderFontColor #1a1f3c
+  FontColor #1a1f3c
+  BorderThickness 1.5
+}
+skinparam package {
+  BackgroundColor #F5F7FF
+  BorderColor #818CF8
+  FontColor #1a1f3c
+  BorderThickness 1.2
+}
+skinparam arrow {
+  Color #374151
+  Thickness 1.5
+}
+
+' Main navigation controller
+class MainController {
+  - BorderPane rootPane
+  - TrenerController trenerController
+  - SalaController salaController
+  - GrafikController grafikController
+  - CzlonekController czlonekController
+  - RaportController raportController
+  --
+  + void initialize()
+  + void showTrenerView()
+  + void showSalaView()
+  + void showGrafikView()
+  + void showCzlonekView()
+  + void showRaportView()
+}
+
+' Manages trainers
+package "Trener" {
+  class TrenerController {
+    - TrenerRepository trenerRepo
+    - TableView<Trener> trenerTable
+    - TextField searchField
+    --
+    + void initialize()
+    + void refresh()
+    + void onDodajTrener()
+    + void onEdytujTrener()
+    + void onUsunTrener()
+    + void onZapisz(Object formData)
+    + void onToggleAktywny()
+    - void waliduj(Object formData)
+    - void loadData()
+    - void applyFilter(String query)
+  }
+  class TrenerRepository << (S,#FCA5A5) singleton >>
+  TrenerController ..> TrenerRepository : uses
+}
+
+' Manages rooms
+package "Sala" {
+  class SalaController {
+    - SalaRepository salaRepo
+    - TableView<Sala> salaTable
+    --
+    + void initialize()
+    + void refresh()
+    + void onDodajSale()
+    + void onEdytujSale()
+    + void onZmienStatus()
+    - void loadData()
+  }
+  class SalaRepository << (S,#FCA5A5) singleton >>
+  SalaController ..> SalaRepository : uses
+}
+
+' Manages schedule
+package "Grafik" {
+  class GrafikController {
+    - GrafikRepository grafikRepo
+    - TrenerRepository trenerRepo
+    - SalaRepository salaRepo
+    - GridPane grafikGrid
+    - LocalDate aktualnyTydzien
+    --
+    + void initialize()
+    + void refresh()
+    + void onPoprzedniTydzien()
+    + void onNastepnyTydzien()
+    + void onDodajZajecia()
+    + void onZapisz(Object formData)
+    + void onUsunZajecia()
+    - void renderTydzien(LocalDate poniedzialek)
+    - boolean sprawdzKonflikt(Zajecia z)
+  }
+  class GrafikRepository << (S,#FCA5A5) singleton >>
+  class "TrenerRepository " as GrafTrenerRepo << (S,#FCA5A5) singleton >>
+  class "SalaRepository " as GrafSalaRepo << (S,#FCA5A5) singleton >>
+  GrafikController ..> GrafikRepository : uses
+  GrafikController ..> GrafTrenerRepo   : uses
+  GrafikController ..> GrafSalaRepo     : uses
+}
+
+' Manages members
+package "Czlonek" {
+  class CzlonekController {
+    - CzlonekRepository czlonekRepo
+    - TableView<Czlonek> czlonekTable
+    - TextField searchField
+    --
+    + void initialize()
+    + void refresh()
+    + void onDodajCzlonka()
+    + void onEdytujCzlonka()
+    + void onSprzedajKarnet()
+    + void onZapisz(Object formData)
+    + void onPrzedluzKarnet()
+    - void obliczDataDo(RodzajKarnetu rodzaj, LocalDate dataOd)
+    - void loadData()
+    - void applyFilter(String query)
+    - void highlightWygasajaceKarnety()
+  }
+  class CzlonekRepository << (S,#FCA5A5) singleton >>
+  CzlonekController ..> CzlonekRepository : uses
+}
+
+' Generates reports
+package "Raport" {
+  class RaportController {
+    - GrafikRepository grafikRepo
+    - SalaRepository salaRepo
+    - TrenerRepository trenerRepo
+    - CzlonekRepository czlonekRepo
+    --
+    + void initialize()
+    + void refresh()
+    + void onEksportCSV()
+    + void onEksportTXT()
+    - Map<String,Double> obliczOblozenieSal()
+    - Map<String,Integer> obliczAktywnosc()
+    - List<Karnet> pobierzWygasajace()
+    - void serializujDoCSV(Object dane)
+    - void serializujDoTXT(Object dane)
+  }
+  class "GrafikRepository "  as RapGrafikRepo  << (S,#FCA5A5) singleton >>
+  class "SalaRepository "    as RapSalaRepo    << (S,#FCA5A5) singleton >>
+  class "TrenerRepository "  as RapTrenerRepo  << (S,#FCA5A5) singleton >>
+  class "CzlonekRepository " as RapCzlonekRepo << (S,#FCA5A5) singleton >>
+  RaportController ..> RapGrafikRepo  : uses
+  RaportController ..> RapSalaRepo    : uses
+  RaportController ..> RapTrenerRepo  : uses
+  RaportController ..> RapCzlonekRepo : uses
+}
+
+TrenerController  -[hidden]right- SalaController
+SalaController    -[hidden]right- GrafikController
+GrafikController  -[hidden]right- CzlonekController
+CzlonekController -[hidden]right- RaportController
+
+MainController "1" -down-> "1" TrenerController
+MainController "1" -down-> "1" SalaController
+MainController "1" -down-> "1" GrafikController
+MainController "1" -down-> "1" CzlonekController
+MainController "1" -down-> "1" RaportController
+
+@enduml

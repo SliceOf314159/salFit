@@ -1,0 +1,130 @@
+@startuml CD_Repository
+title Diagram klas — warstwa danych (Repository)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  HeaderBackgroundColor #C7D2FE
+  HeaderFontColor #1a1f3c
+  FontColor #1a1f3c
+  BorderThickness 1.5
+}
+skinparam interface {
+  BackgroundColor #F0FDF4
+  BorderColor #16A34A
+  HeaderBackgroundColor #BBF7D0
+  HeaderFontColor #1a1f3c
+}
+skinparam arrow {
+  Color #374151
+  Thickness 1.5
+}
+
+' Generic repository interface
+interface Repository<T> {
+  + List<T> findAll()
+  + Optional<T> findById(String id)
+  + void save(T entity)
+  + void update(T entity)
+  + void delete(String id)
+}
+
+' Trainer repository
+class TrenerRepository {
+  - static TrenerRepository instance
+  - String filePath
+  - List<Trener> cache
+  --
+  + static TrenerRepository getInstance()
+  + List<Trener> findAll()
+  + Optional<Trener> findById(String id)
+  + void save(Trener trener)
+  + void update(Trener trener)
+  + void delete(String id)
+  + List<Trener> findAktywni()
+  - void loadFromFile()
+  - void saveToFile()
+  - String generateId()
+}
+
+' Room repository
+class SalaRepository {
+  - static SalaRepository instance
+  - String filePath
+  - List<Sala> cache
+  --
+  + static SalaRepository getInstance()
+  + List<Sala> findAll()
+  + Optional<Sala> findById(String id)
+  + void save(Sala sala)
+  + void update(Sala sala)
+  + void delete(String id)
+  + List<Sala> findByStatus(StatusSali status)
+  - void loadFromFile()
+  - void saveToFile()
+  - String generateId()
+}
+
+' Schedule repository
+class GrafikRepository {
+  - static GrafikRepository instance
+  - String filePath
+  - List<Zajecia> cache
+  --
+  + static GrafikRepository getInstance()
+  + List<Zajecia> findAll()
+  + Optional<Zajecia> findById(String id)
+  + void save(Zajecia zajecia)
+  + void update(Zajecia zajecia)
+  + void delete(String id)
+  + List<Zajecia> findByTrener(String trenerId)
+  + List<Zajecia> findBySala(String salaId)
+  + List<Zajecia> findByTydzien(LocalDate poniedzialek)
+  - void loadFromFile()
+  - void saveToFile()
+  - String generateId()
+}
+
+' Member repository — persists to czlonkowie.json and karnety.json
+class CzlonekRepository {
+  - static CzlonekRepository instance
+  - String czlonkowiePath
+  - String karnetyPath
+  - List<Czlonek> cacheCzlonkowie
+  - List<Karnet> cacheKarnety
+  --
+  + static CzlonekRepository getInstance()
+  + List<Czlonek> findAll()
+  + Optional<Czlonek> findById(String id)
+  + void save(Czlonek czlonek)
+  + void update(Czlonek czlonek)
+  + void delete(String id)
+  + Optional<Karnet> findAktywnyKarnet(String czlonekId)
+  + List<Karnet> findKarnetyWygasajace(int dni)
+  + void saveKarnet(Karnet karnet)
+  + void updateKarnet(Karnet karnet)
+  - void loadFromFile()
+  - void saveToFile()
+  - String generateId()
+}
+
+TrenerRepository  -[hidden]right- SalaRepository
+SalaRepository    -[hidden]right- GrafikRepository
+GrafikRepository  -[hidden]right- CzlonekRepository
+
+TrenerRepository  ..|> Repository
+SalaRepository    ..|> Repository
+GrafikRepository  ..|> Repository
+CzlonekRepository ..|> Repository
+
+TrenerRepository  ..> Trener  : odczytuje / zapisuje
+SalaRepository    ..> Sala    : odczytuje / zapisuje
+GrafikRepository  ..> Zajecia : odczytuje / zapisuje
+CzlonekRepository ..> Czlonek : odczytuje / zapisuje
+CzlonekRepository ..> Karnet  : odczytuje / zapisuje
+
+@enduml

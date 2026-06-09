@@ -1,0 +1,149 @@
+@startuml CD_Model
+title Diagram klas — warstwa modelu (POJO)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  HeaderBackgroundColor #C7D2FE
+  HeaderFontColor #1a1f3c
+  FontColor #1a1f3c
+  BorderThickness 1.5
+}
+skinparam arrow {
+  Color #374151
+  Thickness 1.5
+}
+skinparam enum {
+  BackgroundColor #FEF9C3
+  BorderColor #CA8A04
+  HeaderBackgroundColor #FDE68A
+}
+
+' Enumerations
+enum StatusSali {
+  DOSTEPNA
+  ZAJETA
+  W_REMONCIE
+}
+
+enum StatusKarnetu {
+  AKTYWNY
+  WYGASL
+  WYGASA_WKROTCE
+}
+
+enum RodzajKarnetu {
+  MIESIĘCZNY
+  KWARTALNY
+  ROCZNY
+}
+
+' Trainer model
+class Trener {
+  - String id
+  - String imie
+  - String nazwisko
+  - String email
+  - String telefon
+  - String specjalizacja
+  - boolean aktywny
+  --
+  + String getId()
+  + String getImie()
+  + String getNazwisko()
+  + String getEmail()
+  + String getTelefon()
+  + String getSpecjalizacja()
+  + boolean isAktywny()
+  + void setAktywny(boolean aktywny)
+  + String getImieNazwisko()
+}
+
+' Room model
+class Sala {
+  - String id
+  - String nazwa
+  - int pojemnosc
+  - int minPrzerwaMinut
+  - StatusSali status
+  --
+  + String getId()
+  + String getNazwa()
+  + int getPojemnosc()
+  + int getMinPrzerwaMinut()
+  + StatusSali getStatus()
+  + void setStatus(StatusSali status)
+}
+
+' Class/session model
+class Zajecia {
+  - String id
+  - String nazwa
+  - String trenerId
+  - String salaId
+  - LocalDateTime termin
+  - int czasTrwaniaMinut
+  - int limitUczestnikow
+  - List<String> uczestnicyIds
+  --
+  + String getId()
+  + String getNazwa()
+  + String getTrenerId()
+  + String getSalaId()
+  + LocalDateTime getTermin()
+  + int getCzasTrwaniaMinut()
+  + int getLimitUczestnikow()
+  + List<String> getUczestnicyIds()
+  + void dodajUczestnika(String czlonekId)
+  + void usunUczestnika(String czlonekId)
+}
+
+' Member model
+class Czlonek {
+  - String id
+  - String imie
+  - String nazwisko
+  - String email
+  - String telefon
+  - LocalDate dataUrodzenia
+  --
+  + String getId()
+  + String getImie()
+  + String getNazwisko()
+  + String getEmail()
+  + String getTelefon()
+  + LocalDate getDataUrodzenia()
+  + String getImieNazwisko()
+}
+
+' Membership card model — getStatus() computes StatusKarnetu from dataDo
+class Karnet {
+  - String id
+  - String czlonekId
+  - RodzajKarnetu rodzaj
+  - LocalDate dataOd
+  - LocalDate dataDo
+  --
+  + String getId()
+  + String getCzlonekId()
+  + RodzajKarnetu getRodzaj()
+  + LocalDate getDataOd()
+  + LocalDate getDataDo()
+  + StatusKarnetu getStatus()
+  + boolean wygasaWCiagu(int dni)
+}
+
+Sala   --> StatusSali    : status
+Karnet --> RodzajKarnetu : rodzaj
+Karnet ..> StatusKarnetu : <<computes>>
+
+Zajecia "0..*" --> "1"    Trener  : prowadzi
+Zajecia "0..*" --> "1"    Sala    : odbywa sie w
+Karnet  "0..*" --> "1"    Czlonek : nalezy do
+Zajecia "0..*" --> "0..*" Czlonek : uczestniczy
+
+@enduml

@@ -1,0 +1,80 @@
+@startuml SD_DodajZajecia
+title Diagram sekwencji — Dodanie zajęć z weryfikacją konfliktu (Epic 3)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+skinparam participant {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  FontColor #1a1f3c
+}
+skinparam actor {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+}
+skinparam sequence {
+  ArrowColor #374151
+  ArrowThickness 1.5
+  LifeLineBorderColor #4338CA
+  LifeLineBackgroundColor #E0E7FF
+  DividerBackgroundColor #F0FDF4
+  DividerBorderColor #16A34A
+}
+skinparam note {
+  BackgroundColor #FEF9C3
+  BorderColor #CA8A04
+}
+
+actor Administrator
+boundary "GrafikView\n(FXML)" as View
+control "GrafikController" as Controller
+entity "GrafikRepository" as GrafikRepo
+entity "TrenerRepository" as TrenerRepo
+entity "SalaRepository" as SalaRepo
+database "grafik.json" as File
+
+Administrator -> View       : kliknie "Dodaj zajęcia"
+View          -> Controller : onDodajZajecia()
+Controller    -> TrenerRepo : findAktywni()
+TrenerRepo    --> Controller : List<Trener>
+Controller    -> SalaRepo   : findByStatus(DOSTEPNA)
+SalaRepo      --> Controller : List<Sala>
+Controller    -> View       : showDialog(trenerzy, sale)
+
+Administrator -> View       : wypełnia formularz\n(nazwa, trener, sala, termin,\nlimit, czas trwania)
+Administrator -> View       : kliknie "Zapisz"
+View          -> Controller : onZapisz(formData)
+
+Controller    -> Controller : new Zajecia(formData)
+Controller    -> GrafikRepo : findByTrener(trenerId)
+GrafikRepo    --> Controller : List<Zajecia>
+Controller    -> GrafikRepo : findBySala(salaId)
+GrafikRepo    --> Controller : List<Zajecia>
+Controller    -> Controller : sprawdzKonflikt(zajecia)
+
+note right of Controller
+  Sprawdza czy trener
+  i sala są wolne
+  w danym terminie
+end note
+
+alt konflikt istnieje
+  Controller  -> View       : showAlert("Konflikt terminów:\ntrener lub sala zajęci")
+  View        --> Administrator : wyświetla alert
+  Administrator -> View     : poprawia dane formularza
+else brak konfliktu
+  Controller  -> GrafikRepo : save(zajecia)
+  GrafikRepo  -> GrafikRepo : generateId()
+  GrafikRepo  -> GrafikRepo : cache.add(zajecia)
+  GrafikRepo  -> File       : saveToFile() [JSON]
+  File        --> GrafikRepo : OK
+  GrafikRepo  --> Controller : void
+  Controller  -> View       : closeDialog()
+  Controller  -> Controller : renderTydzien(aktualnyTydzien)
+  View        --> Administrator : wyświetla zaktualizowany grafik
+end
+
+@enduml

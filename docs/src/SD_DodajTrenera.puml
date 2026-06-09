@@ -1,0 +1,67 @@
+@startuml SD_DodajTrenera
+title Diagram sekwencji — Dodanie trenera (Epic 1)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+skinparam participant {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  FontColor #1a1f3c
+}
+skinparam actor {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+}
+skinparam sequence {
+  ArrowColor #374151
+  ArrowThickness 1.5
+  LifeLineBorderColor #4338CA
+  LifeLineBackgroundColor #E0E7FF
+  DividerBackgroundColor #F0FDF4
+  DividerBorderColor #16A34A
+}
+skinparam note {
+  BackgroundColor #FEF9C3
+  BorderColor #CA8A04
+}
+
+actor Administrator
+boundary "TrenerView\n(FXML)" as View
+control "TrenerController" as Controller
+entity "TrenerRepository" as Repo
+database "trenerzy.json" as File
+
+Administrator -> View       : kliknie "Dodaj trenera"
+View          -> Controller : onDodajTrener()
+Controller    -> View       : showDialog(formularzDodaniaTrenera)
+
+Administrator -> View       : wypelnia formularz\n(imie, nazwisko, email,\nspecjalizacja)
+Administrator -> View       : kliknie "Zapisz"
+View          -> Controller : onZapisz(formData)
+
+Controller    -> Controller : waliduj(formData)
+
+alt dane niepoprawne
+  Controller  -> View       : showError("Uzupelnij wymagane pola")
+  View        --> Administrator : wyswietla komunikat bledu
+else dane poprawne
+  Controller  -> Controller : new Trener(formData)
+  Controller  -> Repo       : save(trener)
+  Repo        -> Repo       : generateId()
+  Repo        -> Repo       : loadFromFile()
+  Repo        -> Repo       : cache.add(trener)
+  Repo        -> File       : saveToFile() [JSON]
+  File        --> Repo      : OK
+  Repo        --> Controller : void
+  Controller  -> View       : closeDialog()
+  Controller  -> Repo       : findAll()
+  Repo        --> Controller : List<Trener>
+  Controller  -> Controller  : refresh()
+  Controller  -> View        : updateTable(listaTrenerow)
+  View        --> Administrator : wyswietla zaktualizowana liste
+end
+
+@enduml

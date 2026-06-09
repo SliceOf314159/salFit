@@ -1,0 +1,74 @@
+@startuml SD_GenerujRaport
+title Diagram sekwencji — Generowanie i eksport raportu (Epic 5)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+skinparam participant {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  FontColor #1a1f3c
+}
+skinparam actor {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+}
+skinparam sequence {
+  ArrowColor #374151
+  ArrowThickness 1.5
+  LifeLineBorderColor #4338CA
+  LifeLineBackgroundColor #E0E7FF
+  DividerBackgroundColor #F0FDF4
+  DividerBorderColor #16A34A
+}
+skinparam note {
+  BackgroundColor #FEF9C3
+  BorderColor #CA8A04
+}
+
+actor Administrator
+boundary "RaportView\n(FXML)" as View
+control "RaportController" as Controller
+entity "GrafikRepository" as GrafikRepo
+entity "SalaRepository" as SalaRepo
+entity "TrenerRepository" as TrenerRepo
+entity "CzlonekRepository" as CzlonekRepo
+database "plik eksportu\n(.csv / .txt)" as ExportFile
+
+Administrator -> View       : otwiera moduł raportów
+View          -> Controller : initialize()
+
+Controller    -> GrafikRepo   : findByTydzien(aktualnyTydzien)
+GrafikRepo    --> Controller  : List<Zajecia>
+Controller    -> SalaRepo     : findAll()
+SalaRepo      --> Controller  : List<Sala>
+Controller    -> TrenerRepo   : findAll()
+TrenerRepo    --> Controller  : List<Trener>
+Controller    -> CzlonekRepo  : findKarnetyWygasajace(30)
+CzlonekRepo   --> Controller  : List<Karnet>
+
+Controller    -> Controller   : obliczOblozenieSal()
+Controller    -> Controller   : obliczAktywnosc()
+Controller    -> Controller   : pobierzWygasajace()
+Controller    -> View         : renderRaport(dane)
+View          --> Administrator : wyświetla raport\n(paski postępu, statystyki)
+
+alt eksport CSV
+  Administrator -> View      : kliknie "Eksport CSV"
+  View          -> Controller : onEksportCSV()
+  Controller    -> ExportFile : zapisz raport.csv
+  ExportFile    --> Controller : OK
+  Controller    -> View       : showInfo("Plik zapisany")
+  View          --> Administrator : potwierdzenie zapisu
+else eksport TXT
+  Administrator -> View      : kliknie "Eksport TXT"
+  View          -> Controller : onEksportTXT()
+  Controller    -> ExportFile : zapisz raport.txt
+  ExportFile    --> Controller : OK
+  Controller    -> View       : showInfo("Plik zapisany")
+  View          --> Administrator : potwierdzenie zapisu
+end
+
+@enduml

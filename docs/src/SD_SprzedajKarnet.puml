@@ -1,0 +1,71 @@
+@startuml SD_SprzedajKarnet
+title Diagram sekwencji — Sprzedaz karnetu (Epic 4)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+skinparam participant {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  FontColor #1a1f3c
+}
+skinparam actor {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+}
+skinparam sequence {
+  ArrowColor #374151
+  ArrowThickness 1.5
+  LifeLineBorderColor #4338CA
+  LifeLineBackgroundColor #E0E7FF
+  DividerBackgroundColor #F0FDF4
+  DividerBorderColor #16A34A
+}
+skinparam note {
+  BackgroundColor #FEF9C3
+  BorderColor #CA8A04
+}
+
+actor Administrator
+boundary "CzlonekView\n(FXML)" as View
+control "CzlonekController" as Controller
+entity "CzlonekRepository" as Repo
+database "czlonkowie.json\nkarnety.json" as File
+
+Administrator -> View       : kliknie "Sprzedaj karnet"
+View          -> Controller : onSprzedajKarnet()
+Controller    -> Repo       : findAll()
+Repo          --> Controller : List<Czlonek>
+Controller    -> View       : showDialog(czlonkowie)
+
+Administrator -> View       : wybiera czlonka,\nrodzaj karnetu,\ndate rozpoczecia
+Administrator -> View       : kliknie "Sprzedaj"
+View          -> Controller : onZapisz(czlonekId, rodzaj, dataOd)
+
+Controller    -> Controller : obliczDataDo(rodzaj, dataOd)
+
+note right of Controller
+  MIESIĘCZNY  -> +30 dni
+  KWARTALNY   -> +90 dni
+  ROCZNY      -> +365 dni
+end note
+
+Controller    -> Controller : new Karnet(czlonekId, rodzaj, dataOd, dataDo)
+Controller    -> Repo       : saveKarnet(karnet)
+Repo          -> Repo       : generateId()
+Repo          -> Repo       : cacheKarnety.add(karnet)
+Repo          -> File       : saveToFile() [karnety.json]
+File          --> Repo      : OK
+Repo          --> Controller : void
+Controller    -> View       : closeDialog()
+Controller    -> Repo       : findAll()
+Repo          --> Controller : List<Czlonek>
+Controller    -> Repo       : findAktywnyKarnet(czlonekId)
+Repo          --> Controller : Optional<Karnet>
+Controller    -> Controller  : refresh()
+Controller    -> View        : updateTable(czlonkowie, karnetStatus)
+View          --> Administrator : wyswietla zaktualizowana liste\nze statusem karnetu
+
+@enduml

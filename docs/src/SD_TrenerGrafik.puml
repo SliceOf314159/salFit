@@ -1,0 +1,53 @@
+@startuml SD_TrenerGrafik
+title Diagram sekwencji — Trener przegląda własny grafik (Epic 3)
+
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+skinparam participant {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+  FontColor #1a1f3c
+}
+skinparam actor {
+  BackgroundColor #EEF2FF
+  BorderColor #4338CA
+}
+skinparam sequence {
+  ArrowColor #374151
+  ArrowThickness 1.5
+  LifeLineBorderColor #4338CA
+  LifeLineBackgroundColor #E0E7FF
+  DividerBackgroundColor #F0FDF4
+  DividerBorderColor #16A34A
+}
+
+actor Trener
+boundary "GrafikView\n(FXML)" as View
+control "GrafikController" as Controller
+entity "GrafikRepository" as GrafikRepo
+entity "SalaRepository" as SalaRepo
+
+Trener        -> View        : otwiera "Mój grafik"
+View          -> Controller  : initialize()
+Controller    -> Controller  : aktualnyTydzien = LocalDate.now()
+Controller    -> Controller  : poniedzialek = aktualnyTydzien\n.with(MONDAY)
+
+Controller    -> GrafikRepo  : findByTrener(trenerId)
+GrafikRepo    --> Controller : List<Zajecia>
+Controller    -> SalaRepo    : findAll()
+SalaRepo      --> Controller : List<Sala>
+Controller    -> Controller  : renderTydzien(poniedzialek)
+View          --> Trener     : wyświetla siatkę tygodniową\n(godz. × dni tygodnia)
+
+Trener        -> View        : kliknie "Następny tydzień"
+View          -> Controller  : onNastepnyTydzien()
+Controller    -> Controller  : aktualnyTydzien = aktualnyTydzien\n.plusWeeks(1)
+Controller    -> GrafikRepo  : findByTrener(trenerId)
+GrafikRepo    --> Controller : List<Zajecia>
+Controller    -> Controller  : renderTydzien(poniedzialek)
+View          --> Trener     : wyświetla zaktualizowany widok
+
+@enduml
