@@ -1,0 +1,280 @@
+@startuml
+enum com.salfit.model.StatusSali {
++  DOSTEPNA
++  ZAJETA
++  W_REMONCIE
+}
+
+class com.salfit.SceneManager {
++ {static} SceneManager getInstance()
++ void init(Stage)
++ Stage getStage()
++ void showLogin()
++ void showForgotPassword()
++ void showChangePassword()
++ void showAdminShell()
++ void showTrainerShell()
+}
+
+class com.salfit.SessionManager {
++ {static} SessionManager getInstance()
++ String getLoggedInTrenerId()
++ void setLoggedInTrenerId(String)
++ Zajecia getSelectedZajecia()
++ void setSelectedZajecia(Zajecia)
+}
+
+class com.salfit.controllers.GrafikController {
++ void initialize()
++ void onPoprzedniTydzien()
++ void onNastepnyTydzien()
++ void onDodajZajecia()
++ void refresh()
+}
+
+class com.salfit.controllers.TrainerAktywnoscController {
++ void initialize()
+}
+
+class com.salfit.controllers.MainController {
++ {static} MainController getInstance()
++ void initialize()
++ void showTrenerView()
++ void showSalaView()
++ void showGrafikView()
++ void showCzlonekView()
++ void showKarnetView()
++ void showRaportView()
++ void loadContent(String,Button)
+}
+
+class com.salfit.model.Trener {
++ String getId()
++ String getImie()
++ String getNazwisko()
++ String getEmail()
++ String getTelefon()
++ String getSpecjalizacja()
++ boolean isAktywny()
++ void setAktywny(boolean)
++ String getImieNazwisko()
+}
+
+class com.salfit.controllers.TrainerShellController {
++ {static} TrainerShellController getInstance()
++ void initialize()
++ void showGrafik()
++ void showProfil()
++ void showAktywnosc()
++ void showUczestnicy()
++ void loadContent(String,Button)
+}
+
+class com.salfit.controllers.ForgotPasswordController {
+}
+class com.salfit.repository.GrafikRepository {
+~ <<Create>> GrafikRepository(String)
+~ {static} void resetInstance()
++ {static} GrafikRepository getInstance()
++ List<Zajecia> findAll()
++ Optional<Zajecia> findById(String)
++ void save(Zajecia)
++ void update(Zajecia)
++ void delete(String)
++ List<Zajecia> findByTrener(String)
++ List<Zajecia> findBySala(String)
++ List<Zajecia> findByTydzien(LocalDate)
+}
+
+class com.salfit.controllers.TrenerController {
++ void initialize()
++ void onDodajTrener()
++ void refresh()
+}
+
+class com.salfit.model.Zajecia {
++ String getId()
++ String getNazwa()
++ String getTrenerId()
++ String getSalaId()
++ LocalDateTime getTermin()
++ int getCzasTrwaniaMinut()
++ int getLimitUczestnikow()
++ List<String> getUczestnicyIds()
++ void dodajUczestnika(String)
++ void usunUczestnika(String)
+}
+
+class com.salfit.controllers.SprzedajKarnetDialogController {
++ void initialize()
++ void setCzlonek(Czlonek)
+}
+
+class com.salfit.controllers.AddEditZajeciaDialogController {
++ void initialize()
++ void setZajecia(Zajecia)
++ void setEditMode(boolean)
+}
+
+class com.salfit.repository.TrenerRepository {
+~ <<Create>> TrenerRepository(String)
+~ {static} void resetInstance()
++ {static} TrenerRepository getInstance()
++ List<Trener> findAll()
++ Optional<Trener> findById(String)
++ void save(Trener)
++ void update(Trener)
++ void delete(String)
++ List<Trener> findAktywni()
+}
+
+class com.salfit.controllers.AddEditTrenerDialogController {
++ void initialize()
++ void setTrener(Trener)
++ void setEditMode(boolean)
+}
+
+class com.salfit.controllers.SalaController {
++ void initialize()
++ void onDodajSale()
++ void refresh()
+}
+
+class com.salfit.controllers.TrainerUczestnicyController {
++ void initialize()
+}
+
+class com.salfit.controllers.AddEditSalaDialogController {
++ void initialize()
++ void setSala(Sala)
++ void setEditMode(boolean)
+}
+
+class com.salfit.repository.SalaRepository {
+~ <<Create>> SalaRepository(String)
+~ {static} void resetInstance()
++ {static} SalaRepository getInstance()
++ List<Sala> findAll()
++ Optional<Sala> findById(String)
++ void save(Sala)
++ void update(Sala)
++ void delete(String)
++ List<Sala> findByStatus(StatusSali)
+}
+
+class com.salfit.Main {
++ void start(Stage)
++ {static} void main(String[])
+}
+
+class com.salfit.repository.CzlonekRepository {
+~ <<Create>> CzlonekRepository(String,String)
+~ {static} void resetInstance()
++ {static} CzlonekRepository getInstance()
++ List<Czlonek> findAll()
++ Optional<Czlonek> findById(String)
++ void save(Czlonek)
++ void update(Czlonek)
++ void delete(String)
++ Optional<Karnet> findAktywnyKarnet(String)
++ List<Karnet> findKarnetyWygasajace(int)
++ void saveKarnet(Karnet)
++ List<Karnet> findAllKarnety()
++ void updateKarnet(Karnet)
+}
+
+class com.salfit.controllers.CzlonekController {
++ void initialize()
++ void showMembersTab()
++ void showPassesTab()
++ void onDodajCzlonka()
++ void onSprzedajKarnet()
++ void refresh()
+}
+
+interface com.salfit.repository.Repository {
+~ List<T> findAll()
+~ Optional<T> findById(String)
+~ void save(T)
+~ void update(T)
+~ void delete(String)
+~ {static} Gson createGson()
+}
+
+class com.salfit.controllers.LoginController {
+}
+class com.salfit.model.Sala {
++ String getId()
++ String getNazwa()
++ int getPojemnosc()
++ int getMinPrzerwaMinut()
++ StatusSali getStatus()
++ void setStatus(StatusSali)
+}
+
+enum com.salfit.model.StatusKarnetu {
++  AKTYWNY
++  WYGASL
++  WYGASA_WKROTCE
+}
+
+class com.salfit.model.Czlonek {
++ String getId()
++ String getImie()
++ String getNazwisko()
++ String getEmail()
++ String getTelefon()
++ LocalDate getDataUrodzenia()
++ String getImieNazwisko()
+}
+
+enum com.salfit.model.RodzajKarnetu {
++  MIESIECZNY
++  KWARTALNY
++  ROCZNY
+}
+
+class com.salfit.controllers.ChangePasswordController {
+}
+class com.salfit.controllers.TrainerGrafikController {
++ void initialize()
++ void onPoprzedni()
++ void onNastepny()
++ void showUczestnicy()
+}
+
+class com.salfit.controllers.RaportController {
++ void initialize()
++ void refresh()
++ void onEksportCSV()
++ void onEksportTXT()
+}
+
+class com.salfit.controllers.TrainerProfilController {
++ void initialize()
+}
+
+class com.salfit.model.Karnet {
++ String getId()
++ String getCzlonekId()
++ RodzajKarnetu getRodzaj()
++ LocalDate getDataOd()
++ LocalDate getDataDo()
++ StatusKarnetu getStatus()
++ boolean wygasaWCiagu(int)
+}
+
+class com.salfit.controllers.AddEditCzlonekDialogController {
++ void initialize()
++ void setCzlonek(Czlonek)
++ void setEditMode(boolean)
+}
+
+
+
+com.salfit.repository.Repository <|.. com.salfit.repository.GrafikRepository
+com.salfit.repository.Repository <|.. com.salfit.repository.TrenerRepository
+com.salfit.repository.Repository <|.. com.salfit.repository.SalaRepository
+javafx.application.Application <|-- com.salfit.Main
+com.salfit.repository.Repository <|.. com.salfit.repository.CzlonekRepository
+@enduml

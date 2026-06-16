@@ -15,22 +15,20 @@
 
                 <!-- Main form card -->
                 <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
-                    <!-- Row 1 -->
+                    <!-- Row 1: imie + nazwisko -->
                     <HBox spacing="16">
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
                             <HBox spacing="2"><Label text="IMIę" styleClass="field-label"/>
                                 <Label text="*" styleClass="req"/></HBox>
-                            <TextField fx:id="fieldImie" styleClass="field"
-                                       promptText="Imię"/>
+                            <TextField fx:id="fieldImie" styleClass="field" promptText="Imię"/>
                         </VBox>
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
                             <HBox spacing="2"><Label text="NAZWISKO" styleClass="field-label"/>
                                 <Label text="*" styleClass="req"/></HBox>
-                            <TextField fx:id="fieldNazwisko" styleClass="field"
-                                       promptText="Nazwisko"/>
+                            <TextField fx:id="fieldNazwisko" styleClass="field" promptText="Nazwisko"/>
                         </VBox>
                     </HBox>
-                    <!-- Row 2 -->
+                    <!-- Row 2: email + telefon -->
                     <HBox spacing="16">
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
                             <HBox spacing="2"><Label text="E-MAIL" styleClass="field-label"/>
@@ -45,20 +43,6 @@
                                        promptText="000 000 000"/>
                         </VBox>
                     </HBox>
-                    <!-- Row 3 -->
-                    <HBox spacing="16">
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="DATA URODZENIA" styleClass="field-label"/>
-                            <DatePicker fx:id="fieldDataUr" styleClass="field"
-                                        maxWidth="Infinity"/>
-                        </VBox>
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="PŁEĆ" styleClass="field-label"/>
-                            <ComboBox fx:id="fieldPlec" styleClass="field"
-                                      maxWidth="Infinity"
-                                      promptText="Wybierz…"/>
-                        </VBox>
-                    </HBox>
                     <!-- Specialisations -->
                     <VBox spacing="5">
                         <Label text="SPECJALIZACJE" styleClass="field-label"/>
@@ -71,25 +55,10 @@
                                       styleClass="checkbox-item"/>
                         </HBox>
                     </VBox>
-                    <!-- Row 4 -->
-                    <HBox spacing="16">
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="POZIOM DOŚWIADCZENIA" styleClass="field-label"/>
-                            <ComboBox fx:id="fieldPoziom" styleClass="field"
-                                      maxWidth="Infinity"/>
-                        </VBox>
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
-                            <Label text="SOCIAL MEDIA" styleClass="field-label"/>
-                            <TextField fx:id="fieldSocial" styleClass="field"
-                                       promptText="https://instagram.com/…"/>
-                        </VBox>
-                    </HBox>
-                    <!-- Bio -->
+                    <!-- Poziom doświadczenia -->
                     <VBox spacing="5">
-                        <Label text="BIO" styleClass="field-label"/>
-                        <TextArea fx:id="fieldBio" styleClass="field"
-                                  promptText="Krótki opis trenera…"
-                                  prefRowCount="3"/>
+                        <Label text="POZIOM DOŚWIADCZENIA" styleClass="field-label"/>
+                        <ComboBox fx:id="fieldPoziom" styleClass="field" maxWidth="Infinity"/>
                     </VBox>
                     <!-- Password (add mode only) -->
                     <VBox fx:id="passwordSection" spacing="5">
@@ -101,24 +70,20 @@
 
                     <!-- Form actions -->
                     <HBox styleClass="form-actions" alignment="CENTER_LEFT">
-                        <Button text="Zachowaj wersję roboczą"
-                                styleClass="btn,btn-ghost"/>
+                        <Button text="Zachowaj wersję roboczą" styleClass="btn,btn-ghost"/>
                         <Button fx:id="btnUsun" text="Usuń trenera"
                                 styleClass="btn,btn-danger"
                                 managed="false" visible="false"
                                 onAction="#onUsun"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="Anuluj" styleClass="btn,btn-ghost"
-                                onAction="#onCancel"/>
+                        <Button text="Anuluj" styleClass="btn,btn-ghost" onAction="#onCancel"/>
                         <Button fx:id="btnSave" text="Zapisz"
-                                styleClass="btn,btn-primary"
-                                onAction="#onSave"/>
+                                styleClass="btn,btn-primary" onAction="#onSave"/>
                     </HBox>
                 </VBox>
 
                 <!-- Avatar sidebar -->
-                <VBox styleClass="card" prefWidth="180" alignment="TOP_CENTER"
-                      spacing="12">
+                <VBox styleClass="card" prefWidth="180" alignment="TOP_CENTER" spacing="12">
                     <Label text="ZDJĘCIE" styleClass="field-label"/>
                     <VBox styleClass="avatar-upload" alignment="CENTER"
                           spacing="6" onMouseClicked="#onChoosePhoto">

@@ -16,14 +16,22 @@ import java.util.stream.Collectors;
 public class CzlonekRepository implements Repository<Czlonek> {
 
     private static CzlonekRepository instance;
-    private final String czlonkowiePath = "resources/data/czlonkowie.json";
-    private final String karnetyPath = "resources/data/karnety.json";
+    private String czlonkowiePath = "resources/data/czlonkowie.json";
+    private String karnetyPath = "resources/data/karnety.json";
 
     private List<Czlonek> cacheCzlonkowie = new ArrayList<>();
     private List<Karnet> cacheKarnety = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
     private CzlonekRepository() { loadFromFile(); }
+
+    CzlonekRepository(String czlonkowiePath, String karnetyPath) {
+        this.czlonkowiePath = czlonkowiePath;
+        this.karnetyPath = karnetyPath;
+        loadFromFile();
+    }
+
+    static void resetInstance() { instance = null; }
 
     public static CzlonekRepository getInstance() {
         if (instance == null) instance = new CzlonekRepository();
@@ -93,6 +101,8 @@ public class CzlonekRepository implements Repository<Czlonek> {
         cacheKarnety.add(karnet);
         saveToFile();
     }
+
+    public List<Karnet> findAllKarnety() { return cacheKarnety; }
 
     public void updateKarnet(Karnet karnet) {
         for (int i = 0; i < cacheKarnety.size(); i++) {

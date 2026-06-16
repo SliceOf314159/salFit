@@ -42,59 +42,23 @@
                     </VBox>
                 </HBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="DATA URODZENIA" styleClass="field-label"/>
-                        <DatePicker fx:id="fieldDataUr" styleClass="field"
-                                    maxWidth="Infinity"/>
-                    </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="PŁEĆ" styleClass="field-label"/>
-                        <ComboBox fx:id="fieldPlec" styleClass="field"
-                                  maxWidth="Infinity" promptText="Wybierz…"/>
-                    </VBox>
-                </HBox>
-
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="MIASTO" styleClass="field-label"/>
-                        <TextField fx:id="fieldMiasto" styleClass="field"
-                                   promptText="Kraków"/>
-                    </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="KOD POCZTOWY" styleClass="field-label"/>
-                        <TextField fx:id="fieldKod" styleClass="field"
-                                   promptText="30-001"/>
-                    </VBox>
-                </HBox>
-
                 <VBox spacing="5">
-                    <Label text="ULICA" styleClass="field-label"/>
-                    <TextField fx:id="fieldUlica" styleClass="field"
-                               promptText="ul. Przykładowa 1"/>
+                    <Label text="DATA URODZENIA" styleClass="field-label"/>
+                    <DatePicker fx:id="fieldDataUr" styleClass="field" maxWidth="Infinity"/>
                 </VBox>
 
                 <HBox styleClass="form-actions" alignment="CENTER_LEFT">
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Anuluj" styleClass="btn,btn-ghost"
-                            onAction="#onCancel"/>
+                    <Button text="Anuluj" styleClass="btn,btn-ghost" onAction="#onCancel"/>
                     <Button fx:id="btnSave" text="Zapisz"
-                            styleClass="btn,btn-primary"
-                            onAction="#onSave"/>
+                            styleClass="btn,btn-primary" onAction="#onSave"/>
                 </HBox>
             </VBox>
 
-            <!-- Notes + avatar sidebar -->
-            <VBox prefWidth="220" spacing="16">
-                <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
-                    <Label text="NOTATKI DLA ADMINISTRATORA"
-                           styleClass="field-label"/>
-                    <TextArea fx:id="fieldNotatki" styleClass="field"
-                              promptText="Wewnętrzne notatki…"
-                              prefRowCount="5" maxWidth="Infinity"/>
-
-                    <Label text="ZDJĘCIE" styleClass="field-label"
-                           style="-fx-padding: 8 0 0 0;"/>
+            <!-- Avatar sidebar -->
+            <VBox prefWidth="180" spacing="16">
+                <VBox styleClass="card" spacing="12" alignment="TOP_CENTER">
+                    <Label text="ZDJĘCIE" styleClass="field-label"/>
                     <VBox styleClass="avatar-upload" alignment="CENTER"
                           spacing="6" onMouseClicked="#onChoosePhoto"
                           style="-fx-pref-width: 90px; -fx-pref-height: 90px;">

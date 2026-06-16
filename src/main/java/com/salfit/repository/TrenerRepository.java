@@ -15,13 +15,18 @@ import java.util.stream.Collectors;
 public class TrenerRepository implements Repository<Trener> {
 
     private static TrenerRepository instance;
-    private final String filePath = "resources/data/trenerzy.json";
+    private String filePath = "resources/data/trenerzy.json";
     private List<Trener> cache = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
-    private TrenerRepository() {
+    private TrenerRepository() { loadFromFile(); }
+
+    TrenerRepository(String filePath) {
+        this.filePath = filePath;
         loadFromFile();
     }
+
+    static void resetInstance() { instance = null; }
 
     public static TrenerRepository getInstance() {
         if (instance == null) {

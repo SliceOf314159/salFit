@@ -1,12 +1,18 @@
 package com.salfit.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.salfit.model.Trener;
+import com.salfit.repository.Repository;
+import com.salfit.repository.TrenerRepository;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddEditTrenerDialogController {
 
@@ -14,25 +20,21 @@ public class AddEditTrenerDialogController {
     @FXML private TextField fieldNazwisko;
     @FXML private TextField fieldEmail;
     @FXML private TextField fieldTelefon;
-    @FXML private DatePicker fieldDataUr;
-    @FXML private ComboBox<String> fieldPlec;
     @FXML private ComboBox<String> fieldPoziom;
-    @FXML private TextField fieldSocial;
-    @FXML private TextArea fieldBio;
-    @FXML private PasswordField fieldHaslo;
     @FXML private CheckBox cbGrupowy;
     @FXML private CheckBox cbPersonalny;
     @FXML private CheckBox cbOnline;
     @FXML private VBox passwordSection;
+    @FXML private PasswordField fieldHaslo;
     @FXML private Button btnUsun;
     @FXML private Button btnSave;
 
+    private static final Gson GSON = Repository.createGson();
     private boolean editMode = false;
+    private Trener trener;
 
     @FXML
     public void initialize() {
-        fieldPlec.setItems(FXCollections.observableArrayList(
-                "Kobieta", "Mężczyzna", "Inna"));
         fieldPoziom.setItems(FXCollections.observableArrayList(
                 "★★★★★ Ekspert",
                 "★★★★☆ Zaawansowany",
@@ -40,6 +42,19 @@ public class AddEditTrenerDialogController {
                 "★★☆☆☆ Podstawowy",
                 "★☆☆☆☆ Początkujący"));
         fieldPoziom.getSelectionModel().select(2);
+    }
+
+    public void setTrener(Trener t) {
+        this.trener = t;
+        fieldImie.setText(t.getImie());
+        fieldNazwisko.setText(t.getNazwisko());
+        fieldEmail.setText(t.getEmail());
+        fieldTelefon.setText(t.getTelefon());
+        String spec = t.getSpecjalizacja() != null ? t.getSpecjalizacja() : "";
+        cbGrupowy.setSelected(spec.contains("grupowy"));
+        cbPersonalny.setSelected(spec.contains("personalny"));
+        cbOnline.setSelected(spec.contains("online"));
+        if (t.getPoziom() != null) fieldPoziom.setValue(t.getPoziom());
     }
 
     public void setEditMode(boolean edit) {
@@ -54,23 +69,40 @@ public class AddEditTrenerDialogController {
     @FXML
     private void onSave() {
         if (!validate()) return;
+
+        List<String> specs = new ArrayList<>();
+        if (cbGrupowy.isSelected())    specs.add("grupowy");
+        if (cbPersonalny.isSelected()) specs.add("personalny");
+        if (cbOnline.isSelected())     specs.add("online");
+        String specjalizacja = specs.isEmpty() ? "—" : String.join(", ", specs);
+
+        JsonObject obj = new JsonObject();
+        if (editMode && trener != null) obj.addProperty("id", trener.getId());
+        obj.addProperty("imie",          fieldImie.getText().trim());
+        obj.addProperty("nazwisko",      fieldNazwisko.getText().trim());
+        obj.addProperty("email",         fieldEmail.getText().trim());
+        obj.addProperty("telefon",       fieldTelefon.getText().trim());
+        obj.addProperty("specjalizacja", specjalizacja);
+        obj.addProperty("poziom",        fieldPoziom.getValue());
+        obj.addProperty("aktywny",       true);
+        if (!editMode) {
+            obj.addProperty("haslo", fieldHaslo.getText());
+        } else if (trener != null && trener.getHaslo() != null) {
+            obj.addProperty("haslo", trener.getHaslo());
+        }
+
+        Trener t = GSON.fromJson(obj, Trener.class);
+        if (editMode) {
+            TrenerRepository.getInstance().update(t);
+        } else {
+            TrenerRepository.getInstance().save(t);
+        }
         closeDialog();
     }
 
-    @FXML
-    private void onUsun() {
-        closeDialog();
-    }
-
-    @FXML
-    private void onCancel() {
-        closeDialog();
-    }
-
-    @FXML
-    private void onChoosePhoto() {
-        /* Open file chooser for avatar image. */
-    }
+    @FXML private void onUsun()       { if (trener != null) TrenerRepository.getInstance().delete(trener.getId()); closeDialog(); }
+    @FXML private void onCancel()     { closeDialog(); }
+    @FXML private void onChoosePhoto(){ /* photo chooser stub */ }
 
     private boolean validate() {
         return !fieldImie.getText().isBlank()

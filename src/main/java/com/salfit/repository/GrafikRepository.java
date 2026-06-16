@@ -16,11 +16,18 @@ import java.util.stream.Collectors;
 public class GrafikRepository implements Repository<Zajecia> {
 
     private static GrafikRepository instance;
-    private final String filePath = "resources/data/zajecia.json";
+    private String filePath = "resources/data/zajecia.json";
     private List<Zajecia> cache = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
     private GrafikRepository() { loadFromFile(); }
+
+    GrafikRepository(String filePath) {
+        this.filePath = filePath;
+        loadFromFile();
+    }
+
+    static void resetInstance() { instance = null; }
 
     public static GrafikRepository getInstance() {
         if (instance == null) instance = new GrafikRepository();

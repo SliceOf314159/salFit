@@ -16,11 +16,18 @@ import java.util.stream.Collectors;
 public class SalaRepository implements Repository<Sala> {
 
     private static SalaRepository instance;
-    private final String filePath = "resources/data/sale.json";
+    private String filePath = "resources/data/sale.json";
     private List<Sala> cache = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
     private SalaRepository() { loadFromFile(); }
+
+    SalaRepository(String filePath) {
+        this.filePath = filePath;
+        loadFromFile();
+    }
+
+    static void resetInstance() { instance = null; }
 
     public static SalaRepository getInstance() {
         if (instance == null) instance = new SalaRepository();

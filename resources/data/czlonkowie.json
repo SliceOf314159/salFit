@@ -1,0 +1,26 @@
+[
+  {
+    "id": "c1",
+    "imie": "Piotr",
+    "nazwisko": "Nowak",
+    "email": "piotr.nowak@gmail.com",
+    "telefon": "601111222",
+    "dataUrodzenia": "1990-03-15"
+  },
+  {
+    "id": "c2",
+    "imie": "Monika",
+    "nazwisko": "Jabłońska",
+    "email": "monika.jab@gmail.com",
+    "telefon": "602222333",
+    "dataUrodzenia": "1995-07-22"
+  },
+  {
+    "id": "c3",
+    "imie": "Tomasz",
+    "nazwisko": "Lewandowski",
+    "email": "tomek.lew@gmail.com",
+    "telefon": "603333444",
+    "dataUrodzenia": "1988-11-30"
+  }
+]
