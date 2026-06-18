@@ -29,12 +29,11 @@
             <TableView fx:id="czlonekTable" VBox.vgrow="ALWAYS"
                        style="-fx-pref-height: 420px;">
                 <columns>
-                    <TableColumn text="ID"              fx:id="colMId"     prefWidth="70"/>
                     <TableColumn text="IMIĘ I NAZWISKO" fx:id="colMNazwa"  prefWidth="200"/>
                     <TableColumn text="E-MAIL"          fx:id="colMEmail"  prefWidth="180"/>
                     <TableColumn text="TELEFON"         fx:id="colMTel"    prefWidth="120"/>
                     <TableColumn text="KARNET"          fx:id="colMKarnet" prefWidth="130"/>
-                    <TableColumn text="AKCJE"           fx:id="colMAkcje"  prefWidth="160"/>
+                    <TableColumn text="AKCJE"           fx:id="colMAkcje"  prefWidth="190"/>
                 </columns>
                 <placeholder>
                     <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>
@@ -69,7 +68,7 @@
                     <TableColumn text="OD"             fx:id="colKOd"      prefWidth="100"/>
                     <TableColumn text="DO"             fx:id="colKDo"      prefWidth="100"/>
                     <TableColumn text="STATUS"         fx:id="colKStatus"  prefWidth="130"/>
-                    <TableColumn text="AKCJE"          fx:id="colKAkcje"   prefWidth="120"/>
+                    <TableColumn text="AKCJE"          fx:id="colKAkcje"   prefWidth="140"/>
                 </columns>
                 <placeholder>
                     <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>

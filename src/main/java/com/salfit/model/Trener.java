@@ -8,6 +8,8 @@ public class Trener {
     private String email;
     private String telefon;
     private String specjalizacja;
+    private String poziom;
+    private String haslo;
     private boolean aktywny;
 
     public String getId() { return id; }
@@ -16,6 +18,8 @@ public class Trener {
     public String getEmail() { return email; }
     public String getTelefon() { return telefon; }
     public String getSpecjalizacja() { return specjalizacja; }
+    public String getPoziom() { return poziom; }
+    public String getHaslo() { return haslo; }
     public boolean isAktywny() { return aktywny; }
 
     public void setAktywny(boolean aktywny) {

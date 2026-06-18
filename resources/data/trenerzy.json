@@ -1,0 +1,35 @@
+[
+  {
+    "id": "t1",
+    "imie": "Anna",
+    "nazwisko": "Kowalska",
+    "email": "anna.kowalska@salfit.pl",
+    "telefon": "501234567",
+    "specjalizacja": "grupowy, personalny",
+    "poziom": "★★★★★ Ekspert",
+    "haslo": "haslo123",
+    "aktywny": true
+  },
+  {
+    "id": "t2",
+    "imie": "Marek",
+    "nazwisko": "Wiśniewski",
+    "email": "marek.wisniewski@salfit.pl",
+    "telefon": "502345678",
+    "specjalizacja": "grupowy",
+    "poziom": "★★★★☆ Zaawansowany",
+    "haslo": "haslo123",
+    "aktywny": true
+  },
+  {
+    "id": "t3",
+    "imie": "Karolina",
+    "nazwisko": "Brzezicka",
+    "email": "karolina.brzezicka@salfit.pl",
+    "telefon": "503456789",
+    "specjalizacja": "online",
+    "poziom": "★★★☆☆ Średniozaawansowany",
+    "haslo": "haslo123",
+    "aktywny": false
+  }
+]

@@ -10,63 +10,70 @@
 
     <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
                 style="-fx-background-color: -sf-bg;" VBox.vgrow="ALWAYS">
-        <HBox style="-fx-padding: 24;" spacing="24" alignment="TOP_LEFT">
+        <VBox spacing="0">
+        <HBox style="-fx-padding: 24 24 0 24;" spacing="24" alignment="TOP_LEFT">
 
             <!-- Left card: basic info -->
             <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
                 <Label text="Podstawowe informacje" styleClass="card-title"/>
 
+                <Label fx:id="formError" styleClass="auth-error" wrapText="true"
+                       minHeight="22" visible="false"/>
+                <Label fx:id="draftHint" styleClass="field-hint" visible="false" managed="false"/>
+
                 <VBox spacing="5">
                     <HBox spacing="2"><Label text="NAZWA ZAJĘĆ" styleClass="field-label"/>
                         <Label text="*" styleClass="req"/></HBox>
-                    <TextField fx:id="fieldNazwa" styleClass="field"
+                    <TextField fx:id="fieldNazwa" styleClass="field" maxWidth="Infinity"
                                promptText="np. Yoga poranny"/>
                 </VBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="RODZAJ ZAJĘĆ" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
                         <ComboBox fx:id="fieldRodzaj" styleClass="field"
-                                  maxWidth="Infinity" promptText="Wybierz…"/>
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity" promptText="Wybierz…"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="PRZYPISZ TRENERA" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
                         <ComboBox fx:id="fieldTrener" styleClass="field"
-                                  maxWidth="Infinity" promptText="Wybierz…"/>
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity" promptText="Wybierz…"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="SALA" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
                         <ComboBox fx:id="fieldSala" styleClass="field"
-                                  maxWidth="Infinity" promptText="Wybierz…"/>
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity" promptText="Wybierz…"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="POZIOM TRUDNOŚCI" styleClass="field-label"/>
                         <ComboBox fx:id="fieldPoziom" styleClass="field"
-                                  maxWidth="Infinity"/>
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="TERMIN" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
                         <DatePicker fx:id="fieldData" styleClass="field"
-                                    maxWidth="Infinity"/>
+                                    prefWidth="0" minWidth="0" maxWidth="Infinity"/>
+                        <ComboBox fx:id="fieldGodzina" styleClass="field"
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity" promptText="Godzina…"/>
                         <CheckBox text="Powtarzalność" styleClass="checkbox-item"
                                   style="-fx-padding: 6 0 0 0;"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="LIMIT UCZESTNIKÓW" styleClass="field-label"/>
-                        <HBox styleClass="stepper" alignment="CENTER">
+                        <HBox styleClass="stepper" alignment="CENTER" maxWidth="Infinity">
                             <Button text="−" styleClass="stepper-btn" onAction="#stepLimitDown"/>
                             <TextField fx:id="fieldLimit" styleClass="stepper-value"
-                                       text="35" alignment="CENTER"/>
+                                       text="35" alignment="CENTER" HBox.hgrow="ALWAYS"/>
                             <Button text="+" styleClass="stepper-btn" onAction="#stepLimitUp"/>
                         </HBox>
                     </VBox>
@@ -74,10 +81,10 @@
 
                 <VBox spacing="5">
                     <Label text="CZAS TRWANIA" styleClass="field-label"/>
-                    <HBox styleClass="stepper" alignment="CENTER">
+                    <HBox styleClass="stepper" alignment="CENTER" maxWidth="Infinity">
                         <Button text="−" styleClass="stepper-btn" onAction="#stepCzasDown"/>
                         <TextField fx:id="fieldCzas" styleClass="stepper-value"
-                                   text="60" alignment="CENTER"/>
+                                   text="60" alignment="CENTER" HBox.hgrow="ALWAYS"/>
                         <Button text="+" styleClass="stepper-btn" onAction="#stepCzasUp"/>
                     </HBox>
                     <Label text="minut" styleClass="field-hint"/>
@@ -85,7 +92,7 @@
             </VBox>
 
             <!-- Right card: description -->
-            <VBox styleClass="card" prefWidth="340" spacing="16">
+            <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
                 <Label text="Opis i wymagania" styleClass="card-title"/>
 
                 <VBox spacing="5" VBox.vgrow="ALWAYS">
@@ -100,18 +107,34 @@
                     <TextArea fx:id="fieldWymagania" styleClass="field"
                               promptText="np. Maty, liny…" prefRowCount="3"/>
                 </VBox>
-
-                <HBox styleClass="form-actions" alignment="CENTER_LEFT">
-                    <Button text="Zachowaj wersję roboczą"
-                            styleClass="btn,btn-ghost"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Anuluj" styleClass="btn,btn-ghost"
-                            onAction="#onCancel"/>
-                    <Button text="Zapisz" styleClass="btn,btn-primary"
-                            onAction="#onSave"/>
-                </HBox>
             </VBox>
 
         </HBox>
+
+        <!-- Form actions -->
+        <HBox styleClass="form-actions" alignment="CENTER_LEFT" style="-fx-padding: 0 24 0 24;">
+            <Button fx:id="btnDraft" text="Zachowaj wersję roboczą"
+                    styleClass="btn,btn-ghost" onAction="#onZachowajWersjeRobocza"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Anuluj" styleClass="btn,btn-ghost"
+                    onAction="#onCancel"/>
+            <Button text="Zapisz" styleClass="btn,btn-primary"
+                    onAction="#onSave"/>
+        </HBox>
+
+        <!-- Uczestnicy zajęć -->
+        <HBox style="-fx-padding: 0 24 24 24;">
+            <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="12">
+                <Label text="Uczestnicy zajęć" styleClass="card-title"/>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="fieldNowyUczestnik" styleClass="field" editable="true"
+                              prefWidth="0" minWidth="0" maxWidth="Infinity" promptText="Szukaj członka…" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <ListView fx:id="uczestnicyList" prefHeight="160"/>
+            </VBox>
+        </HBox>
+        </VBox>
     </ScrollPane>
 </VBox>

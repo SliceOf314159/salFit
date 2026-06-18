@@ -1,0 +1,23 @@
+[
+  {
+    "id": "k1",
+    "czlonekId": "c1",
+    "rodzaj": "MIESIECZNY",
+    "dataOd": "2026-06-01",
+    "dataDo": "2026-07-01"
+  },
+  {
+    "id": "k2",
+    "czlonekId": "c2",
+    "rodzaj": "KWARTALNY",
+    "dataOd": "2026-04-01",
+    "dataDo": "2026-06-20"
+  },
+  {
+    "id": "k3",
+    "czlonekId": "c3",
+    "rodzaj": "ROCZNY",
+    "dataOd": "2026-01-01",
+    "dataDo": "2027-01-01"
+  }
+]

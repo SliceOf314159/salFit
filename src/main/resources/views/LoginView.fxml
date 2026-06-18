@@ -45,11 +45,6 @@
                 <Button text="Zaloguj" styleClass="btn,btn-primary"
                         maxWidth="Infinity" onAction="#loginAdmin"
                         style="-fx-padding: 11 18 11 18; -fx-margin-top: 8;"/>
-
-                <HBox styleClass="auth-footer" alignment="CENTER" style="-fx-padding: 14 0 0 0;">
-                    <Hyperlink text="Zapomniałem hasła" styleClass="auth-link"
-                               onAction="#goForgotPassword"/>
-                </HBox>
             </VBox>
 
             <!-- Trainer card -->
@@ -62,9 +57,9 @@
                        minHeight="22" visible="false"/>
 
                 <VBox spacing="5" style="-fx-padding: 0 0 14 0;">
-                    <Label text="LOGIN" styleClass="field-label"/>
+                    <Label text="E-MAIL" styleClass="field-label"/>
                     <TextField fx:id="trainerLogin" styleClass="field"
-                               promptText="Podaj swój login"/>
+                               promptText="Podaj swój e-mail"/>
                 </VBox>
                 <VBox spacing="5" style="-fx-padding: 0 0 14 0;">
                     <Label text="HASŁO" styleClass="field-label"/>

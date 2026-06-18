@@ -1,5 +1,11 @@
 package com.salfit.controllers;
 
+import com.salfit.model.Sala;
+import com.salfit.model.StatusSali;
+import com.salfit.repository.SalaRepository;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,18 +15,21 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SalaController {
 
     @FXML private TextField searchField;
-    @FXML private TableView<Object> salaTable;
-    @FXML private TableColumn<Object, String> colId;
-    @FXML private TableColumn<Object, String> colNazwa;
-    @FXML private TableColumn<Object, String> colTyp;
-    @FXML private TableColumn<Object, String> colPoj;
-    @FXML private TableColumn<Object, String> colPrzerwa;
-    @FXML private TableColumn<Object, String> colStatus;
-    @FXML private TableColumn<Object, String> colAkcje;
+    @FXML private TableView<Sala> salaTable;
+    @FXML private TableColumn<Sala, String> colNazwa;
+    @FXML private TableColumn<Sala, String> colTyp;
+    @FXML private TableColumn<Sala, String> colPoj;
+    @FXML private TableColumn<Sala, String> colPrzerwa;
+    @FXML private TableColumn<Sala, String> colStatus;
+    @FXML private TableColumn<Sala, String> colAkcje;
+
+    private ObservableList<Sala> allSale = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -29,16 +38,54 @@ public class SalaController {
     }
 
     private void setupColumns() {
+        colNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNazwa()));
+        colTyp.setCellValueFactory(d -> new SimpleStringProperty("—"));
+        colPoj.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().getPojemnosc())));
+        colPrzerwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getMinPrzerwaMinut() + " min"));
+
+        colStatus.setCellValueFactory(d -> {
+            String label = switch (d.getValue().getStatus()) {
+                case DOSTEPNA  -> "Dostępna";
+                case ZAJETA    -> "Zajęta";
+                case W_REMONCIE-> "W remoncie";
+            };
+            return new SimpleStringProperty(label);
+        });
+        colStatus.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) { setGraphic(null); return; }
+                Label badge = new Label(item);
+                String cls = switch (item) {
+                    case "Dostępna"   -> "badge-green";
+                    case "Zajęta"     -> "badge-amber";
+                    case "W remoncie" -> "badge-red";
+                    default           -> "badge-gray";
+                };
+                badge.getStyleClass().addAll("badge", cls);
+                setGraphic(badge);
+            }
+        });
+
         colAkcje.setCellFactory(col -> new TableCell<>() {
             private final Button btnStatus = new Button("Zmień status");
             private final Button btnEdytuj = new Button("Edytuj");
-            private final HBox box         = new HBox(6, btnStatus, btnEdytuj);
+            private final HBox box = new HBox(6, btnStatus, btnEdytuj);
 
             {
                 btnStatus.getStyleClass().addAll("btn", "btn-ghost", "btn-sm");
                 btnEdytuj.getStyleClass().addAll("btn", "btn-ghost", "btn-sm");
-                btnStatus.setOnAction(e -> onZmienStatus());
-                btnEdytuj.setOnAction(e -> onEdytujSale());
+                btnStatus.setOnAction(e -> {
+                    int i = getIndex();
+                    if (i >= 0 && i < getTableView().getItems().size())
+                        onZmienStatus(getTableView().getItems().get(i));
+                });
+                btnEdytuj.setOnAction(e -> {
+                    int i = getIndex();
+                    if (i >= 0 && i < getTableView().getItems().size())
+                        onEdytujSale(getTableView().getItems().get(i));
+                });
             }
 
             @Override
@@ -47,49 +94,57 @@ public class SalaController {
                 setGraphic(empty ? null : box);
             }
         });
-
-        colStatus.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) { setGraphic(null); return; }
-                Label badge = new Label(item);
-                String cls = switch (item) {
-                    case "Dostępna"  -> "badge-green";
-                    case "Zajęta"    -> "badge-amber";
-                    case "W remoncie"-> "badge-red";
-                    default          -> "badge-gray";
-                };
-                badge.getStyleClass().addAll("badge", cls);
-                setGraphic(badge);
-            }
-        });
     }
 
-    private void loadData() { /* Wired to SalaRepository */ }
+    private void loadData() {
+        allSale.setAll(SalaRepository.getInstance().findAll());
+        salaTable.setItems(allSale);
+    }
 
-    @FXML private void onSearch() { /* Filter salaTable */ }
+    @FXML
+    private void onSearch() {
+        String text = searchField.getText().toLowerCase();
+        if (text.isBlank()) { salaTable.setItems(allSale); return; }
+        List<Sala> filtered = allSale.stream()
+                .filter(s -> s.getNazwa().toLowerCase().contains(text))
+                .collect(Collectors.toList());
+        salaTable.setItems(FXCollections.observableArrayList(filtered));
+    }
 
     @FXML
     public void onDodajSale() {
-        openDialog("/views/dialogs/AddEditSalaDialog.fxml", "Dodanie sali");
+        openDialog("/views/dialogs/AddEditSalaDialog.fxml", "Dodanie sali", null);
     }
 
-    private void onEdytujSale() {
-        openDialog("/views/dialogs/AddEditSalaDialog.fxml", "Edycja sali");
+    private void onEdytujSale(Sala sala) {
+        openDialog("/views/dialogs/AddEditSalaDialog.fxml", "Edycja sali", sala);
     }
 
-    private void onZmienStatus() { /* Toggle room status */ }
+    private void onZmienStatus(Sala sala) {
+        StatusSali next = switch (sala.getStatus()) {
+            case DOSTEPNA   -> StatusSali.ZAJETA;
+            case ZAJETA     -> StatusSali.W_REMONCIE;
+            case W_REMONCIE -> StatusSali.DOSTEPNA;
+        };
+        sala.setStatus(next);
+        SalaRepository.getInstance().update(sala);
+        salaTable.refresh();
+    }
 
     public void refresh() { loadData(); }
 
-    private void openDialog(String path, String title) {
+    private void openDialog(String path, String title, Sala sala) {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle(title);
-            dialog.setScene(new Scene(FXMLLoader.load(getClass().getResource(path))));
-            dialog.setResizable(false);
+            dialog.setScene(new Scene(loader.load()));
+            AddEditSalaDialogController ctrl = loader.getController();
+            if (sala != null) {
+                ctrl.setSala(sala);
+                ctrl.setEditMode(true);
+            }
             dialog.showAndWait();
             refresh();
         } catch (IOException e) {

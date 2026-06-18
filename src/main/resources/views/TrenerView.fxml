@@ -33,12 +33,11 @@
         <TableView fx:id="trenerTable" VBox.vgrow="ALWAYS"
                    style="-fx-pref-height: 400px;">
             <columns>
-                <TableColumn text="ID"               fx:id="colId"     prefWidth="70"/>
                 <TableColumn text="IMIĘ I NAZWISKO"  fx:id="colNazwa"  prefWidth="200"/>
                 <TableColumn text="SPECJALIZACJA"    fx:id="colSpec"   prefWidth="180"/>
                 <TableColumn text="E-MAIL"           fx:id="colEmail"  prefWidth="180"/>
                 <TableColumn text="STATUS"           fx:id="colStatus" prefWidth="100"/>
-                <TableColumn text="AKCJE"            fx:id="colAkcje"  prefWidth="160"/>
+                <TableColumn text="AKCJE"            fx:id="colAkcje"  prefWidth="220"/>
             </columns>
             <placeholder>
                 <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>

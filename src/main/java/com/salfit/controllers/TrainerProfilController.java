@@ -1,5 +1,8 @@
 package com.salfit.controllers;
 
+import com.salfit.SessionManager;
+import com.salfit.model.Trener;
+import com.salfit.repository.TrenerRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -12,6 +15,17 @@ public class TrainerProfilController {
 
     @FXML
     public void initialize() {
-        /* Data will be loaded from TrenerRepository for the logged-in trainer. */
+        String id = SessionManager.getInstance().getLoggedInTrenerId();
+        if (id == null) return;
+        TrenerRepository.getInstance().findById(id).ifPresent(this::populate);
+    }
+
+    private void populate(Trener t) {
+        valNazwa.setText(t.getImieNazwisko());
+        String spec = t.getSpecjalizacja() != null ? t.getSpecjalizacja() : "—";
+        String poziom = t.getPoziom() != null ? " · " + t.getPoziom() : "";
+        valSpec.setText(spec + poziom);
+        valEmail.setText(t.getEmail() != null ? t.getEmail() : "—");
+        valTelefon.setText(t.getTelefon() != null ? t.getTelefon() : "—");
     }
 }

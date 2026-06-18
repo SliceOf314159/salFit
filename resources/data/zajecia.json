@@ -1,0 +1,42 @@
+[
+  {
+    "id": "z1",
+    "nazwa": "Yoga Poranna",
+    "trenerId": "t1",
+    "salaId": "s1",
+    "termin": "2026-06-16T08:00:00",
+    "czasTrwaniaMinut": 60,
+    "limitUczestnikow": 15,
+    "uczestnicyIds": ["c1", "c2"]
+  },
+  {
+    "id": "z2",
+    "nazwa": "CrossFit",
+    "trenerId": "t2",
+    "salaId": "s2",
+    "termin": "2026-06-17T10:00:00",
+    "czasTrwaniaMinut": 60,
+    "limitUczestnikow": 12,
+    "uczestnicyIds": ["c3"]
+  },
+  {
+    "id": "z3",
+    "nazwa": "Pilates",
+    "trenerId": "t1",
+    "salaId": "s1",
+    "termin": "2026-06-18T12:00:00",
+    "czasTrwaniaMinut": 45,
+    "limitUczestnikow": 10,
+    "uczestnicyIds": []
+  },
+  {
+    "id": "z4",
+    "nazwa": "HIIT",
+    "trenerId": "t2",
+    "salaId": "s2",
+    "termin": "2026-06-19T14:00:00",
+    "czasTrwaniaMinut": 45,
+    "limitUczestnikow": 20,
+    "uczestnicyIds": ["c1"]
+  }
+]
