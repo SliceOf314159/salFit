@@ -6,6 +6,8 @@ import com.salfit.model.Sala;
 import com.salfit.model.StatusSali;
 import com.salfit.repository.Repository;
 import com.salfit.repository.SalaRepository;
+import com.salfit.util.DraftStore;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +21,8 @@ public class AddEditSalaDialogController {
     @FXML private ComboBox<String> fieldStatus;
     @FXML private Button btnUsun;
     @FXML private Button btnSave;
+    @FXML private Label formError;
+    @FXML private Label draftHint;
 
     private static final Gson GSON = Repository.createGson();
     private boolean editMode = false;
@@ -30,6 +34,7 @@ public class AddEditSalaDialogController {
         fieldStatus.getSelectionModel().selectFirst();
         fieldPojemnosc.setText("20");
         fieldPrzerwa.setText("10");
+        Platform.runLater(this::maybeLoadDraft);
     }
 
     public void setSala(Sala s) {
@@ -66,7 +71,11 @@ public class AddEditSalaDialogController {
 
     @FXML
     private void onSave() {
-        if (fieldNazwa.getText().isBlank()) return;
+        if (fieldNazwa.getText().isBlank()) {
+            showError("Wypełnij wszystkie wymagane pola.");
+            return;
+        }
+        hideError();
 
         StatusSali status = switch (fieldStatus.getValue() != null ? fieldStatus.getValue() : "Dostępna") {
             case "Zajęta"     -> StatusSali.ZAJETA;
@@ -84,11 +93,42 @@ public class AddEditSalaDialogController {
         Sala s = GSON.fromJson(obj, Sala.class);
         if (editMode) SalaRepository.getInstance().update(s);
         else          SalaRepository.getInstance().save(s);
+        DraftStore.clearDraft(draftKey());
         closeDialog();
     }
 
     @FXML private void onUsun()   { if (sala != null) SalaRepository.getInstance().delete(sala.getId()); closeDialog(); }
     @FXML private void onCancel() { closeDialog(); }
+
+    @FXML
+    private void onZachowajWersjeRobocza() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("nazwa", fieldNazwa.getText());
+        obj.addProperty("pojemnosc", fieldPojemnosc.getText());
+        obj.addProperty("minPrzerwaMinut", fieldPrzerwa.getText());
+        DraftStore.saveDraft(draftKey(), obj);
+        draftHint.setText("Zapisano wersję roboczą.");
+        draftHint.setVisible(true);
+        draftHint.setManaged(true);
+    }
+
+    private String draftKey() {
+        return editMode && sala != null ? "sala_" + sala.getId() : "sala_new";
+    }
+
+    private void maybeLoadDraft() {
+        DraftStore.loadDraft(draftKey()).ifPresent(obj -> {
+            if (obj.has("nazwa")) fieldNazwa.setText(obj.get("nazwa").getAsString());
+            if (obj.has("pojemnosc")) fieldPojemnosc.setText(obj.get("pojemnosc").getAsString());
+            if (obj.has("minPrzerwaMinut")) fieldPrzerwa.setText(obj.get("minPrzerwaMinut").getAsString());
+            draftHint.setText("Wczytano zapisaną wersję roboczą.");
+            draftHint.setVisible(true);
+            draftHint.setManaged(true);
+        });
+    }
+
+    private void showError(String msg) { formError.setText(msg); formError.setVisible(true); }
+    private void hideError() { formError.setVisible(false); }
 
     private int parseSafe(String text, int fallback) {
         try { return Integer.parseInt(text.trim()); }

@@ -5,15 +5,17 @@ import com.salfit.model.Sala;
 import com.salfit.model.Zajecia;
 import com.salfit.repository.GrafikRepository;
 import com.salfit.repository.SalaRepository;
+import com.salfit.util.ZajeciaColor;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
@@ -21,12 +23,13 @@ import java.util.Locale;
 public class TrainerGrafikController {
 
     @FXML private Label weekLabel;
-    @FXML private GridPane grafikGrid;
+    @FXML private SplitPane grafikGrid;
 
     private LocalDate aktualnyTydzien;
     private static final Locale PL = Locale.forLanguageTag("pl");
     private static final int[] HOUR_VALUES = {8, 10, 12, 15, 17, 19};
     private static final String[] HOURS     = {"8:00", "10:00", "12:00", "15:00", "17:00", "19:00"};
+    private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
 
     @FXML
     public void initialize() {
@@ -36,11 +39,6 @@ public class TrainerGrafikController {
 
     @FXML public void onPoprzedni() { aktualnyTydzien = aktualnyTydzien.minusWeeks(1); refresh(); }
     @FXML public void onNastepny()  { aktualnyTydzien = aktualnyTydzien.plusWeeks(1);  refresh(); }
-
-    @FXML
-    public void showUczestnicy() {
-        TrainerShellController.getInstance().showUczestnicy();
-    }
 
     private void refresh() {
         LocalDate monday = aktualnyTydzien.with(DayOfWeek.MONDAY);
@@ -52,33 +50,39 @@ public class TrainerGrafikController {
     }
 
     private void renderGrid(LocalDate monday) {
-        grafikGrid.getChildren().clear();
-        grafikGrid.getRowConstraints().clear();
+        grafikGrid.getItems().clear();
 
-        grafikGrid.getRowConstraints().add(rowConst(36));
-        grafikGrid.add(makeHeaderCell("GODZ."), 0, 0);
+        VBox timeCol = new VBox();
+        timeCol.setMinWidth(55);
+        timeCol.setPrefWidth(60);
+        timeCol.getChildren().add(sizedLabel(makeHeaderCell("GODZ."), 36));
+        for (String hour : HOURS) {
+            Label time = new Label(hour);
+            time.getStyleClass().add("cal-time-cell");
+            time.setMaxWidth(Double.MAX_VALUE);
+            timeCol.getChildren().add(sizedLabel(time, 72));
+        }
+        grafikGrid.getItems().add(timeCol);
+
+        HBox[][] cells = new HBox[HOURS.length][5];
         for (int d = 0; d < 5; d++) {
             LocalDate day = monday.plusDays(d);
             String lbl = day.getDayOfWeek().getDisplayName(TextStyle.SHORT, PL).toUpperCase()
                     + " " + String.format("%d.%02d", day.getDayOfMonth(), day.getMonthValue());
-            grafikGrid.add(makeHeaderCell(lbl), d + 1, 0);
-        }
-
-        VBox[][] cells = new VBox[HOURS.length][5];
-        for (int r = 0; r < HOURS.length; r++) {
-            grafikGrid.getRowConstraints().add(rowConst(72));
-            Label time = new Label(HOURS[r]);
-            time.getStyleClass().add("cal-time-cell");
-            time.setMaxWidth(Double.MAX_VALUE);
-            time.setMaxHeight(Double.MAX_VALUE);
-            grafikGrid.add(time, 0, r + 1);
-            for (int d = 0; d < 5; d++) {
-                VBox cell = new VBox(3);
+            VBox dayCol = new VBox();
+            dayCol.setMinWidth(80);
+            dayCol.getChildren().add(sizedLabel(makeHeaderCell(lbl), 36));
+            for (int r = 0; r < HOURS.length; r++) {
+                HBox cell = new HBox(3);
                 cell.getStyleClass().add("cal-cell");
                 cell.setPadding(new Insets(4));
-                grafikGrid.add(cell, d + 1, r + 1);
+                cell.setPrefHeight(72);
+                cell.setMinHeight(72);
+                cell.setMaxHeight(72);
+                dayCol.getChildren().add(cell);
                 cells[r][d] = cell;
             }
+            grafikGrid.getItems().add(dayCol);
         }
 
         String trainerId = SessionManager.getInstance().getLoggedInTrenerId();
@@ -90,8 +94,17 @@ public class TrainerGrafikController {
             int row = hourToRow(z.getTermin().getHour());
             int col = z.getTermin().getDayOfWeek().getValue() - 1;
             if (row < 0 || col < 0 || col > 4) continue;
-            cells[row][col].getChildren().add(makeCard(z));
+            VBox card = makeCard(z);
+            HBox.setHgrow(card, Priority.ALWAYS);
+            cells[row][col].getChildren().add(card);
         }
+    }
+
+    private Label sizedLabel(Label l, double height) {
+        l.setPrefHeight(height);
+        l.setMinHeight(height);
+        l.setMaxHeight(height);
+        return l;
     }
 
     private int hourToRow(int hour) {
@@ -110,16 +123,21 @@ public class TrainerGrafikController {
         card.getStyleClass().add("cal-card");
         card.setPadding(new Insets(4, 6, 4, 6));
         card.setCursor(Cursor.HAND);
+        card.setStyle("-fx-background-color: " + ZajeciaColor.colorFor(z.getId()) + ";");
 
         String salaNazwa = SalaRepository.getInstance().findById(z.getSalaId())
                 .map(Sala::getNazwa).orElse("—");
+        String czasRange = z.getTermin().format(TIME_FMT) + "–"
+                + z.getTermin().plusMinutes(z.getCzasTrwaniaMinut()).format(TIME_FMT);
 
         Label lNazwa = new Label(z.getNazwa());
         lNazwa.getStyleClass().add("cal-card-title");
+        Label lCzas = new Label(czasRange);
+        lCzas.getStyleClass().add("cal-card-sub");
         Label lInfo = new Label(salaNazwa + " · "
                 + z.getUczestnicyIds().size() + "/" + z.getLimitUczestnikow());
         lInfo.getStyleClass().add("cal-card-sub");
-        card.getChildren().addAll(lNazwa, lInfo);
+        card.getChildren().addAll(lNazwa, lCzas, lInfo);
 
         card.setOnMouseClicked(e -> {
             SessionManager.getInstance().setSelectedZajecia(z);
@@ -132,15 +150,6 @@ public class TrainerGrafikController {
         Label l = new Label(text);
         l.getStyleClass().add("cal-header-cell");
         l.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(l, Priority.ALWAYS);
-        GridPane.setHalignment(l, HPos.CENTER);
         return l;
-    }
-
-    private RowConstraints rowConst(double h) {
-        RowConstraints rc = new RowConstraints();
-        rc.setMinHeight(h);
-        rc.setPrefHeight(h);
-        return rc;
     }
 }

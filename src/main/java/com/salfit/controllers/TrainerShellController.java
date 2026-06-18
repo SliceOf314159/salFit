@@ -5,17 +5,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class TrainerShellController {
 
     @FXML private StackPane contentArea;
+    @FXML private Label topbarDate;
     @FXML private Button btnMojeZajecia;
     @FXML private Button btnProfil;
     @FXML private Button btnAktywnosc;
+
+    private static final DateTimeFormatter DATE_FMT =
+            DateTimeFormatter.ofPattern("d MMMM yyyy").withLocale(Locale.forLanguageTag("pl"));
 
     private static TrainerShellController instance;
 
@@ -24,6 +32,7 @@ public class TrainerShellController {
     @FXML
     public void initialize() {
         instance = this;
+        topbarDate.setText(LocalDate.now().format(DATE_FMT));
         showGrafik();
     }
 

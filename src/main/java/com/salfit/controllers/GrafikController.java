@@ -6,12 +6,13 @@ import com.salfit.model.Zajecia;
 import com.salfit.repository.GrafikRepository;
 import com.salfit.repository.SalaRepository;
 import com.salfit.repository.TrenerRepository;
+import com.salfit.util.ZajeciaColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,7 +28,7 @@ import java.util.Locale;
 public class GrafikController {
 
     @FXML private Label weekLabel;
-    @FXML private GridPane grafikGrid;
+    @FXML private SplitPane grafikGrid;
 
     private LocalDate aktualnyTydzien;
     private static final Locale PL = Locale.forLanguageTag("pl");
@@ -60,32 +61,37 @@ public class GrafikController {
     }
 
     private void renderTydzien(LocalDate monday) {
-        grafikGrid.getChildren().clear();
-        grafikGrid.getRowConstraints().clear();
+        grafikGrid.getItems().clear();
 
-        grafikGrid.getRowConstraints().add(rowConst(36));
-        grafikGrid.add(makeHeaderCell("GODZ."), 0, 0);
-        for (int d = 0; d < 5; d++) {
-            LocalDate day = monday.plusDays(d);
-            grafikGrid.add(makeHeaderCell(day.format(DAY_FMT).toUpperCase(PL)), d + 1, 0);
-        }
-
-        VBox[][] cells = new VBox[HOURS.length][5];
-        for (int r = 0; r < HOURS.length; r++) {
-            grafikGrid.getRowConstraints().add(rowConst(72));
-            int row = r + 1;
-            Label timeCell = new Label(HOURS[r]);
+        VBox timeCol = new VBox();
+        timeCol.setMinWidth(55);
+        timeCol.setPrefWidth(60);
+        timeCol.getChildren().add(sizedLabel(makeHeaderCell("GODZ."), 36));
+        for (String hour : HOURS) {
+            Label timeCell = new Label(hour);
             timeCell.getStyleClass().add("cal-time-cell");
             timeCell.setMaxWidth(Double.MAX_VALUE);
-            timeCell.setMaxHeight(Double.MAX_VALUE);
-            grafikGrid.add(timeCell, 0, row);
-            for (int d = 0; d < 5; d++) {
-                VBox cell = new VBox(3);
+            timeCol.getChildren().add(sizedLabel(timeCell, 72));
+        }
+        grafikGrid.getItems().add(timeCol);
+
+        HBox[][] cells = new HBox[HOURS.length][5];
+        for (int d = 0; d < 5; d++) {
+            LocalDate day = monday.plusDays(d);
+            VBox dayCol = new VBox();
+            dayCol.setMinWidth(80);
+            dayCol.getChildren().add(sizedLabel(makeHeaderCell(day.format(DAY_FMT).toUpperCase(PL)), 36));
+            for (int r = 0; r < HOURS.length; r++) {
+                HBox cell = new HBox(3);
                 cell.getStyleClass().add("cal-cell");
                 cell.setPadding(new Insets(4));
-                grafikGrid.add(cell, d + 1, row);
+                cell.setPrefHeight(72);
+                cell.setMinHeight(72);
+                cell.setMaxHeight(72);
+                dayCol.getChildren().add(cell);
                 cells[r][d] = cell;
             }
+            grafikGrid.getItems().add(dayCol);
         }
 
         List<Zajecia> zajecia = GrafikRepository.getInstance().findByTydzien(monday);
@@ -93,8 +99,17 @@ public class GrafikController {
             int row = hourToRow(z.getTermin().getHour());
             int col = z.getTermin().getDayOfWeek().getValue() - 1; // Mon=0, ..., Fri=4
             if (row < 0 || col < 0 || col > 4) continue;
-            cells[row][col].getChildren().add(makeCard(z));
+            VBox card = makeCard(z);
+            HBox.setHgrow(card, Priority.ALWAYS);
+            cells[row][col].getChildren().add(card);
         }
+    }
+
+    private Label sizedLabel(Label l, double height) {
+        l.setPrefHeight(height);
+        l.setMinHeight(height);
+        l.setMaxHeight(height);
+        return l;
     }
 
     private int hourToRow(int hour) {
@@ -108,22 +123,29 @@ public class GrafikController {
         return HOUR_VALUES.length - 1;
     }
 
+    private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
+
     private VBox makeCard(Zajecia z) {
         VBox card = new VBox(2);
         card.getStyleClass().add("cal-card");
         card.setPadding(new Insets(4, 6, 4, 6));
+        card.setStyle("-fx-background-color: " + ZajeciaColor.colorFor(z.getId()) + ";");
 
         String trenerName = TrenerRepository.getInstance().findById(z.getTrenerId())
                 .map(Trener::getImieNazwisko).orElse("—");
         String salaNazwa = SalaRepository.getInstance().findById(z.getSalaId())
                 .map(Sala::getNazwa).orElse("—");
+        String czasRange = z.getTermin().format(TIME_FMT) + "–"
+                + z.getTermin().plusMinutes(z.getCzasTrwaniaMinut()).format(TIME_FMT);
 
         Label lNazwa = new Label(z.getNazwa());
         lNazwa.getStyleClass().add("cal-card-title");
+        Label lCzas = new Label(czasRange);
+        lCzas.getStyleClass().add("cal-card-sub");
         Label lInfo = new Label(trenerName + " · " + salaNazwa);
         lInfo.getStyleClass().add("cal-card-sub");
         lInfo.setWrapText(true);
-        card.getChildren().addAll(lNazwa, lInfo);
+        card.getChildren().addAll(lNazwa, lCzas, lInfo);
 
         card.setOnMouseClicked(e -> openZajeciaDialog(z));
         return card;
@@ -137,6 +159,8 @@ public class GrafikController {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle(zajecia != null ? "Edycja zajęć" : "Dodanie zajęć");
             dialog.setScene(new Scene(loader.load()));
+            double maxHeight = javafx.stage.Screen.getPrimary().getVisualBounds().getHeight() - 80;
+            dialog.setMaxHeight(maxHeight);
             AddEditZajeciaDialogController ctrl = loader.getController();
             if (zajecia != null) {
                 ctrl.setZajecia(zajecia);
@@ -153,15 +177,6 @@ public class GrafikController {
         Label l = new Label(text);
         l.getStyleClass().add("cal-header-cell");
         l.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(l, Priority.ALWAYS);
-        GridPane.setHalignment(l, HPos.CENTER);
         return l;
-    }
-
-    private RowConstraints rowConst(double height) {
-        RowConstraints rc = new RowConstraints();
-        rc.setMinHeight(height);
-        rc.setPrefHeight(height);
-        return rc;
     }
 }

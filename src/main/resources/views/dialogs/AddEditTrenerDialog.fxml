@@ -11,35 +11,38 @@
     <center>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
                     style="-fx-background-color: -sf-bg;">
-            <HBox spacing="24" style="-fx-padding: 24;" alignment="TOP_LEFT">
+            <VBox spacing="16" style="-fx-padding: 24;">
 
                 <!-- Main form card -->
-                <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
+                <VBox styleClass="card" spacing="16">
+                    <Label fx:id="formError" styleClass="auth-error" wrapText="true"
+                           minHeight="22" visible="false"/>
+                    <Label fx:id="draftHint" styleClass="field-hint" visible="false" managed="false"/>
                     <!-- Row 1: imie + nazwisko -->
-                    <HBox spacing="16">
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <HBox spacing="16" alignment="TOP_LEFT">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                             <HBox spacing="2"><Label text="IMIę" styleClass="field-label"/>
                                 <Label text="*" styleClass="req"/></HBox>
-                            <TextField fx:id="fieldImie" styleClass="field" promptText="Imię"/>
+                            <TextField fx:id="fieldImie" styleClass="field" maxWidth="Infinity" promptText="Imię"/>
                         </VBox>
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                             <HBox spacing="2"><Label text="NAZWISKO" styleClass="field-label"/>
                                 <Label text="*" styleClass="req"/></HBox>
-                            <TextField fx:id="fieldNazwisko" styleClass="field" promptText="Nazwisko"/>
+                            <TextField fx:id="fieldNazwisko" styleClass="field" maxWidth="Infinity" promptText="Nazwisko"/>
                         </VBox>
                     </HBox>
                     <!-- Row 2: email + telefon -->
-                    <HBox spacing="16">
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <HBox spacing="16" alignment="TOP_LEFT">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                             <HBox spacing="2"><Label text="E-MAIL" styleClass="field-label"/>
                                 <Label text="*" styleClass="req"/></HBox>
-                            <TextField fx:id="fieldEmail" styleClass="field"
+                            <TextField fx:id="fieldEmail" styleClass="field" maxWidth="Infinity"
                                        promptText="adres@email.pl"/>
                         </VBox>
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                             <HBox spacing="2"><Label text="NUMER TELEFONU" styleClass="field-label"/>
                                 <Label text="*" styleClass="req"/></HBox>
-                            <TextField fx:id="fieldTelefon" styleClass="field"
+                            <TextField fx:id="fieldTelefon" styleClass="field" maxWidth="Infinity"
                                        promptText="000 000 000"/>
                         </VBox>
                     </HBox>
@@ -58,42 +61,32 @@
                     <!-- Poziom doświadczenia -->
                     <VBox spacing="5">
                         <Label text="POZIOM DOŚWIADCZENIA" styleClass="field-label"/>
-                        <ComboBox fx:id="fieldPoziom" styleClass="field" maxWidth="Infinity"/>
+                        <ComboBox fx:id="fieldPoziom" styleClass="field" prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                     </VBox>
                     <!-- Password (add mode only) -->
                     <VBox fx:id="passwordSection" spacing="5">
                         <HBox spacing="2"><Label text="HASŁO" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
-                        <PasswordField fx:id="fieldHaslo" styleClass="field"
+                        <PasswordField fx:id="fieldHaslo" styleClass="field" maxWidth="Infinity"
                                        promptText="Min. 8 znaków"/>
                     </VBox>
-
-                    <!-- Form actions -->
-                    <HBox styleClass="form-actions" alignment="CENTER_LEFT">
-                        <Button text="Zachowaj wersję roboczą" styleClass="btn,btn-ghost"/>
-                        <Button fx:id="btnUsun" text="Usuń trenera"
-                                styleClass="btn,btn-danger"
-                                managed="false" visible="false"
-                                onAction="#onUsun"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="Anuluj" styleClass="btn,btn-ghost" onAction="#onCancel"/>
-                        <Button fx:id="btnSave" text="Zapisz"
-                                styleClass="btn,btn-primary" onAction="#onSave"/>
-                    </HBox>
                 </VBox>
 
-                <!-- Avatar sidebar -->
-                <VBox styleClass="card" prefWidth="180" alignment="TOP_CENTER" spacing="12">
-                    <Label text="ZDJĘCIE" styleClass="field-label"/>
-                    <VBox styleClass="avatar-upload" alignment="CENTER"
-                          spacing="6" onMouseClicked="#onChoosePhoto">
-                        <Label text="📷" styleClass="avatar-upload-icon"/>
-                        <Label text="Kliknij aby dodać"
-                               styleClass="avatar-upload-text" wrapText="true"/>
-                    </VBox>
-                </VBox>
+                <!-- Form actions -->
+                <HBox styleClass="form-actions" alignment="CENTER_LEFT">
+                    <Button fx:id="btnDraft" text="Zachowaj wersję roboczą" styleClass="btn,btn-ghost"
+                            onAction="#onZachowajWersjeRobocza"/>
+                    <Button fx:id="btnUsun" text="Usuń trenera"
+                            styleClass="btn,btn-danger"
+                            managed="false" visible="false"
+                            onAction="#onUsun"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Anuluj" styleClass="btn,btn-ghost" onAction="#onCancel"/>
+                    <Button fx:id="btnSave" text="Zapisz"
+                            styleClass="btn,btn-primary" onAction="#onSave"/>
+                </HBox>
 
-            </HBox>
+            </VBox>
         </ScrollPane>
     </center>
 </BorderPane>

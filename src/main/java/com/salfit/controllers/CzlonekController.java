@@ -28,7 +28,6 @@ public class CzlonekController {
 
     @FXML private TextField searchMembers;
     @FXML private TableView<Czlonek> czlonekTable;
-    @FXML private TableColumn<Czlonek, String> colMId;
     @FXML private TableColumn<Czlonek, String> colMNazwa;
     @FXML private TableColumn<Czlonek, String> colMEmail;
     @FXML private TableColumn<Czlonek, String> colMTel;
@@ -56,10 +55,6 @@ public class CzlonekController {
     }
 
     private void setupMemberColumns() {
-        colMId.setCellValueFactory(d -> new SimpleStringProperty(
-                d.getValue().getId() != null
-                        ? d.getValue().getId().substring(0, Math.min(8, d.getValue().getId().length())) + "…"
-                        : "—"));
         colMNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getImieNazwisko()));
         colMEmail.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEmail()));
         colMTel.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getTelefon()));
@@ -235,7 +230,6 @@ public class CzlonekController {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle(czlonek != null ? "Edycja członka" : "Dodanie członka");
             dialog.setScene(new Scene(loader.load()));
-            dialog.setResizable(false);
             AddEditCzlonekDialogController ctrl = loader.getController();
             if (czlonek != null) {
                 ctrl.setCzlonek(czlonek);
@@ -256,7 +250,6 @@ public class CzlonekController {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle("Sprzedaż karnetu");
             dialog.setScene(new Scene(loader.load()));
-            dialog.setResizable(false);
             SprzedajKarnetDialogController ctrl = loader.getController();
             if (preselected != null) ctrl.setCzlonek(preselected);
             dialog.showAndWait();

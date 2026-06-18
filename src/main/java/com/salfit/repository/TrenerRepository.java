@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TrenerRepository implements Repository<Trener> {
@@ -92,5 +91,7 @@ public class TrenerRepository implements Repository<Trener> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateId() {
+        return Repository.nextSequentialId(cache.stream().map(Trener::getId).collect(Collectors.toList()));
+    }
 }

@@ -22,7 +22,6 @@ public class SalaController {
 
     @FXML private TextField searchField;
     @FXML private TableView<Sala> salaTable;
-    @FXML private TableColumn<Sala, String> colId;
     @FXML private TableColumn<Sala, String> colNazwa;
     @FXML private TableColumn<Sala, String> colTyp;
     @FXML private TableColumn<Sala, String> colPoj;
@@ -39,8 +38,6 @@ public class SalaController {
     }
 
     private void setupColumns() {
-        colId.setCellValueFactory(d -> new SimpleStringProperty(
-                d.getValue().getId() != null ? d.getValue().getId().substring(0, Math.min(8, d.getValue().getId().length())) + "…" : "—"));
         colNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNazwa()));
         colTyp.setCellValueFactory(d -> new SimpleStringProperty("—"));
         colPoj.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().getPojemnosc())));
@@ -143,7 +140,6 @@ public class SalaController {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle(title);
             dialog.setScene(new Scene(loader.load()));
-            dialog.setResizable(false);
             AddEditSalaDialogController ctrl = loader.getController();
             if (sala != null) {
                 ctrl.setSala(sala);

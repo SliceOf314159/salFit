@@ -18,7 +18,7 @@
     </HBox>
 
     <!-- Participant count summary -->
-    <HBox style="-fx-padding: 0 0 12 0;" spacing="4" alignment="CENTER_LEFT">
+    <HBox style="-fx-padding: 0 0 12 0;" spacing="4" alignment="BASELINE_LEFT">
         <Label fx:id="countLabel" text="12" styleClass="participants-count"/>
         <Label text=" uczestników zapisanych · " styleClass="participants-meta"/>
         <Label fx:id="limitLabel" text="20" styleClass="participants-count"/>

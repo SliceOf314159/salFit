@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SalaRepository implements Repository<Sala> {
@@ -91,5 +90,7 @@ public class SalaRepository implements Repository<Sala> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateId() {
+        return Repository.nextSequentialId(cache.stream().map(Sala::getId).collect(Collectors.toList()));
+    }
 }

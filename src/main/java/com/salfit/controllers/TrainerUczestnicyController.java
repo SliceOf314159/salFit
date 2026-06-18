@@ -66,7 +66,22 @@ public class TrainerUczestnicyController {
                 setGraphic(badge);
             }
         });
-        colObec.setCellValueFactory(d -> new SimpleStringProperty("Obecny"));
+        colObec.setCellValueFactory(d -> {
+            Zajecia zajecia = SessionManager.getInstance().getSelectedZajecia();
+            boolean potwierdzony = zajecia != null && zajecia.czyPotwierdzony(d.getValue().getId());
+            return new SimpleStringProperty(potwierdzony ? "Potwierdzony" : "Niepotwierdzony");
+        });
+        colObec.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) { setGraphic(null); return; }
+                Label badge = new Label(item);
+                badge.getStyleClass().addAll("badge",
+                        item.equals("Potwierdzony") ? "badge-green" : "badge-gray");
+                setGraphic(badge);
+            }
+        });
     }
 
     private void loadData() {

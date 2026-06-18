@@ -21,7 +21,6 @@ public class TrenerController {
 
     @FXML private TextField searchField;
     @FXML private TableView<Trener> trenerTable;
-    @FXML private TableColumn<Trener, String> colId;
     @FXML private TableColumn<Trener, String> colNazwa;
     @FXML private TableColumn<Trener, String> colSpec;
     @FXML private TableColumn<Trener, String> colEmail;
@@ -37,8 +36,6 @@ public class TrenerController {
     }
 
     private void setupColumns() {
-        colId.setCellValueFactory(d -> new SimpleStringProperty(
-                d.getValue().getId() != null ? d.getValue().getId().substring(0, 8) + "…" : "—"));
         colNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getImieNazwisko()));
         colSpec.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getSpecjalizacja()));
         colEmail.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEmail()));
@@ -137,7 +134,6 @@ public class TrenerController {
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.setTitle(title);
             dialog.setScene(new Scene(loader.load()));
-            dialog.setResizable(false);
             AddEditTrenerDialogController ctrl = loader.getController();
             if (trener != null) {
                 ctrl.setTrener(trener);

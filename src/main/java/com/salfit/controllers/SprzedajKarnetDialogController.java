@@ -29,6 +29,7 @@ public class SprzedajKarnetDialogController {
     @FXML private DatePicker fieldDataDo;
     @FXML private Label calMonthLabel;
     @FXML private GridPane calGrid;
+    @FXML private Label formError;
 
     private static final Gson GSON = Repository.createGson();
     private YearMonth displayedMonth;
@@ -108,7 +109,11 @@ public class SprzedajKarnetDialogController {
     private void onSprzedaj() {
         Czlonek czlonek = fieldCzlonek.getValue();
         if (czlonek == null || fieldRodzaj.getValue() == null
-                || fieldDataOd.getValue() == null || fieldDataDo.getValue() == null) return;
+                || fieldDataOd.getValue() == null || fieldDataDo.getValue() == null) {
+            showError("Wypełnij wszystkie wymagane pola.");
+            return;
+        }
+        hideError();
 
         RodzajKarnetu rodzaj = switch (fieldRodzaj.getValue()) {
             case "Kwartalny" -> RodzajKarnetu.KWARTALNY;
@@ -133,4 +138,7 @@ public class SprzedajKarnetDialogController {
     private void closeDialog() {
         ((Stage) fieldRodzaj.getScene().getWindow()).close();
     }
+
+    private void showError(String msg) { formError.setText(msg); formError.setVisible(true); }
+    private void hideError() { formError.setVisible(false); }
 }

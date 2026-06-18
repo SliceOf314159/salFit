@@ -14,7 +14,7 @@
         <HBox spacing="8">
             <Button text="↓ Eksport CSV" styleClass="btn,btn-secondary"
                     onAction="#onEksportCSV"/>
-            <Button text="↓ Eksport TXT" styleClass="btn,btn-ghost"
+            <Button text="↓ Eksport TXT" styleClass="btn,btn-secondary"
                     onAction="#onEksportTXT"/>
         </HBox>
     </HBox>
@@ -44,35 +44,35 @@
                    styleClass="card-title"/>
             <!-- Sala A -->
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Sala A" styleClass="progress-label"/>
-                <ProgressBar fx:id="barSalaA" progress="0.78"
+                <Label fx:id="labelSalaA" text="Sala A" styleClass="progress-label"/>
+                <ProgressBar fx:id="barSalaA"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar"/>
-                <Label text="78%" styleClass="progress-pct"/>
+                <Label fx:id="pctSalaA" styleClass="progress-pct"/>
             </HBox>
             <!-- Sala B -->
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Sala B" styleClass="progress-label"/>
-                <ProgressBar fx:id="barSalaB" progress="0.50"
+                <Label fx:id="labelSalaB" text="Sala B" styleClass="progress-label"/>
+                <ProgressBar fx:id="barSalaB"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar"/>
-                <Label text="50%" styleClass="progress-pct"/>
+                <Label fx:id="pctSalaB" styleClass="progress-pct"/>
             </HBox>
             <!-- Sala C -->
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Sala C" styleClass="progress-label"/>
-                <ProgressBar fx:id="barSalaC" progress="0.20"
+                <Label fx:id="labelSalaC" text="Sala C" styleClass="progress-label"/>
+                <ProgressBar fx:id="barSalaC"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar,progress-bar-danger"/>
-                <Label text="20%" styleClass="progress-pct"/>
+                <Label fx:id="pctSalaC" styleClass="progress-pct"/>
             </HBox>
             <!-- Sala D -->
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Sala D" styleClass="progress-label"/>
-                <ProgressBar fx:id="barSalaD" progress="0.65"
+                <Label fx:id="labelSalaD" text="Sala D" styleClass="progress-label"/>
+                <ProgressBar fx:id="barSalaD"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar"/>
-                <Label text="65%" styleClass="progress-pct"/>
+                <Label fx:id="pctSalaD" styleClass="progress-pct"/>
             </HBox>
         </VBox>
 
@@ -80,34 +80,52 @@
         <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="12">
             <Label text="Aktywność trenerów" styleClass="card-title"/>
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Anna K." styleClass="progress-label"/>
-                <ProgressBar fx:id="barT1" progress="0.90"
+                <Label fx:id="labelT1" styleClass="progress-label"/>
+                <ProgressBar fx:id="barT1"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar,progress-bar-teal"/>
-                <Label text="9 zaj." styleClass="progress-pct"/>
+                <Label fx:id="pctT1" styleClass="progress-pct"/>
             </HBox>
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Piotr N." styleClass="progress-label"/>
-                <ProgressBar fx:id="barT2" progress="0.60"
+                <Label fx:id="labelT2" styleClass="progress-label"/>
+                <ProgressBar fx:id="barT2"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar,progress-bar-teal"/>
-                <Label text="6 zaj." styleClass="progress-pct"/>
+                <Label fx:id="pctT2" styleClass="progress-pct"/>
             </HBox>
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Maria W." styleClass="progress-label"/>
-                <ProgressBar fx:id="barT3" progress="0.40"
+                <Label fx:id="labelT3" styleClass="progress-label"/>
+                <ProgressBar fx:id="barT3"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar,progress-bar-teal"/>
-                <Label text="4 zaj." styleClass="progress-pct"/>
+                <Label fx:id="pctT3" styleClass="progress-pct"/>
             </HBox>
             <HBox spacing="12" alignment="CENTER_LEFT">
-                <Label text="Tomasz B." styleClass="progress-label"/>
-                <ProgressBar fx:id="barT4" progress="0.50"
+                <Label fx:id="labelT4" styleClass="progress-label"/>
+                <ProgressBar fx:id="barT4"
                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                              styleClass="progress-bar,progress-bar-teal"/>
-                <Label text="5 zaj." styleClass="progress-pct"/>
+                <Label fx:id="pctT4" styleClass="progress-pct"/>
             </HBox>
         </VBox>
     </HBox>
+
+    <!-- Monthly breakdown -->
+    <Region prefHeight="20"/>
+    <VBox styleClass="card" spacing="8">
+        <Label text="Statystyki miesięczne" styleClass="card-title"/>
+        <TableView fx:id="monthlyTable" VBox.vgrow="ALWAYS"
+                   style="-fx-pref-height: 280px;">
+            <columns>
+                <TableColumn text="MIESIĄC"           fx:id="colMiesiac"     prefWidth="140"/>
+                <TableColumn text="LICZBA ZAJĘĆ"      fx:id="colLiczbaZajec" prefWidth="140"/>
+                <TableColumn text="UCZESTNICY ŁĄCZNIE" fx:id="colUczestnicy" prefWidth="160"/>
+                <TableColumn text="OBŁOŻENIE"         fx:id="colObloz"       prefWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="Brak danych" style="-fx-text-fill: -sf-muted;"/>
+            </placeholder>
+        </TableView>
+    </VBox>
 
 </VBox>

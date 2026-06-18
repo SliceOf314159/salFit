@@ -5,7 +5,7 @@
 <?import java.net.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.salfit.controllers.AddEditSalaDialogController"
-      styleClass="dialog-root" prefWidth="520" spacing="0">
+      styleClass="dialog-root" prefWidth="580" spacing="0">
     <stylesheets><URL value="@/styles/main.css"/></stylesheets>
 
     <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
@@ -13,29 +13,33 @@
         <VBox style="-fx-padding: 24;" spacing="0">
             <VBox styleClass="card" spacing="16">
 
+                <Label fx:id="formError" styleClass="auth-error" wrapText="true"
+                       minHeight="22" visible="false"/>
+                <Label fx:id="draftHint" styleClass="field-hint" visible="false" managed="false"/>
+
                 <VBox spacing="5">
                     <HBox spacing="2"><Label text="NAZWA SALI" styleClass="field-label"/>
                         <Label text="*" styleClass="req"/></HBox>
-                    <TextField fx:id="fieldNazwa" styleClass="field" promptText="np. Sala E"/>
+                    <TextField fx:id="fieldNazwa" styleClass="field" maxWidth="Infinity" promptText="np. Sala E"/>
                 </VBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="LIMIT UCZESTNIKÓW" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
-                        <HBox styleClass="stepper" alignment="CENTER">
+                        <HBox styleClass="stepper" alignment="CENTER" maxWidth="Infinity">
                             <Button text="−" styleClass="stepper-btn" onAction="#stepDown"/>
                             <TextField fx:id="fieldPojemnosc" styleClass="stepper-value"
-                                       text="20" alignment="CENTER"/>
+                                       text="20" alignment="CENTER" HBox.hgrow="ALWAYS"/>
                             <Button text="+" styleClass="stepper-btn" onAction="#stepUp"/>
                         </HBox>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="MINIMALNA PRZERWA" styleClass="field-label"/>
-                        <HBox styleClass="stepper" alignment="CENTER">
+                        <HBox styleClass="stepper" alignment="CENTER" maxWidth="Infinity">
                             <Button text="−" styleClass="stepper-btn" onAction="#stepPrzerwaDown"/>
                             <TextField fx:id="fieldPrzerwa" styleClass="stepper-value"
-                                       text="15" alignment="CENTER"/>
+                                       text="15" alignment="CENTER" HBox.hgrow="ALWAYS"/>
                             <Button text="+" styleClass="stepper-btn" onAction="#stepPrzerwaUp"/>
                         </HBox>
                         <Label text="minut" styleClass="field-hint"/>
@@ -44,10 +48,12 @@
 
                 <VBox spacing="5">
                     <Label text="STATUS" styleClass="field-label"/>
-                    <ComboBox fx:id="fieldStatus" styleClass="field" maxWidth="Infinity"/>
+                    <ComboBox fx:id="fieldStatus" styleClass="field" prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                 </VBox>
 
                 <HBox styleClass="form-actions" alignment="CENTER_LEFT">
+                    <Button fx:id="btnDraft" text="Zachowaj wersję roboczą" styleClass="btn,btn-ghost"
+                            onAction="#onZachowajWersjeRobocza"/>
                     <Button fx:id="btnUsun" text="Usuń salę"
                             styleClass="btn,btn-danger"
                             managed="false" visible="false"

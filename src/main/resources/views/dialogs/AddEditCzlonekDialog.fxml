@@ -10,64 +10,57 @@
 
     <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
                 style="-fx-background-color: -sf-bg;" VBox.vgrow="ALWAYS">
-        <HBox style="-fx-padding: 24;" spacing="24" alignment="TOP_LEFT">
+        <VBox style="-fx-padding: 24;" spacing="16">
 
             <!-- Main form card -->
-            <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
+            <VBox styleClass="card" spacing="16">
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label fx:id="formError" styleClass="auth-error" wrapText="true"
+                       minHeight="22" visible="false"/>
+                <Label fx:id="draftHint" styleClass="field-hint" visible="false" managed="false"/>
+
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="IMIę" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
-                        <TextField fx:id="fieldImie" styleClass="field" promptText="Imię"/>
+                        <TextField fx:id="fieldImie" styleClass="field" maxWidth="Infinity" promptText="Imię"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="NAZWISKO" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
-                        <TextField fx:id="fieldNazwisko" styleClass="field" promptText="Nazwisko"/>
+                        <TextField fx:id="fieldNazwisko" styleClass="field" maxWidth="Infinity" promptText="Nazwisko"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2"><Label text="E-MAIL" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/></HBox>
-                        <TextField fx:id="fieldEmail" styleClass="field"
+                        <TextField fx:id="fieldEmail" styleClass="field" maxWidth="Infinity"
                                    promptText="adres@email.pl"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="NUMER TELEFONU" styleClass="field-label"/>
-                        <TextField fx:id="fieldTelefon" styleClass="field"
+                        <TextField fx:id="fieldTelefon" styleClass="field" maxWidth="Infinity"
                                    promptText="000-000-000"/>
                     </VBox>
                 </HBox>
 
                 <VBox spacing="5">
                     <Label text="DATA URODZENIA" styleClass="field-label"/>
-                    <DatePicker fx:id="fieldDataUr" styleClass="field" maxWidth="Infinity"/>
-                </VBox>
-
-                <HBox styleClass="form-actions" alignment="CENTER_LEFT">
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Anuluj" styleClass="btn,btn-ghost" onAction="#onCancel"/>
-                    <Button fx:id="btnSave" text="Zapisz"
-                            styleClass="btn,btn-primary" onAction="#onSave"/>
-                </HBox>
-            </VBox>
-
-            <!-- Avatar sidebar -->
-            <VBox prefWidth="180" spacing="16">
-                <VBox styleClass="card" spacing="12" alignment="TOP_CENTER">
-                    <Label text="ZDJĘCIE" styleClass="field-label"/>
-                    <VBox styleClass="avatar-upload" alignment="CENTER"
-                          spacing="6" onMouseClicked="#onChoosePhoto"
-                          style="-fx-pref-width: 90px; -fx-pref-height: 90px;">
-                        <Label text="📷" style="-fx-font-size: 18px; -fx-text-fill: -sf-muted;"/>
-                        <Label text="Dodaj" styleClass="avatar-upload-text"/>
-                    </VBox>
+                    <DatePicker fx:id="fieldDataUr" styleClass="field" prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                 </VBox>
             </VBox>
 
-        </HBox>
+            <HBox styleClass="form-actions" alignment="CENTER_LEFT">
+                <Button fx:id="btnDraft" text="Zachowaj wersję roboczą" styleClass="btn,btn-ghost"
+                        onAction="#onZachowajWersjeRobocza"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Anuluj" styleClass="btn,btn-ghost" onAction="#onCancel"/>
+                <Button fx:id="btnSave" text="Zapisz"
+                        styleClass="btn,btn-primary" onAction="#onSave"/>
+            </HBox>
+
+        </VBox>
     </ScrollPane>
 </VBox>

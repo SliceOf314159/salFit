@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.salfit.model.Trener;
 import com.salfit.repository.Repository;
 import com.salfit.repository.TrenerRepository;
+import com.salfit.util.DraftStore;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -28,6 +30,8 @@ public class AddEditTrenerDialogController {
     @FXML private PasswordField fieldHaslo;
     @FXML private Button btnUsun;
     @FXML private Button btnSave;
+    @FXML private Label formError;
+    @FXML private Label draftHint;
 
     private static final Gson GSON = Repository.createGson();
     private boolean editMode = false;
@@ -42,6 +46,7 @@ public class AddEditTrenerDialogController {
                 "★★☆☆☆ Podstawowy",
                 "★☆☆☆☆ Początkujący"));
         fieldPoziom.getSelectionModel().select(2);
+        Platform.runLater(this::maybeLoadDraft);
     }
 
     public void setTrener(Trener t) {
@@ -68,7 +73,11 @@ public class AddEditTrenerDialogController {
 
     @FXML
     private void onSave() {
-        if (!validate()) return;
+        if (!validate()) {
+            showError("Wypełnij wszystkie wymagane pola.");
+            return;
+        }
+        hideError();
 
         List<String> specs = new ArrayList<>();
         if (cbGrupowy.isSelected())    specs.add("grupowy");
@@ -97,12 +106,41 @@ public class AddEditTrenerDialogController {
         } else {
             TrenerRepository.getInstance().save(t);
         }
+        DraftStore.clearDraft(draftKey());
         closeDialog();
     }
 
     @FXML private void onUsun()       { if (trener != null) TrenerRepository.getInstance().delete(trener.getId()); closeDialog(); }
     @FXML private void onCancel()     { closeDialog(); }
-    @FXML private void onChoosePhoto(){ /* photo chooser stub */ }
+
+    @FXML
+    private void onZachowajWersjeRobocza() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("imie", fieldImie.getText());
+        obj.addProperty("nazwisko", fieldNazwisko.getText());
+        obj.addProperty("email", fieldEmail.getText());
+        obj.addProperty("telefon", fieldTelefon.getText());
+        DraftStore.saveDraft(draftKey(), obj);
+        draftHint.setText("Zapisano wersję roboczą.");
+        draftHint.setVisible(true);
+        draftHint.setManaged(true);
+    }
+
+    private String draftKey() {
+        return editMode && trener != null ? "trener_" + trener.getId() : "trener_new";
+    }
+
+    private void maybeLoadDraft() {
+        DraftStore.loadDraft(draftKey()).ifPresent(obj -> {
+            if (obj.has("imie")) fieldImie.setText(obj.get("imie").getAsString());
+            if (obj.has("nazwisko")) fieldNazwisko.setText(obj.get("nazwisko").getAsString());
+            if (obj.has("email")) fieldEmail.setText(obj.get("email").getAsString());
+            if (obj.has("telefon")) fieldTelefon.setText(obj.get("telefon").getAsString());
+            draftHint.setText("Wczytano zapisaną wersję roboczą.");
+            draftHint.setVisible(true);
+            draftHint.setManaged(true);
+        });
+    }
 
     private boolean validate() {
         return !fieldImie.getText().isBlank()
@@ -114,4 +152,7 @@ public class AddEditTrenerDialogController {
     private void closeDialog() {
         ((Stage) fieldImie.getScene().getWindow()).close();
     }
+
+    private void showError(String msg) { formError.setText(msg); formError.setVisible(true); }
+    private void hideError() { formError.setVisible(false); }
 }

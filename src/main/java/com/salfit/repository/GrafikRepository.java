@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class GrafikRepository implements Repository<Zajecia> {
@@ -105,5 +104,7 @@ public class GrafikRepository implements Repository<Zajecia> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateId() {
+        return Repository.nextSequentialId(cache.stream().map(Zajecia::getId).collect(Collectors.toList()));
+    }
 }
