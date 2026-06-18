@@ -16,6 +16,7 @@
                 <Label text="Fit" styleClass="topbar-logo-accent"/>
             </HBox>
             <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="topbarDate" styleClass="topbar-user"/>
             <Label fx:id="topbarUser" text="Jan Kowalski (admin)"
                    styleClass="topbar-user"/>
             <Button text="Wyloguj" styleClass="topbar-link"

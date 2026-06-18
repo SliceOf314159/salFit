@@ -15,6 +15,9 @@
             <!-- Form card -->
             <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="16">
 
+                <Label fx:id="formError" styleClass="auth-error" wrapText="true"
+                       minHeight="22" visible="false"/>
+
                 <!-- Member selector -->
                 <VBox spacing="5">
                     <HBox spacing="2">
@@ -24,42 +27,42 @@
                     <HBox spacing="8">
                         <ComboBox fx:id="fieldCzlonek" styleClass="field"
                                   promptText="Wybierz…" HBox.hgrow="ALWAYS"
-                                  maxWidth="Infinity"/>
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                         <Button text="+ Nowy" styleClass="btn,btn-secondary"
                                 onAction="#onNowyCzlonek"/>
                     </HBox>
                 </VBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <HBox spacing="2">
                             <Label text="RODZAJ KARNETU" styleClass="field-label"/>
                             <Label text="*" styleClass="req"/>
                         </HBox>
                         <ComboBox fx:id="fieldRodzaj" styleClass="field"
-                                  maxWidth="Infinity" promptText="Wybierz…"
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity" promptText="Wybierz…"
                                   onAction="#onRodzajChanged"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="METODA PŁATNOŚCI" styleClass="field-label"/>
                         <ComboBox fx:id="fieldPlatnosc" styleClass="field"
-                                  maxWidth="Infinity"/>
+                                  prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="16">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <HBox spacing="16" alignment="TOP_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="DATA ROZPOCZĘCIA" styleClass="field-label"/>
                         <DatePicker fx:id="fieldDataOd" styleClass="field"
-                                    maxWidth="Infinity" onAction="#onDataOdChanged"/>
+                                    prefWidth="0" minWidth="0" maxWidth="Infinity" onAction="#onDataOdChanged"/>
                         <CheckBox text="Przedłuż od dnia wygaśnięcia"
                                   styleClass="checkbox-item"
                                   style="-fx-padding: 6 0 0 0;"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="0" minWidth="0">
                         <Label text="DATA ZAKOŃCZENIA" styleClass="field-label"/>
                         <DatePicker fx:id="fieldDataDo" styleClass="field"
-                                    maxWidth="Infinity"/>
+                                    prefWidth="0" minWidth="0" maxWidth="Infinity"/>
                     </VBox>
                 </HBox>
 

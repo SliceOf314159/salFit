@@ -10,17 +10,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class GrafikRepository implements Repository<Zajecia> {
 
     private static GrafikRepository instance;
-    private final String filePath = "resources/data/zajecia.json";
+    private String filePath = "resources/data/zajecia.json";
     private List<Zajecia> cache = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
     private GrafikRepository() { loadFromFile(); }
+
+    GrafikRepository(String filePath) {
+        this.filePath = filePath;
+        loadFromFile();
+    }
+
+    static void resetInstance() { instance = null; }
 
     public static GrafikRepository getInstance() {
         if (instance == null) instance = new GrafikRepository();
@@ -98,5 +104,7 @@ public class GrafikRepository implements Repository<Zajecia> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateId() {
+        return Repository.nextSequentialId(cache.stream().map(Zajecia::getId).collect(Collectors.toList()));
+    }
 }

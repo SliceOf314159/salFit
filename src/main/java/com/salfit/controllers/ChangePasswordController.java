@@ -34,6 +34,7 @@ public class ChangePasswordController {
         double trackWidth = strengthFill.getParent() != null
                 ? strengthFill.getParent().getBoundsInLocal().getWidth() : 316;
         strengthFill.setPrefWidth(trackWidth * WIDTHS[score]);
+        strengthFill.setMaxWidth(trackWidth * WIDTHS[score]);
         strengthFill.setStyle(String.format(
                 "-fx-background-color: %s; -fx-background-radius: 2; -fx-pref-height: 4px; -fx-max-height: 4px;",
                 COLORS[score]));

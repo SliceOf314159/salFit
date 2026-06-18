@@ -14,6 +14,14 @@ public interface Repository<T> {
     void update(T entity);
     void delete(String id);
 
+    static String nextSequentialId(List<String> existingIds) {
+        int max = existingIds.stream()
+                .map(id -> id.replaceAll("\\D+", ""))
+                .filter(s -> !s.isEmpty())
+                .mapToInt(Integer::parseInt)
+                .max().orElse(-1);
+        return String.valueOf(max + 1);
+    }
 
     static Gson createGson() {
         return new GsonBuilder()

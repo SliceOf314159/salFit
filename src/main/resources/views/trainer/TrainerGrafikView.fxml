@@ -10,9 +10,6 @@
 
     <HBox styleClass="page-header" alignment="CENTER_LEFT">
         <Label text="Moje zajęcia" styleClass="page-title"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button text="👥 Uczestnicy zajęć" styleClass="btn,btn-secondary"
-                onAction="#showUczestnicy"/>
     </HBox>
 
     <VBox styleClass="card" spacing="0">
@@ -27,18 +24,6 @@
                     onAction="#onNastepny"/>
         </HBox>
 
-        <ScrollPane fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER"
-                    style="-fx-background-color: transparent;">
-            <GridPane fx:id="grafikGrid" hgap="0" vgap="0">
-                <columnConstraints>
-                    <ColumnConstraints minWidth="55" prefWidth="60" maxWidth="70"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
-                </columnConstraints>
-            </GridPane>
-        </ScrollPane>
+        <SplitPane fx:id="grafikGrid" style="-fx-background-color: -sf-white;"/>
     </VBox>
 </VBox>

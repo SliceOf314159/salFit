@@ -1,0 +1,30 @@
+[
+  {
+    "id": "s1",
+    "nazwa": "Sala A",
+    "pojemnosc": 20,
+    "minPrzerwaMinut": 15,
+    "status": "DOSTEPNA"
+  },
+  {
+    "id": "s2",
+    "nazwa": "Sala B",
+    "pojemnosc": 15,
+    "minPrzerwaMinut": 10,
+    "status": "DOSTEPNA"
+  },
+  {
+    "id": "s3",
+    "nazwa": "Sala C",
+    "pojemnosc": 30,
+    "minPrzerwaMinut": 20,
+    "status": "W_REMONCIE"
+  },
+  {
+    "id": "s4",
+    "nazwa": "Sala D",
+    "pojemnosc": 10,
+    "minPrzerwaMinut": 10,
+    "status": "DOSTEPNA"
+  }
+]

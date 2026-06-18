@@ -14,6 +14,7 @@ public class Zajecia {
     private int czasTrwaniaMinut;
     private int limitUczestnikow;
     private List<String> uczestnicyIds = new ArrayList<>();
+    private List<String> potwierdzeniUczestnicy = new ArrayList<>();
 
     public String getId() { return id; }
     public String getNazwa() { return nazwa; }
@@ -23,6 +24,7 @@ public class Zajecia {
     public int getCzasTrwaniaMinut() { return czasTrwaniaMinut; }
     public int getLimitUczestnikow() { return limitUczestnikow; }
     public List<String> getUczestnicyIds() { return uczestnicyIds; }
+    public List<String> getPotwierdzeniUczestnicy() { return potwierdzeniUczestnicy; }
 
     public void dodajUczestnika(String czlonekId) {
         if (!uczestnicyIds.contains(czlonekId)) {
@@ -32,5 +34,20 @@ public class Zajecia {
 
     public void usunUczestnika(String czlonekId) {
         uczestnicyIds.remove(czlonekId);
+        potwierdzeniUczestnicy.remove(czlonekId);
+    }
+
+    public void potwierdzUczestnika(String czlonekId) {
+        if (!potwierdzeniUczestnicy.contains(czlonekId)) {
+            potwierdzeniUczestnicy.add(czlonekId);
+        }
+    }
+
+    public void odznaczUczestnika(String czlonekId) {
+        potwierdzeniUczestnicy.remove(czlonekId);
+    }
+
+    public boolean czyPotwierdzony(String czlonekId) {
+        return potwierdzeniUczestnicy.contains(czlonekId);
     }
 }

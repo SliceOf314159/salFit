@@ -10,20 +10,27 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CzlonekRepository implements Repository<Czlonek> {
 
     private static CzlonekRepository instance;
-    private final String czlonkowiePath = "resources/data/czlonkowie.json";
-    private final String karnetyPath = "resources/data/karnety.json";
+    private String czlonkowiePath = "resources/data/czlonkowie.json";
+    private String karnetyPath = "resources/data/karnety.json";
 
     private List<Czlonek> cacheCzlonkowie = new ArrayList<>();
     private List<Karnet> cacheKarnety = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
     private CzlonekRepository() { loadFromFile(); }
+
+    CzlonekRepository(String czlonkowiePath, String karnetyPath) {
+        this.czlonkowiePath = czlonkowiePath;
+        this.karnetyPath = karnetyPath;
+        loadFromFile();
+    }
+
+    static void resetInstance() { instance = null; }
 
     public static CzlonekRepository getInstance() {
         if (instance == null) instance = new CzlonekRepository();
@@ -43,7 +50,7 @@ public class CzlonekRepository implements Repository<Czlonek> {
         try {
             java.lang.reflect.Field idField = czlonek.getClass().getDeclaredField("id");
             idField.setAccessible(true);
-            idField.set(czlonek, generateId());
+            idField.set(czlonek, generateCzlonekId());
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -86,13 +93,15 @@ public class CzlonekRepository implements Repository<Czlonek> {
         try {
             java.lang.reflect.Field idField = karnet.getClass().getDeclaredField("id");
             idField.setAccessible(true);
-            idField.set(karnet, generateId());
+            idField.set(karnet, generateKarnetId());
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         cacheKarnety.add(karnet);
         saveToFile();
     }
+
+    public List<Karnet> findAllKarnety() { return cacheKarnety; }
 
     public void updateKarnet(Karnet karnet) {
         for (int i = 0; i < cacheKarnety.size(); i++) {
@@ -129,5 +138,11 @@ public class CzlonekRepository implements Repository<Czlonek> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateCzlonekId() {
+        return Repository.nextSequentialId(cacheCzlonkowie.stream().map(Czlonek::getId).collect(Collectors.toList()));
+    }
+
+    private String generateKarnetId() {
+        return Repository.nextSequentialId(cacheKarnety.stream().map(Karnet::getId).collect(Collectors.toList()));
+    }
 }

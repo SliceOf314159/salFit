@@ -10,17 +10,23 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SalaRepository implements Repository<Sala> {
 
     private static SalaRepository instance;
-    private final String filePath = "resources/data/sale.json";
+    private String filePath = "resources/data/sale.json";
     private List<Sala> cache = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
     private SalaRepository() { loadFromFile(); }
+
+    SalaRepository(String filePath) {
+        this.filePath = filePath;
+        loadFromFile();
+    }
+
+    static void resetInstance() { instance = null; }
 
     public static SalaRepository getInstance() {
         if (instance == null) instance = new SalaRepository();
@@ -84,5 +90,7 @@ public class SalaRepository implements Repository<Sala> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateId() {
+        return Repository.nextSequentialId(cache.stream().map(Sala::getId).collect(Collectors.toList()));
+    }
 }

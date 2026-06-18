@@ -9,19 +9,23 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TrenerRepository implements Repository<Trener> {
 
     private static TrenerRepository instance;
-    private final String filePath = "resources/data/trenerzy.json";
+    private String filePath = "resources/data/trenerzy.json";
     private List<Trener> cache = new ArrayList<>();
     private final Gson gson = Repository.createGson();
 
-    private TrenerRepository() {
+    private TrenerRepository() { loadFromFile(); }
+
+    TrenerRepository(String filePath) {
+        this.filePath = filePath;
         loadFromFile();
     }
+
+    static void resetInstance() { instance = null; }
 
     public static TrenerRepository getInstance() {
         if (instance == null) {
@@ -87,5 +91,7 @@ public class TrenerRepository implements Repository<Trener> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private String generateId() { return UUID.randomUUID().toString(); }
+    private String generateId() {
+        return Repository.nextSequentialId(cache.stream().map(Trener::getId).collect(Collectors.toList()));
+    }
 }
