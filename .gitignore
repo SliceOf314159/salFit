@@ -1,0 +1,15 @@
+target/
+*.class
+
+# Surefire/Failsafe test reports
+surefire-reports/
+failsafe-reports/
+
+# JaCoCo coverage
+jacoco.exec
+*.exec
+
+# IDE
+.idea/
+*.iml
+.vscode/
