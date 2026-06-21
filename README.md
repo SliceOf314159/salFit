@@ -17,8 +17,8 @@
 
 SalFit to system służący do kompleksowego zarządzania organizacją siłowni i sal fitness. Umożliwia:
 
-- **Administratorom** — dodawanie i edytowanie profili trenerów, zarządzanie statusem sal (dostępna / zajęta / w remoncie), tworzenie grafiku zajęć oraz przypisywanie trenerów do konkretnych sal i terminów
-- **Obsłudze** — rejestrację członków, śledzenie karnetów oraz generowanie podstawowych raportów obłożenia
+- **Administratorom** — dodawanie i edytowanie profili trenerów, zarządzanie statusem sal (dostępna / zajęta / w remoncie), tworzenie grafiku zajęć oraz przypisywanie trenerów do konkretnych sal i terminów, rejestrację członków, śledzenie karnetów oraz generowanie podstawowych raportów obłożenia
+- **Trenerom** — przeglądanie własnego profilu i specjalizacji, sprawdzanie statusu sali przypisanej do swoich zajęć, podgląd własnego grafiku zajęć w układzie tygodniowym, przeglądanie listy uczestników przypisanych do swoich zajęć oraz raportu własnej aktywności (liczba przeprowadzonych zajęć)
 
 Celem systemu jest usprawnienie codziennej obsługi obiektu i zastąpienie ręcznego planowania jednym centralnym narzędziem.
 
