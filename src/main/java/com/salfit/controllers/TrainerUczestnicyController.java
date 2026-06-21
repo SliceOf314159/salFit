@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// Kontroler widoku "uczestnicy zajec" w panelu trenera - pokazuje liste osob zapisanych
+// na konkretne zajecia
 public class TrainerUczestnicyController {
 
     @FXML private Label pageTitle;
@@ -38,10 +40,12 @@ public class TrainerUczestnicyController {
                         ? d.getValue().getId().substring(0, Math.min(8, d.getValue().getId().length())) + "…"
                         : "—"));
         colNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getImieNazwisko()));
+        // kolumna karnetu - szukamy aktywnego karnetu danego czlonka i wyswietlamy jego rodzaj
         colKarnet.setCellValueFactory(d -> {
             Optional<Karnet> k = CzlonekRepository.getInstance().findAktywnyKarnet(d.getValue().getId());
             return new SimpleStringProperty(k.map(karnet -> karnet.getRodzaj().name()).orElse("Brak"));
         });
+        // kolumna statusu karnetu - tlumaczymy enum na polski tekst do wyswietlenia
         colStatus.setCellValueFactory(d -> {
             Optional<Karnet> k = CzlonekRepository.getInstance().findAktywnyKarnet(d.getValue().getId());
             String label = k.map(karnet -> switch (karnet.getStatus()) {
@@ -66,6 +70,7 @@ public class TrainerUczestnicyController {
                 setGraphic(badge);
             }
         });
+        // kolumna obecnosci - sprawdzamy czy dany czlonek jest na liscie "potwierdzonych" w zajeciach
         colObec.setCellValueFactory(d -> {
             Zajecia zajecia = SessionManager.getInstance().getSelectedZajecia();
             boolean potwierdzony = zajecia != null && zajecia.czyPotwierdzony(d.getValue().getId());
@@ -84,6 +89,7 @@ public class TrainerUczestnicyController {
         });
     }
 
+    // wczytuje dane wybranych zajec
     private void loadData() {
         Zajecia zajecia = SessionManager.getInstance().getSelectedZajecia();
         if (zajecia == null) {
@@ -96,6 +102,7 @@ public class TrainerUczestnicyController {
         if (countLabel != null) countLabel.setText(String.valueOf(zajecia.getUczestnicyIds().size()));
         if (limitLabel != null) limitLabel.setText(String.valueOf(zajecia.getLimitUczestnikow()));
 
+        // zamieniamy liste id uczestnikow na liste pelnych obiektow Czlonek (do wyswietlenia w tabeli)
         List<Czlonek> uczestnicy = new ArrayList<>();
         for (String id : zajecia.getUczestnicyIds()) {
             CzlonekRepository.getInstance().findById(id).ifPresent(uczestnicy::add);
@@ -103,6 +110,7 @@ public class TrainerUczestnicyController {
         uczestnicyTable.setItems(FXCollections.observableArrayList(uczestnicy));
     }
 
+    // przycisk "wroc" - wraca do widoku grafiku trenera
     @FXML
     private void backToGrafik() {
         TrainerShellController.getInstance().showGrafik();

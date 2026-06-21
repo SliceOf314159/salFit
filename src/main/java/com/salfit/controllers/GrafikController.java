@@ -25,6 +25,9 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
+// Glowny kontroler grafika tygodniowego dla PANELU ADMINA - widzi WSZYSTKICH trenerow
+// i WSZYSTKIE zajecia (w odroznieniu od TrainerGrafikController, ktory widzi tylko swoje zajecia).
+// Klik na karte zajec otwiera dialog edycji (a nie liste uczestnikow jak u trenera)
 public class GrafikController {
 
     @FXML private Label weekLabel;
@@ -45,11 +48,13 @@ public class GrafikController {
     @FXML public void onPoprzedniTydzien() { aktualnyTydzien = aktualnyTydzien.minusWeeks(1); refresh(); }
     @FXML public void onNastepnyTydzien()  { aktualnyTydzien = aktualnyTydzien.plusWeeks(1);  refresh(); }
 
+    // przycisk "dodaj zajecia" - otwiera dialog ale bez przekazanych zajec (null = tworzymy nowe)
     @FXML
     public void onDodajZajecia() {
         openZajeciaDialog(null);
     }
 
+    // odswieza naglowek tygodnia i przerysowuje cala siatke
     public void refresh() {
         LocalDate monday = aktualnyTydzien.with(DayOfWeek.MONDAY);
         LocalDate friday = monday.plusDays(4);
@@ -60,6 +65,7 @@ public class GrafikController {
         renderTydzien(monday);
     }
 
+    // rysuje cala siatke grafika - kolumna godzin po lewej + 5 kolumn dni roboczych
     private void renderTydzien(LocalDate monday) {
         grafikGrid.getItems().clear();
 
@@ -75,6 +81,7 @@ public class GrafikController {
         }
         grafikGrid.getItems().add(timeCol);
 
+        // macierz komorek (wiersz=godzina, kolumna=dzien) - tu wstawimy karty zajec
         HBox[][] cells = new HBox[HOURS.length][5];
         for (int d = 0; d < 5; d++) {
             LocalDate day = monday.plusDays(d);
@@ -94,11 +101,12 @@ public class GrafikController {
             grafikGrid.getItems().add(dayCol);
         }
 
+        // bierzemy WSZYSTKIE zajecia z tygodnia
         List<Zajecia> zajecia = GrafikRepository.getInstance().findByTydzien(monday);
         for (Zajecia z : zajecia) {
             int row = hourToRow(z.getTermin().getHour());
             int col = z.getTermin().getDayOfWeek().getValue() - 1; // Mon=0, ..., Fri=4
-            if (row < 0 || col < 0 || col > 4) continue;
+            if (row < 0 || col < 0 || col > 4) continue; // poza siatka (np weekend) - ignorujemy
             VBox card = makeCard(z);
             HBox.setHgrow(card, Priority.ALWAYS);
             cells[row][col].getChildren().add(card);
@@ -112,6 +120,7 @@ public class GrafikController {
         return l;
     }
 
+    // zamienia konkretna godzine na numer wiersza siatki
     private int hourToRow(int hour) {
         for (int i = 0; i < HOUR_VALUES.length; i++) {
             if (hour == HOUR_VALUES[i]) return i;
@@ -125,6 +134,8 @@ public class GrafikController {
 
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
 
+    // tworzy karteczke zajec do wstawienia w siatce -  pokazujemy imie trenera + nazwe sali,
+    // bo admin musi widziec KTO i GDZIE prowadzi te zajecia
     private VBox makeCard(Zajecia z) {
         VBox card = new VBox(2);
         card.getStyleClass().add("cal-card");
@@ -144,13 +155,15 @@ public class GrafikController {
         lCzas.getStyleClass().add("cal-card-sub");
         Label lInfo = new Label(trenerName + " · " + salaNazwa);
         lInfo.getStyleClass().add("cal-card-sub");
-        lInfo.setWrapText(true);
+        lInfo.setWrapText(true); // imie trenera + sala moze byc dlugie, zawijamy tekst zeby sie zmiescilo
         card.getChildren().addAll(lNazwa, lCzas, lInfo);
 
+        // klik na karte - otwiera dialog EDYCJI tych zajec
         card.setOnMouseClicked(e -> openZajeciaDialog(z));
         return card;
     }
 
+    // otwiera modalny dialog dodania/edycji zajec
     private void openZajeciaDialog(Zajecia zajecia) {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -167,7 +180,7 @@ public class GrafikController {
                 ctrl.setEditMode(true);
             }
             dialog.showAndWait();
-            refresh();
+            refresh(); // po zamknieciu dialogu odswiezamy grafik
         } catch (IOException e) {
             e.printStackTrace();
         }

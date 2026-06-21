@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Kontroler listy trenerow (panel admina)
 public class TrenerController {
 
     @FXML private TextField searchField;
@@ -40,6 +41,7 @@ public class TrenerController {
         colSpec.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getSpecjalizacja()));
         colEmail.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEmail()));
 
+        // status to po prostu boolean aktywny/nieaktywny, tlumaczymy na czytelny tekst
         colStatus.setCellValueFactory(d ->
                 new SimpleStringProperty(d.getValue().isAktywny() ? "Aktywny" : "Nieaktywny"));
         colStatus.setCellFactory(col -> new TableCell<>() {
@@ -54,6 +56,8 @@ public class TrenerController {
             }
         });
 
+        // kolumna akcji - edytuj + przycisk ktorego TEKST sie zmienia w zaleznosci od statusu
+        // (jak trener aktywny, przycisk mowi "Dezaktywuj", jak nieaktywny - "Aktywuj")
         colAkcje.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdytuj = new Button("Edytuj");
             private final Button btnToggle = new Button("Dezaktywuj");
@@ -93,6 +97,7 @@ public class TrenerController {
         trenerTable.setItems(allTrenerzy);
     }
 
+    // szukanie po imieniu+nazwisku, mailu LUB specjalizacji
     @FXML
     private void onSearch() {
         String text = searchField.getText().toLowerCase();
@@ -117,6 +122,7 @@ public class TrenerController {
         openDialog("/views/dialogs/AddEditTrenerDialog.fxml", "Edycja trenera", trener);
     }
 
+    // przelacznik aktywny/nieaktywny
     private void onToggleAktywny(Trener trener) {
         trener.setAktywny(!trener.isAktywny());
         TrenerRepository.getInstance().update(trener);

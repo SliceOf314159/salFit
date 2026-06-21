@@ -1,8 +1,8 @@
-package com.salfit.model;
+package com.salfit.repository;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.salfit.repository.Repository;
+import com.salfit.model.Zajecia;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

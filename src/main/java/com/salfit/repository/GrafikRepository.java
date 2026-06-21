@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Repozytorium zajec - czyli "grafik" calej silowni. Tutaj rowniez sa metody
+// do filtrowania zajec po trenerze, sali albo po tygodniu (przydatne do widoku kalendarza)
 public class GrafikRepository implements Repository<Zajecia> {
 
     private static GrafikRepository instance;
@@ -71,19 +73,24 @@ public class GrafikRepository implements Repository<Zajecia> {
         saveToFile();
     }
 
+    // wszystkie zajecia danego trenera
     public List<Zajecia> findByTrener(String trenerId) {
         return cache.stream().filter(z -> z.getTrenerId().equals(trenerId)).collect(Collectors.toList());
     }
 
+    // wszystkie zajecia w danej sali
     public List<Zajecia> findBySala(String salaId) {
         return cache.stream().filter(z -> z.getSalaId().equals(salaId)).collect(Collectors.toList());
     }
 
+    // zwraca zajecia z danego tygodnia (od poniedzialku do niedzieli) - kluczowe do rysowania
+    // widoku grafika tygodniowego w GrafikController i TrainerGrafikController
     public List<Zajecia> findByTydzien(LocalDate poniedzialek) {
-        LocalDate niedziela = poniedzialek.plusDays(6);
+        LocalDate niedziela = poniedzialek.plusDays(6); // tydzien = 7 dni, +6 bo poniedzialek juz liczymy
         return cache.stream()
                 .filter(z -> {
                     LocalDate dataZajec = z.getTermin().toLocalDate();
+                    // sprawdzamy czy data zajec jest w przedziale [poniedzialek, niedziela] (wlacznie)
                     return !dataZajec.isBefore(poniedzialek) && !dataZajec.isAfter(niedziela);
                 })
                 .collect(Collectors.toList());

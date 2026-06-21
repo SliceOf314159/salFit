@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Kontroler widoku czlonkow
 public class CzlonekController {
 
     @FXML private VBox membersTab;
@@ -54,10 +55,12 @@ public class CzlonekController {
         loadData();
     }
 
+    // konfiguracja kolumn tabeli CZLONKOW
     private void setupMemberColumns() {
         colMNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getImieNazwisko()));
         colMEmail.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getEmail()));
         colMTel.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getTelefon()));
+        // kolumna karnetu - szukamy aktywnego karnetu danego czlonka i tlumaczymy status na polski
         colMKarnet.setCellValueFactory(d -> {
             Optional<Karnet> karnet = CzlonekRepository.getInstance().findAktywnyKarnet(d.getValue().getId());
             String label = karnet.map(k -> switch (k.getStatus()) {
@@ -67,6 +70,7 @@ public class CzlonekController {
             }).orElse("Brak");
             return new SimpleStringProperty(label);
         });
+        // tu zamieniamy tekst statusu na kolorowy badge
         colMKarnet.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -83,6 +87,7 @@ public class CzlonekController {
                 setGraphic(badge);
             }
         });
+        // kolumna akcji - dwa przyciski: edytuj czlonka i sprzedaj mu karnet
         colMAkcje.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdytuj = new Button("Edytuj");
             private final Button btnKarnet = new Button("Karnet");
@@ -109,7 +114,10 @@ public class CzlonekController {
         });
     }
 
+    // konfiguracja kolumn tabeli KARNETOW
     private void setupPassColumns() {
+        // kolumna z imieniem czlonka - musimy podpiąc sie do CzlonekRepository, bo Karnet
+        // trzyma tylko czlonekId, nie cale imie i nazwisko
         colKCzlonek.setCellValueFactory(d -> {
             String name = CzlonekRepository.getInstance().findById(d.getValue().getCzlonekId())
                     .map(Czlonek::getImieNazwisko).orElse("—");
@@ -145,6 +153,7 @@ public class CzlonekController {
                 setGraphic(badge);
             }
         });
+        // przycisk "Przedluz"
         colKAkcje.setCellFactory(col -> new TableCell<>() {
             private final Button btn = new Button("Przedłuż");
             {
@@ -170,6 +179,7 @@ public class CzlonekController {
         karnetTable.setItems(allKarnety);
     }
 
+    // wyszukiwanie czlonkow - po imieniu+nazwisku, mailu LUB telefonie
     @FXML
     private void onSearchMembers() {
         String text = searchMembers.getText().toLowerCase();
@@ -182,6 +192,7 @@ public class CzlonekController {
         czlonekTable.setItems(FXCollections.observableArrayList(filtered));
     }
 
+    // wyszukiwanie karnetow - tu szukamy po IMIENIU CZLONKA (nie po atrybutach samego karnetu)
     @FXML
     private void onSearchPasses() {
         String text = searchPasses.getText().toLowerCase();
@@ -196,6 +207,7 @@ public class CzlonekController {
         karnetTable.setItems(FXCollections.observableArrayList(filtered));
     }
 
+    // przelaczanie miedzy zakladkami "Czlonkowie" i "Karnety"
     @FXML
     public void showMembersTab() {
         membersTab.setVisible(true);  membersTab.setManaged(true);
@@ -222,6 +234,7 @@ public class CzlonekController {
         openSprzedajDialog(null);
     }
 
+    // otwiera dialog dodania/edycji czlonka
     private void openCzlonekDialog(Czlonek czlonek) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
@@ -242,6 +255,7 @@ public class CzlonekController {
         }
     }
 
+    // otwiera dialog sprzedazy/przedluzenia karnetu, opcjonalnie z juz wybranym czlonkiem
     private void openSprzedajDialog(Czlonek preselected) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(

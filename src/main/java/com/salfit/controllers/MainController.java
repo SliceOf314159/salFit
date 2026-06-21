@@ -14,9 +14,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+// Glowny kontroler  panelu admina
 public class MainController {
 
-    @FXML private StackPane contentArea;
+    @FXML private StackPane contentArea; // aktualnie wybrany widok
     @FXML private Label topbarDate;
     @FXML private Button btnTrenerzy;
     @FXML private Button btnSale;
@@ -28,6 +29,8 @@ public class MainController {
     private static final DateTimeFormatter DATE_FMT =
             DateTimeFormatter.ofPattern("d MMMM yyyy").withLocale(Locale.forLanguageTag("pl"));
 
+    // statyczna referencja do "siebie" - dzieki temu inne kontrolery (np dzieci wewnatrz contentArea)
+    // moga sobie wziac instancje MainController i np kazac mu przeladowac widok
     private static MainController instance;
 
     public static MainController getInstance() { return instance; }
@@ -36,9 +39,10 @@ public class MainController {
     public void initialize() {
         instance = this;
         topbarDate.setText(LocalDate.now().format(DATE_FMT));
-        showTrenerView();
+        showTrenerView(); // domyslnie po wejsciu do panelu admina pokazujemy widok trenerow
     }
 
+    // kazda z tych metod laduje inny widok fxml do contentArea i podswietla odpowiedni przycisk w menu
     @FXML public void showTrenerView()  { loadContent("/views/TrenerView.fxml",   btnTrenerzy);  }
     @FXML public void showSalaView()    { loadContent("/views/SalaView.fxml",     btnSale);      }
     @FXML public void showGrafikView()  { loadContent("/views/GrafikView.fxml",   btnGrafik);    }
@@ -56,6 +60,7 @@ public class MainController {
     }
     @FXML public void showRaportView()  { loadContent("/views/RaportView.fxml",   btnRaporty);   }
 
+    // wylogowanie - wracamy do ekranu logowania
     @FXML
     private void logout() {
         SceneManager.getInstance().showLogin();
@@ -66,9 +71,11 @@ public class MainController {
         SceneManager.getInstance().showChangePassword();
     }
 
+    // glowna metoda do podmiany widoku w contentArea - wczytuje fxml i ustawia go jako jedyne dziecko
     public void loadContent(String fxmlPath, Button activeBtn) {
         try {
             Node view = FXMLLoader.load(getClass().getResource(fxmlPath));
+            // setAll - czysci stara liste dzieci i wstawia nowa
             contentArea.getChildren().setAll(view);
             updateActiveButton(activeBtn);
         } catch (IOException e) {
@@ -77,16 +84,20 @@ public class MainController {
         }
     }
 
+    // ustawia styl "aktywny" tylko na klikniety przycisk menu, resztę zwraca do normalnego stylu
     private void updateActiveButton(Button active) {
         List<Button> all = List.of(btnTrenerzy, btnSale, btnGrafik,
                                    btnCzlonkowie, btnKarnety, btnRaporty);
         for (Button b : all) {
+            // najpierw zdejmujemy klase "aktywny" z wszystkich
             b.getStyleClass().removeAll("sidebar-item-active");
+            // i pilnujemy zeby kazdy mial przynajmniej zwykla klase "sidebar-item"
             if (!b.getStyleClass().contains("sidebar-item")) {
                 b.getStyleClass().add("sidebar-item");
             }
         }
         if (active != null) {
+            // a temu jednemu klikniete przyciskowi zamieniamy styl na "aktywny"
             active.getStyleClass().remove("sidebar-item");
             active.getStyleClass().add("sidebar-item-active");
         }

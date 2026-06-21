@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
+// Kontroler dialogu dodania/edycji trenera
 public class AddEditTrenerDialogController {
 
     @FXML private TextField fieldImie;
@@ -26,7 +27,7 @@ public class AddEditTrenerDialogController {
     @FXML private CheckBox cbGrupowy;
     @FXML private CheckBox cbPersonalny;
     @FXML private CheckBox cbOnline;
-    @FXML private VBox passwordSection;
+    @FXML private VBox passwordSection; // sekcja z polem hasla - widoczna TYLKO przy tworzeniu nowego trenera
     @FXML private PasswordField fieldHaslo;
     @FXML private Button btnUsun;
     @FXML private Button btnSave;
@@ -39,16 +40,18 @@ public class AddEditTrenerDialogController {
 
     @FXML
     public void initialize() {
+        // poziomy doswiadczenia jako gwiazdki - od najlepszego do najslabszego
         fieldPoziom.setItems(FXCollections.observableArrayList(
                 "★★★★★ Ekspert",
                 "★★★★☆ Zaawansowany",
                 "★★★☆☆ Średniozaawansowany",
                 "★★☆☆☆ Podstawowy",
                 "★☆☆☆☆ Początkujący"));
-        fieldPoziom.getSelectionModel().select(2);
+        fieldPoziom.getSelectionModel().select(2); // domyslnie "Sredniozaawansowany" (indeks 2)
         Platform.runLater(this::maybeLoadDraft);
     }
 
+    // wypelnia formularz danymi istniejacego trenera (tryb edycji)
     public void setTrener(Trener t) {
         this.trener = t;
         fieldImie.setText(t.getImie());
@@ -64,6 +67,7 @@ public class AddEditTrenerDialogController {
 
     public void setEditMode(boolean edit) {
         this.editMode = edit;
+        // sekcja hasla widoczna tylko gdy TWORZYMY nowego trenera (przy edycji haslo zostaje bez zmian)
         passwordSection.setVisible(!edit);
         passwordSection.setManaged(!edit);
         btnUsun.setVisible(edit);
@@ -93,10 +97,12 @@ public class AddEditTrenerDialogController {
         obj.addProperty("telefon",       fieldTelefon.getText().trim());
         obj.addProperty("specjalizacja", specjalizacja);
         obj.addProperty("poziom",        fieldPoziom.getValue());
-        obj.addProperty("aktywny",       true);
+        obj.addProperty("aktywny",       true); // nowy trener (i kazdy edytowany przez ten dialog) jest aktywny
         if (!editMode) {
+            // nowy trener - bierzemy haslo wpisane w formularzu
             obj.addProperty("haslo", fieldHaslo.getText());
         } else if (trener != null && trener.getHaslo() != null) {
+            // edycja istniejacego trenera - zachowujemy JEGO STARE haslo (formularz go nie zmienia)
             obj.addProperty("haslo", trener.getHaslo());
         }
 
@@ -142,6 +148,7 @@ public class AddEditTrenerDialogController {
         });
     }
 
+    // walidacja - wszystkie cztery podstawowe pola musza byc wypelnione
     private boolean validate() {
         return !fieldImie.getText().isBlank()
                 && !fieldNazwisko.getText().isBlank()

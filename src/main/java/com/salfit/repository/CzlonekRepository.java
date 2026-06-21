@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Repozytorium dla Czlonkow ORAZ Karnetow - jedna klasa ogarnia oba (bo sa silnie zwiazane,
+// karnet zawsze nalezy do jakiegos czlonka). Trzyma dwa pliki JSON i dwa cache.
 public class CzlonekRepository implements Repository<Czlonek> {
 
     private static CzlonekRepository instance;
@@ -47,6 +49,7 @@ public class CzlonekRepository implements Repository<Czlonek> {
 
     @Override
     public void save(Czlonek czlonek) {
+        // ustawiamy id przez refleksje, tak jak w innych repo (bo brak settera na "id")
         try {
             java.lang.reflect.Field idField = czlonek.getClass().getDeclaredField("id");
             idField.setAccessible(true);
@@ -72,10 +75,12 @@ public class CzlonekRepository implements Repository<Czlonek> {
     @Override
     public void delete(String id) {
         cacheCzlonkowie.removeIf(c -> c.getId().equals(id));
+        // jak usuwamy czlonka, to usuwamy mu rowniez wszystkie jego karnety
         cacheKarnety.removeIf(k -> k.getCzlonekId().equals(id));
         saveToFile();
     }
 
+    // znajduje "aktywny" karnet czlonka - czyli taki ktory jest AKTYWNY albo WYGASA_WKROTCE
     public Optional<Karnet> findAktywnyKarnet(String czlonekId) {
         return cacheKarnety.stream()
                 .filter(k -> k.getCzlonekId().equals(czlonekId))
@@ -83,12 +88,14 @@ public class CzlonekRepository implements Repository<Czlonek> {
                 .findFirst();
     }
 
+    // wszystkie karnety ktore wygasaja w ciagu X dni
     public List<Karnet> findKarnetyWygasajace(int dni) {
         return cacheKarnety.stream()
                 .filter(k -> k.wygasaWCiagu(dni))
                 .collect(Collectors.toList());
     }
 
+    // zapisuje nowy karnet (oddzielna metoda od save() bo to inny typ obiektu - Karnet a nie Czlonek)
     public void saveKarnet(Karnet karnet) {
         try {
             java.lang.reflect.Field idField = karnet.getClass().getDeclaredField("id");
@@ -113,6 +120,8 @@ public class CzlonekRepository implements Repository<Czlonek> {
         saveToFile();
     }
 
+    // wczytuje OBA pliki (czlonkow i karnety) do cache - kazdy w osobnym try-catch
+    // zeby blad jednego pliku nie blokowal wczytania drugiego
     private void loadFromFile() {
         try (Reader reader = new FileReader(czlonkowiePath)) {
             Type listType = new TypeToken<ArrayList<Czlonek>>(){}.getType();
@@ -127,6 +136,7 @@ public class CzlonekRepository implements Repository<Czlonek> {
         } catch (IOException e) {}
     }
 
+    // zapisuje OBA cache do ich plikow
     private void saveToFile() {
         new File("data").mkdirs();
         try (Writer writer = new FileWriter(czlonkowiePath)) {
@@ -138,10 +148,12 @@ public class CzlonekRepository implements Repository<Czlonek> {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
+    // generowanie kolejnego id dla czlonka
     private String generateCzlonekId() {
         return Repository.nextSequentialId(cacheCzlonkowie.stream().map(Czlonek::getId).collect(Collectors.toList()));
     }
 
+    // to samo, ale dla karnetow (osobna numeracja niz czlonkowie)
     private String generateKarnetId() {
         return Repository.nextSequentialId(cacheKarnety.stream().map(Karnet::getId).collect(Collectors.toList()));
     }

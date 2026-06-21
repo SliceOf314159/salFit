@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+// odpowiednik MainController ale dla panelu trenera
+// (mniejsze menu: grafik, profil, aktywnosc). Dziala na tej samej zasadzie - sidebar + contentArea
 public class TrainerShellController {
 
     @FXML private StackPane contentArea;
@@ -25,6 +27,8 @@ public class TrainerShellController {
     private static final DateTimeFormatter DATE_FMT =
             DateTimeFormatter.ofPattern("d MMMM yyyy").withLocale(Locale.forLanguageTag("pl"));
 
+    // tak jak w MainController - statyczna referencja "do siebie", zeby inne kontrolery
+    // mogly wywolac np showGrafik() bez przekazywania referencji recznie
     private static TrainerShellController instance;
 
     public static TrainerShellController getInstance() { return instance; }
@@ -33,7 +37,7 @@ public class TrainerShellController {
     public void initialize() {
         instance = this;
         topbarDate.setText(LocalDate.now().format(DATE_FMT));
-        showGrafik();
+        showGrafik(); // domyslny widok po zalogowaniu trenera to jego grafik zajec
     }
 
     @FXML public void showGrafik()    { loadContent("/views/trainer/TrainerGrafikView.fxml",    btnMojeZajecia); }

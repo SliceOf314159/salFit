@@ -13,6 +13,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+// Kontroler dialogu dodania/edycji sali. Ten formularz ma dodatkowo przyciski "+/-"
+// do zmiany pojemnosci i przerwy bez recznego wpisywania liczb, oraz
+// mozliwosc usuniecia sali (tylko w trybie edycji)
 public class AddEditSalaDialogController {
 
     @FXML private TextField fieldNazwa;
@@ -31,17 +34,19 @@ public class AddEditSalaDialogController {
     @FXML
     public void initialize() {
         fieldStatus.setItems(FXCollections.observableArrayList("Dostępna", "Zajęta", "W remoncie"));
-        fieldStatus.getSelectionModel().selectFirst();
-        fieldPojemnosc.setText("20");
+        fieldStatus.getSelectionModel().selectFirst(); // domyslnie "Dostepna"
+        fieldPojemnosc.setText("20"); // sensowne wartosci domyslne dla nowej sali
         fieldPrzerwa.setText("10");
         Platform.runLater(this::maybeLoadDraft);
     }
 
+    // wypelnia formularz danymi istniejacej sali (tryb edycji)
     public void setSala(Sala s) {
         this.sala = s;
         fieldNazwa.setText(s.getNazwa());
         fieldPojemnosc.setText(String.valueOf(s.getPojemnosc()));
         fieldPrzerwa.setText(String.valueOf(s.getMinPrzerwaMinut()));
+        // tlumaczymy enum na polska etykiete (zeby ustawic odpowiednia wartosc w comboboxie)
         String statusLabel = switch (s.getStatus()) {
             case DOSTEPNA   -> "Dostępna";
             case ZAJETA     -> "Zajęta";
@@ -52,16 +57,19 @@ public class AddEditSalaDialogController {
 
     public void setEditMode(boolean edit) {
         editMode = edit;
+        // przycisk "Usun" widoczny tylko w trybie edycji - nie ma sensu usuwac czegos co jeszcze nie istnieje
         btnUsun.setVisible(edit);
         btnUsun.setManaged(edit);
         btnSave.setText(edit ? "Zapisz zmiany" : "Dodaj salę");
     }
 
+    // przyciski +/- do zmiany pojemnosci (krok 1) i przerwy (krok 5)
     @FXML private void stepUp()          { step(fieldPojemnosc,  1); }
     @FXML private void stepDown()        { step(fieldPojemnosc, -1); }
     @FXML private void stepPrzerwaUp()   { step(fieldPrzerwa,    5); }
     @FXML private void stepPrzerwaDown() { step(fieldPrzerwa,   -5); }
 
+    // wspolny helper do zwiekszania/zmniejszania liczby w polu tekstowym
     private void step(TextField field, int delta) {
         try {
             int val = Integer.parseInt(field.getText().trim());
@@ -77,6 +85,7 @@ public class AddEditSalaDialogController {
         }
         hideError();
 
+        // zamieniamy polska etykiete z powrotem na wartosc enuma
         StatusSali status = switch (fieldStatus.getValue() != null ? fieldStatus.getValue() : "Dostępna") {
             case "Zajęta"     -> StatusSali.ZAJETA;
             case "W remoncie" -> StatusSali.W_REMONCIE;
@@ -86,6 +95,7 @@ public class AddEditSalaDialogController {
         JsonObject obj = new JsonObject();
         if (editMode && sala != null) obj.addProperty("id", sala.getId());
         obj.addProperty("nazwa",           fieldNazwa.getText().trim());
+        // parseSafe - jak user wpisal cos niepoprawnego (np litery) to bierzemy wartosc domyslna zamiast wyrzucania bledu
         obj.addProperty("pojemnosc",       parseSafe(fieldPojemnosc.getText(), 10));
         obj.addProperty("minPrzerwaMinut", parseSafe(fieldPrzerwa.getText(), 10));
         obj.addProperty("status",          status.name());
@@ -97,6 +107,7 @@ public class AddEditSalaDialogController {
         closeDialog();
     }
 
+    // usuwa sale i zamyka dialog
     @FXML private void onUsun()   { if (sala != null) SalaRepository.getInstance().delete(sala.getId()); closeDialog(); }
     @FXML private void onCancel() { closeDialog(); }
 
@@ -130,6 +141,8 @@ public class AddEditSalaDialogController {
     private void showError(String msg) { formError.setText(msg); formError.setVisible(true); }
     private void hideError() { formError.setVisible(false); }
 
+    // pomocnicze parsowanie liczby z tekstu - zeby formularz nie wyrzucal wyjatku
+    // jak user wpisze cos dziwnego do pola liczbowego
     private int parseSafe(String text, int fallback) {
         try { return Integer.parseInt(text.trim()); }
         catch (NumberFormatException e) { return fallback; }

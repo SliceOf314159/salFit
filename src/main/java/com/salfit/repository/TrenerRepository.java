@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Repozytorium trenerow - dziala identycznie jak inne repozytoria (CRUD + JSON na dysku)
 public class TrenerRepository implements Repository<Trener> {
 
     private static TrenerRepository instance;
@@ -44,6 +45,7 @@ public class TrenerRepository implements Repository<Trener> {
 
     @Override
     public void save(Trener trener) {
+        // refleksja do ustawienia prywatnego pola "id" (Trener nie ma settera na id)
         try {
             java.lang.reflect.Field idField = trener.getClass().getDeclaredField("id");
             idField.setAccessible(true);
@@ -72,6 +74,8 @@ public class TrenerRepository implements Repository<Trener> {
         saveToFile();
     }
 
+    // zwraca tylko trenerow aktywnych - przydatne np przy wybieraniu trenera w formularzu nowych zajec
+    // (nie chcemy proponowac nieaktywnego trenera do nowych zajec)
     public List<Trener> findAktywni() {
         return cache.stream().filter(Trener::isAktywny).collect(Collectors.toList());
     }

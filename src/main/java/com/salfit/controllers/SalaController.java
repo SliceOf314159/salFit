@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Kontroler widoku listy sal (panel admina). Pozwala wyszukiwac, dodawac, edytowac
+// oraz "cyklicznie" zmieniac status sali jednym kliknieciem
 public class SalaController {
 
     @FXML private TextField searchField;
@@ -29,6 +31,8 @@ public class SalaController {
     @FXML private TableColumn<Sala, String> colStatus;
     @FXML private TableColumn<Sala, String> colAkcje;
 
+    // pelna, niefiltrowana lista sal - trzymamy ja osobno, zeby po wyczyszczeniu wyszukiwania
+    // moc latwo wrocic do widoku "wszystkie sale"
     private ObservableList<Sala> allSale = FXCollections.observableArrayList();
 
     @FXML
@@ -39,10 +43,12 @@ public class SalaController {
 
     private void setupColumns() {
         colNazwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNazwa()));
+        // colTyp zawsze zwraca "—" - czyli pole nieuzywane/zaslepka, model Sala nie ma takiego atrybutu
         colTyp.setCellValueFactory(d -> new SimpleStringProperty("—"));
         colPoj.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().getPojemnosc())));
         colPrzerwa.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getMinPrzerwaMinut() + " min"));
 
+        // tlumaczymy enum StatusSali na polskie etykiety do wyswietlenia
         colStatus.setCellValueFactory(d -> {
             String label = switch (d.getValue().getStatus()) {
                 case DOSTEPNA  -> "Dostępna";
@@ -51,6 +57,7 @@ public class SalaController {
             };
             return new SimpleStringProperty(label);
         });
+        // tu zamieniamy tekst na kolorowy badge (zielony/zolty/czerwony wedlug statusu)
         colStatus.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -101,10 +108,11 @@ public class SalaController {
         salaTable.setItems(allSale);
     }
 
+    // filtrowanie listy po nazwie sali
     @FXML
     private void onSearch() {
         String text = searchField.getText().toLowerCase();
-        if (text.isBlank()) { salaTable.setItems(allSale); return; }
+        if (text.isBlank()) { salaTable.setItems(allSale); return; } // brak tekstu - pokazujemy wszystko
         List<Sala> filtered = allSale.stream()
                 .filter(s -> s.getNazwa().toLowerCase().contains(text))
                 .collect(Collectors.toList());
@@ -120,6 +128,8 @@ public class SalaController {
         openDialog("/views/dialogs/AddEditSalaDialog.fxml", "Edycja sali", sala);
     }
 
+    // klik na "Zmien status" przesuwa status sali "o jeden krok" w kolko
+    // dostepna -> zajeta -> w remoncie -> dostepna -> ...
     private void onZmienStatus(Sala sala) {
         StatusSali next = switch (sala.getStatus()) {
             case DOSTEPNA   -> StatusSali.ZAJETA;
@@ -128,11 +138,12 @@ public class SalaController {
         };
         sala.setStatus(next);
         SalaRepository.getInstance().update(sala);
-        salaTable.refresh();
+        salaTable.refresh(); // wymuszamy przerysowanie tabeli zeby badge zaktualizowal kolor
     }
 
     public void refresh() { loadData(); }
 
+    // otwiera okno z formularzem dodania/edycji sali
     private void openDialog(String path, String title, Sala sala) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
@@ -145,8 +156,9 @@ public class SalaController {
                 ctrl.setSala(sala);
                 ctrl.setEditMode(true);
             }
+            // showAndWait() - blokuje kod tutaj dopoki user nie zamknie dialogu
             dialog.showAndWait();
-            refresh();
+            refresh(); // po zamknieciu dialogu odswiezamy tabele
         } catch (IOException e) {
             e.printStackTrace();
         }

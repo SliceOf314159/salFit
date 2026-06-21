@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//  dodawanie/edycja zajec
 public class AddEditZajeciaDialogController {
 
     @FXML private TextField fieldNazwa;
@@ -43,18 +44,20 @@ public class AddEditZajeciaDialogController {
     @FXML private TextField fieldCzas;
     @FXML private TextArea fieldOpis;
     @FXML private TextArea fieldWymagania;
-    @FXML private ComboBox<Czlonek> fieldNowyUczestnik;
-    @FXML private ListView<Czlonek> uczestnicyList;
+    @FXML private ComboBox<Czlonek> fieldNowyUczestnik; // combo z autouzupelnianiem do wyszukania kogo dopisac
+    @FXML private ListView<Czlonek> uczestnicyList;     // lista juz zapisanych uczestnikow
     @FXML private Label formError;
     @FXML private Label draftHint;
 
     private static final Gson GSON = Repository.createGson();
     private boolean editMode = false;
     private Zajecia zajecia;
+    // robocze listy id uczestnikow/potwierdzonych - edytujemy je "w pamieci" i zapisujemy dopiero na onSave()
     private final List<String> currentUczestnicy = new ArrayList<>();
     private final List<String> currentPotwierdzeni = new ArrayList<>();
-    private List<Czlonek> allAvailable = new ArrayList<>();
+    private List<Czlonek> allAvailable = new ArrayList<>(); // czlonkowie ktorych jeszcze MOZNA dopisac (nie sa juz na liscie)
 
+    // dostepne godziny (co godzina od 6 do 21)
     private static final String[] HOURS = {
         "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
         "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
@@ -66,6 +69,7 @@ public class AddEditZajeciaDialogController {
         fieldRodzaj.setItems(FXCollections.observableArrayList(
                 "Yoga", "Pilates", "CrossFit", "HIIT", "Stretching", "Spinning", "Inne"));
 
+        // combo trenerow - bierzemy TYLKO aktywnych (nie chcemy proponowac nieaktywnego trenera do nowych zajec)
         fieldTrener.setItems(FXCollections.observableArrayList(
                 TrenerRepository.getInstance().findAktywni()));
         fieldTrener.setConverter(new StringConverter<>() {
@@ -82,7 +86,7 @@ public class AddEditZajeciaDialogController {
 
         fieldPoziom.setItems(FXCollections.observableArrayList(
                 "★★★★★", "★★★★☆", "★★★☆☆", "★★☆☆☆", "★☆☆☆☆"));
-        fieldPoziom.getSelectionModel().select(2);
+        fieldPoziom.getSelectionModel().select(2); // domyslnie sredni poziom
 
         fieldGodzina.setItems(FXCollections.observableArrayList(HOURS));
         fieldGodzina.getSelectionModel().select("08:00");
@@ -96,19 +100,26 @@ public class AddEditZajeciaDialogController {
             @Override public String toString(Czlonek c) { return c != null ? c.getImieNazwisko() : ""; }
             @Override public Czlonek fromString(String s) { return null; }
         });
+        // listener na tekst wpisywany w pole combo - to jest mechanizm "filtrowania na zywo" (autouzupelnianie)
         fieldNowyUczestnik.getEditor().textProperty().addListener((obs, old, text) -> {
+            // jak tekst zgadza sie z imieniem aktualnie wybranego czlonka, to znaczy ze user
+            // wlasnie wybral kogos z listy (nie pisze recznie) - wtedy nie odswiezamy listy ponownie
             if (fieldNowyUczestnik.getValue() != null
                     && fieldNowyUczestnik.getValue().getImieNazwisko().equals(text)) return;
             String filter = text == null ? "" : text.toLowerCase();
+            // filtrujemy dostepnych czlonkow po wpisanym tekscie
             List<Czlonek> filtered = allAvailable.stream()
                     .filter(c -> c.getImieNazwisko().toLowerCase().contains(filter))
                     .collect(Collectors.toList());
             fieldNowyUczestnik.setItems(FXCollections.observableArrayList(filtered));
+            // pokazujemy rozwijana liste automatycznie jak user zaczyna pisac (zeby nie musial klikac strzalki)
             if (!fieldNowyUczestnik.isShowing() && !filtered.isEmpty()) fieldNowyUczestnik.show();
         });
+        // jak user wybierze kogos z listy , to od razu dodajemy go do zajec
         fieldNowyUczestnik.valueProperty().addListener((obs, old, val) -> {
             if (val != null) onDodajUczestnika();
         });
+        // cellFactory dla listy uczestnikow - kazdy wiersz ma: imie, checkbox "Potwierdzony", przycisk "Usun"
         uczestnicyList.setCellFactory(lv -> new ListCell<>() {
             private final Label lblNazwa = new Label();
             private final Region spacer = new Region();
@@ -141,6 +152,7 @@ public class AddEditZajeciaDialogController {
                 super.updateItem(item, empty);
                 if (empty || item == null) { setGraphic(null); return; }
                 lblNazwa.setText(item.getImieNazwisko());
+                // checkbox musi byc ustawiony zgodnie z aktualnym stanem (czy ten czlonek jest w currentPotwierdzeni)
                 cbPotwierdzony.setSelected(currentPotwierdzeni.contains(item.getId()));
                 setGraphic(box);
             }
@@ -149,6 +161,7 @@ public class AddEditZajeciaDialogController {
         Platform.runLater(this::maybeLoadDraft);
     }
 
+    // odswieza liste zapisanych uczestnikow ORAZ liste "dostepnych do dodania" (czyli wszystkich minus juz zapisani)
     private void refreshUczestnicyUI() {
         List<Czlonek> enrolled = new ArrayList<>();
         for (String id : currentUczestnicy) {
@@ -156,12 +169,14 @@ public class AddEditZajeciaDialogController {
         }
         uczestnicyList.setItems(FXCollections.observableArrayList(enrolled));
 
+        // allAvailable = wszyscy czlonkowie MINUS ci ktorzy juz sa zapisani (zeby nie dodac kogos 2 razy)
         allAvailable = CzlonekRepository.getInstance().findAll().stream()
                 .filter(c -> !currentUczestnicy.contains(c.getId()))
                 .collect(Collectors.toList());
         fieldNowyUczestnik.setItems(FXCollections.observableArrayList(allAvailable));
     }
 
+    // dodaje wybranego czlonka do listy uczestnikow
     @FXML
     private void onDodajUczestnika() {
         Czlonek c = fieldNowyUczestnik.getValue();
@@ -169,10 +184,11 @@ public class AddEditZajeciaDialogController {
         if (!currentUczestnicy.contains(c.getId())) {
             currentUczestnicy.add(c.getId());
         }
-        fieldNowyUczestnik.setValue(null);
+        fieldNowyUczestnik.setValue(null); // czyscimy combo zeby bylo gotowe na nastepne wyszukiwanie
         refreshUczestnicyUI();
     }
 
+    // wypelnia caly formularz danymi istniejacych zajec
     public void setZajecia(Zajecia z) {
         this.zajecia = z;
         fieldNazwa.setText(z.getNazwa());
@@ -198,6 +214,7 @@ public class AddEditZajeciaDialogController {
         editMode = edit;
     }
 
+    // przyciski +/- dla limitu (krok 1) i czasu trwania (krok 15 minut)
     @FXML private void stepLimitUp()   { step(fieldLimit,  1); }
     @FXML private void stepLimitDown() { step(fieldLimit, -1); }
     @FXML private void stepCzasUp()    { step(fieldCzas,  15); }
@@ -212,6 +229,7 @@ public class AddEditZajeciaDialogController {
 
     @FXML
     private void onSave() {
+        // walidacja - nazwa, trener, sala i data sa wymagane (limit/czas maja wartosci domyslne wiec ich nie sprawdzamy)
         if (fieldNazwa.getText().isBlank()
                 || fieldTrener.getValue() == null
                 || fieldSala.getValue() == null
@@ -221,6 +239,7 @@ public class AddEditZajeciaDialogController {
         }
         hideError();
 
+        // skladamy date + godzine w jeden LocalDateTime (model trzyma to jako jedna wartosc "termin")
         String godzinaStr = fieldGodzina.getValue() != null ? fieldGodzina.getValue() : "08:00";
         LocalTime time = LocalTime.parse(godzinaStr);
         LocalDateTime termin = LocalDateTime.of(fieldData.getValue(), time);
@@ -274,6 +293,7 @@ public class AddEditZajeciaDialogController {
         return editMode && zajecia != null ? "zajecia_" + zajecia.getId() : "zajecia_new";
     }
 
+    // wczytuje -  musimy odszukac obiekty Trener/Sala po id (a nie tylko ustawic tekst w polu)
     private void maybeLoadDraft() {
         DraftStore.loadDraft(draftKey()).ifPresent(obj -> {
             if (obj.has("nazwa")) fieldNazwa.setText(obj.get("nazwa").getAsString());

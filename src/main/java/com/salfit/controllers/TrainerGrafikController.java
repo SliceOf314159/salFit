@@ -20,6 +20,8 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
+// grafik tygodniowy ale dla panelu TRENERA. Tutaj filtrujemy tylko zajecia
+// zalogowanego trenera i klikniecie w karte przenosi do listy uczestnikow (a nie do edycji jak u admina)
 public class TrainerGrafikController {
 
     @FXML private Label weekLabel;
@@ -37,9 +39,11 @@ public class TrainerGrafikController {
         refresh();
     }
 
+    // przyciski "poprzedni/nastepny tydzien"
     @FXML public void onPoprzedni() { aktualnyTydzien = aktualnyTydzien.minusWeeks(1); refresh(); }
     @FXML public void onNastepny()  { aktualnyTydzien = aktualnyTydzien.plusWeeks(1);  refresh(); }
 
+    // odswieza caly widok - liczy poniedzialek/piatek tygodnia i rysuje siatke
     private void refresh() {
         LocalDate monday = aktualnyTydzien.with(DayOfWeek.MONDAY);
         LocalDate friday = monday.plusDays(4);
@@ -49,9 +53,11 @@ public class TrainerGrafikController {
         renderGrid(monday);
     }
 
+    // rysuje cala siatke grafika
     private void renderGrid(LocalDate monday) {
-        grafikGrid.getItems().clear();
+        grafikGrid.getItems().clear(); // czyscimy stary widok przed narysowaniem nowego
 
+        // kolumna z godzinami po lewej stronie
         VBox timeCol = new VBox();
         timeCol.setMinWidth(55);
         timeCol.setPrefWidth(60);
@@ -64,6 +70,7 @@ public class TrainerGrafikController {
         }
         grafikGrid.getItems().add(timeCol);
 
+        // tworzymy macierz "komorek"
         HBox[][] cells = new HBox[HOURS.length][5];
         for (int d = 0; d < 5; d++) {
             LocalDate day = monday.plusDays(d);
@@ -76,6 +83,7 @@ public class TrainerGrafikController {
                 HBox cell = new HBox(3);
                 cell.getStyleClass().add("cal-cell");
                 cell.setPadding(new Insets(4));
+                // ustawiamy sztywna wysokosc komorki, zeby wszystkie wiersze byly rowne
                 cell.setPrefHeight(72);
                 cell.setMinHeight(72);
                 cell.setMaxHeight(72);
@@ -85,21 +93,24 @@ public class TrainerGrafikController {
             grafikGrid.getItems().add(dayCol);
         }
 
+        // bierzemy id zalogowanego trenera - jak go nie ma to nie ma sensu rysowac zadnych zajec
         String trainerId = SessionManager.getInstance().getLoggedInTrenerId();
         if (trainerId == null) return;
 
+        // pobieramy WSZYSTKIE zajecia z tygodnia, ale filtrujemy tylko te tego konkretnego trenera
         List<Zajecia> weekAll = GrafikRepository.getInstance().findByTydzien(monday);
         for (Zajecia z : weekAll) {
-            if (!trainerId.equals(z.getTrenerId())) continue;
+            if (!trainerId.equals(z.getTrenerId())) continue; // nie jego zajecia - pomijamy
             int row = hourToRow(z.getTermin().getHour());
-            int col = z.getTermin().getDayOfWeek().getValue() - 1;
-            if (row < 0 || col < 0 || col > 4) continue;
+            int col = z.getTermin().getDayOfWeek().getValue() - 1; // poniedzialek=1
+            if (row < 0 || col < 0 || col > 4) continue; // weekend albo dziwna godzina - pomijamy
             VBox card = makeCard(z);
             HBox.setHgrow(card, Priority.ALWAYS);
             cells[row][col].getChildren().add(card);
         }
     }
 
+    // helper - ustawia sztywna wysokosc labelki, zeby siatka byla rowna
     private Label sizedLabel(Label l, double height) {
         l.setPrefHeight(height);
         l.setMinHeight(height);
@@ -107,9 +118,10 @@ public class TrainerGrafikController {
         return l;
     }
 
+    // zamienia konkretna godzine na numer wiersza w siatce
     private int hourToRow(int hour) {
         for (int i = 0; i < HOUR_VALUES.length; i++) {
-            if (hour == HOUR_VALUES[i]) return i;
+            if (hour == HOUR_VALUES[i]) return i; // idealne trafienie w slot
         }
         if (hour < HOUR_VALUES[0]) return 0;
         for (int i = 0; i < HOUR_VALUES.length - 1; i++) {
@@ -118,11 +130,13 @@ public class TrainerGrafikController {
         return HOUR_VALUES.length - 1;
     }
 
+    // tworzy wizualna "karteczke" zajec do wstawienia w siatce
     private VBox makeCard(Zajecia z) {
         VBox card = new VBox(2);
         card.getStyleClass().add("cal-card");
         card.setPadding(new Insets(4, 6, 4, 6));
         card.setCursor(Cursor.HAND);
+        // kolor karty generowany na podstawie id zajec (zeby kazde zajecia mialy inny kolor)
         card.setStyle("-fx-background-color: " + ZajeciaColor.colorFor(z.getId()) + ";");
 
         String salaNazwa = SalaRepository.getInstance().findById(z.getSalaId())
@@ -134,6 +148,7 @@ public class TrainerGrafikController {
         lNazwa.getStyleClass().add("cal-card-title");
         Label lCzas = new Label(czasRange);
         lCzas.getStyleClass().add("cal-card-sub");
+        //  pokazujemy liczbe zapisanych/limit
         Label lInfo = new Label(salaNazwa + " · "
                 + z.getUczestnicyIds().size() + "/" + z.getLimitUczestnikow());
         lInfo.getStyleClass().add("cal-card-sub");

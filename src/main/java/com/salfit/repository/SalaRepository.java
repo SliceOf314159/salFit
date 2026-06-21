@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Repozytorium sal treningowych - znowu ten sam schemat co reszta (CRUD + zapis do JSON na dysk)
 public class SalaRepository implements Repository<Sala> {
 
     private static SalaRepository instance;
@@ -71,6 +72,7 @@ public class SalaRepository implements Repository<Sala> {
         saveToFile();
     }
 
+    // filtruje sale po statusie (np tylko DOSTEPNA)
     public List<Sala> findByStatus(StatusSali status) {
         return cache.stream().filter(s -> s.getStatus() == status).collect(Collectors.toList());
     }
