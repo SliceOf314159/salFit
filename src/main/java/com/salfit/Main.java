@@ -3,7 +3,7 @@ package com.salfit;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-//  klasa startowa  aplikacjki - tutaj wszystko sie zaczyna
+//  klasa startowa  aplikacji - tutaj wszystko sie zaczyna
 //  Application to klasa z JavaFX
 public class Main extends Application {
 
